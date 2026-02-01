@@ -1,4 +1,4 @@
----
+  ```
 classDiagram
 direction LR
 
@@ -79,3 +79,4 @@ Place "0.." -- "0..*" Amenity : includes
 %% (Optional but common) Each Review targets one Place and one User explicitly
 Review "1" --> "1" Place : about
 Review "1" --> "1" User : author
+ ```
