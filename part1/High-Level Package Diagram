@@ -1,1 +1,37 @@
-l
+classDiagram
+    %% ========================
+    %% Presentation Layer
+    %% ========================
+    class PresentationLayer {
+        <<Package>>
+        +API
+        +Services
+    }
+
+    %% ========================
+    %% Business Logic Layer
+    %% ========================
+    class BusinessLogicLayer {
+        <<Package>>
+        +HBnBFacade
+        +User
+        +Place
+        +Review
+        +Amenity
+    }
+
+    %% ========================
+    %% Persistence Layer
+    %% ========================
+    class PersistenceLayer {
+        <<Package>>
+        +Repositories
+        +Database
+    }
+
+    %% ========================
+    %% Relationships
+    %% ========================
+    PresentationLayer --> BusinessLogicLayer : uses Facade
+    BusinessLogicLayer --> PersistenceLayer : CRUD Operations
+
