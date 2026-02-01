@@ -1,10 +1,8 @@
-```
 classDiagram
     %% ========================
     %% Presentation Layer
     %% ========================
     class PresentationLayer {
-        <<Package>>
         API
         Services
     }
@@ -13,7 +11,6 @@ classDiagram
     %% Business Logic Layer
     %% ========================
     class BusinessLogicLayer {
-        <<Package>>
         HBnBFacade
         User
         Place
@@ -25,7 +22,6 @@ classDiagram
     %% Persistence Layer
     %% ========================
     class PersistenceLayer {
-        <<Package>>
         Repositories
         Database
     }
@@ -35,4 +31,3 @@ classDiagram
     %% ========================
     PresentationLayer --> BusinessLogicLayer : uses Facade
     BusinessLogicLayer --> PersistenceLayer : CRUD Operations
-```
