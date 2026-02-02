@@ -1,0 +1,12 @@
+sequenceDiagram
+        actor user
+        participant API
+        participant BusinessLogic
+        participant DataBase
+        
+        user->>API: register(email,password)
+        API->>BusinessLogic: send registration request
+        BusinessLogic->>DataBase: save user
+        DataBase-->>BusinessLogic: user saved
+        BusinessLogic-->>API: successed registration 
+        API-->>user: account created 
