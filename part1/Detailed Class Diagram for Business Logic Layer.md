@@ -2,56 +2,56 @@
 classDiagram
 direction LR
 
-class BaseEntity {
-  <<abstract>>
-  +UUID id
-  +DateTime created_at
-  +DateTime updated_at
-  +update_timestamp() void
-  +to_dict() dict
-}
-
 class User {
-  +String first_name
-  +String last_name
-  +String email
-  +String password_hash
-  +set_password(password:String) void
-  +check_password(password:String) bool
-  +update_profile(first_name:String,last_name:String,email:String) void
+  -id: UUID
+  +first_name: String
+  +last_name: String
+  +email: String
+  -password: String
+  +is_admin: Boolean
+  +register(): void
+  +updateProfile(): void
+  +delete(): void
 }
 
 class Place {
-  +String title
-  +String description
-  +Float price
-  +Float latitude
-  +Float longitude
-  +update_details(title:String,description:String,price:Float,latitude:Float,longitude:Float) void
-  +add_amenity(amenity:Amenity) void
-  +remove_amenity(amenity:Amenity) void
+  
+  +title: String
+  +description: String
+  +price: Float
+  +latitude: Float
+  +longitude: Float
+  +create(): void
+  +update(): void
+  +delete(): void
+  +list(): List~Place~
 }
 
 class Review {
-  +String text
-  +Int rating
-  +update_review(text:String,rating:Int) void
+  
+  +rating: Integer
+  +comment: String
+  +create(): void
+  +update(): void
+  +delete(): void
+  +list(): List~Review~
 }
 
 class Amenity {
-  +String name
-  +rename(name:String) void
+  
+  +name: String
+  +description: String
+  +create(): void
+  +update(): void
+  +delete(): void
+  +list(): List~Amenity~
 }
 
-BaseEntity <|-- User
-BaseEntity <|-- Place
-BaseEntity <|-- Review
-BaseEntity <|-- Amenity
+%% العلاقات (UML Relationships)
 
 User "1" --> "0..*" Place : owns
 User "1" --> "0..*" Review : writes
 Place "1" --> "0..*" Review : has
-Place "0..*" -- "0..*" Amenity : includes
-Review "1" --> "1" User : author
-Review "1" --> "1" Place : about
+Place "0..*" o-- "0..*" Amenity : includes
+
 ```
