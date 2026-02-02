@@ -14,8 +14,15 @@ class User {
   +delete(): void
 }
 
+class Admin {
+  +createUser(): void
+  +deleteUser(): void
+  +managePlaces(): void
+  +manageReviews(): void
+  +manageAmenities(): void
+}
+
 class Place {
-  
   +title: String
   +description: String
   +price: Float
@@ -28,7 +35,6 @@ class Place {
 }
 
 class Review {
-  
   +rating: Integer
   +comment: String
   +create(): void
@@ -38,7 +44,6 @@ class Review {
 }
 
 class Amenity {
-  
   +name: String
   +description: String
   +create(): void
@@ -47,11 +52,18 @@ class Amenity {
   +list(): List~Amenity~
 }
 
-%% العلاقات (UML Relationships)
+%% Inheritance (Admin is a User)
+User <|-- Admin
 
+%% العلاقات الأساسية
 User "1" --> "0..*" Place : owns
 User "1" --> "0..*" Review : writes
 Place "1" --> "0..*" Review : has
 Place "0..*" o-- "0..*" Amenity : includes
 
+%% علاقات الأدمن (إدارية)
+Admin --> Place : manages
+Admin --> Review : moderates
+Admin --> Amenity : manages
+Admin --> User : manages
 ```
