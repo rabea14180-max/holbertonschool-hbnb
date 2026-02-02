@@ -9,25 +9,23 @@ class User {
   +email: String
   -password: String
   +is_admin: Boolean
+  +created_at: DateTime
+  +updated_at: DateTime
   +register(): void
   +updateProfile(): void
   +delete(): void
 }
 
-class Admin {
-  +createUser(): void
-  +deleteUser(): void
-  +managePlaces(): void
-  +manageReviews(): void
-  +manageAmenities(): void
-}
-
 class Place {
+  -id: UUID
+  +owner_id: UUID
   +title: String
   +description: String
   +price: Float
   +latitude: Float
   +longitude: Float
+  +created_at: DateTime
+  +updated_at: DateTime
   +create(): void
   +update(): void
   +delete(): void
@@ -35,25 +33,30 @@ class Place {
 }
 
 class Review {
+  -id: UUID
+  +place_id: UUID
+  +user_id: UUID
   +rating: Integer
   +comment: String
+  +created_at: DateTime
+  +updated_at: DateTime
   +create(): void
   +update(): void
   +delete(): void
-  +list(): List~Review~
+  +listByPlace(place_id): List~Review~
 }
 
 class Amenity {
+  -id: UUID
   +name: String
   +description: String
+  +created_at: DateTime
+  +updated_at: DateTime
   +create(): void
   +update(): void
   +delete(): void
   +list(): List~Amenity~
 }
-
-%% Inheritance (Admin is a User)
-User <|-- Admin
 
 %% العلاقات الأساسية
 User "1" --> "0..*" Place : owns
@@ -61,9 +64,5 @@ User "1" --> "0..*" Review : writes
 Place "1" --> "0..*" Review : has
 Place "0..*" o-- "0..*" Amenity : includes
 
-%% علاقات الأدمن (إدارية)
-Admin --> Place : manages
-Admin --> Review : moderates
-Admin --> Amenity : manages
-Admin --> User : manages
+
 ```
