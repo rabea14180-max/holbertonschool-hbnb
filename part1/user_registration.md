@@ -7,7 +7,13 @@ sequenceDiagram
         
         user->>API: register(email,password)
         API->>BusinessLogic: send registration request
-        BusinessLogic->>DataBase: save user
-        DataBase-->>BusinessLogic: user saved
-        BusinessLogic-->>API: successed registration 
+        BusinessLogic->>DataBase: save data
+        alt Successed registration 
+        DataBase-->>BusinessLogic: Confirm Save
+        BusinessLogic-->>API: registration success 
         API-->>user: account created 
+        else failed registration 
+        DataBase-->>BusinessLogic: Email exists
+        BusinessLogic-->>API: registration failed
+        API-->>user: Email already exists 
+        end
