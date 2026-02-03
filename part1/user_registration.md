@@ -9,11 +9,11 @@ sequenceDiagram
         API->>BusinessLogic: process registration request
         BusinessLogic->>DataBase: save data
         alt Registration success
-        DataBase-->>BusinessLogic: Confirm Save
+        DataBase-->>BusinessLogic: user saved
         BusinessLogic-->>API: registration success 
         API-->>user: account created 
         else Registration failed 
-        DataBase-->>BusinessLogic: Email exists
+        DataBase-->>BusinessLogic: Email found
         BusinessLogic-->>API: registration failed
-        API-->>user: failed creation(email already exists)
+        API-->>user: creation failed(email already exists)
         end
