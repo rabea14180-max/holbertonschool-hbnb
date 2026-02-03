@@ -16,7 +16,7 @@ sequenceDiagram
         DataBase-->>BusinessLogic: Empty list
         BusinessLogic-->>API: return empty list
         API-->>user: no places found
-        else list does not exist / DataBase error
+        else list does not exist 
         DataBase-->>BusinessLogic: no list found
         BusinessLogic-->>API: fetch failed 
         API-->>user: list does not exist 
