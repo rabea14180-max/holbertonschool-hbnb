@@ -6,7 +6,7 @@ sequenceDiagram
         participant DataBase
 
         user-->>API: create_Place(title, description, price, lat, long)
-        API->>BusinessLogic: send creation request
+        API->>BusinessLogic: process creation request
         BusinessLogic->>DataBase: save place
         alt Creation success
         DataBase-->>BusinessLogic: place saved
