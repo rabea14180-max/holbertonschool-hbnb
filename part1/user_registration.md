@@ -15,5 +15,5 @@ sequenceDiagram
         else failed registration 
         DataBase-->>BusinessLogic: Email exists
         BusinessLogic-->>API: registration failed
-        API-->>user: Email already exists 
+        API-->>user: failed creation 
         end
