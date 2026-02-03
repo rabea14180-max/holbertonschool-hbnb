@@ -6,8 +6,8 @@ sequenceDiagram
         participant DataBase
 
         user->>API: get_place(criteria)
-        API->>BusinessLogic: send request 
-        BusinessLogic->>DataBase: fetching a List of Places
+        API->>BusinessLogic: process request
+        BusinessLogic->>DataBase: fetch list of places
         alt list exists 
         DataBase-->>BusinessLogic: list exists
         BusinessLogic-->>API: return list
