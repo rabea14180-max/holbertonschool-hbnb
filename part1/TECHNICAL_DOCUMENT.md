@@ -268,7 +268,7 @@ This workflow ensures that only valid owners can create places and that place da
 
 The following sequence diagram describes how a user submits a review for a place:
 
-![Review Submission Sequence Diagram](./review_submission.png)
+![Review Submission Sequence Diagram](Detailed%20Class%20Diagram%20for%20Business%20Logic%20Layer.md)
 
 #### Explanation
 
@@ -290,7 +290,7 @@ This workflow ensures reviews are always linked to valid users and valid places.
 
 The following sequence diagram describes how the system retrieves a list of available places:
 
-![Fetch Places Sequence Diagram](./fetch_places.png)
+![Fetch Places Sequence Diagram](Detailed%20Class%20Diagram%20for%20Business%20Logic%20Layer.md)
 
 #### Explanation
 
