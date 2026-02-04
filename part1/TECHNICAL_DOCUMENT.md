@@ -80,7 +80,7 @@ These entities represent the main objects required to implement an AirBnB-like p
 The following class diagram describes the entities, their attributes, methods, and relationships:
 
 ![Detailed Class D![WhatsApp Image 2026-02-04 at 13 25 53](https://github.com/user-attachments/assets/46b3d1e7-637b-4755-b80b-2dc72685aeca)
-iagram for Business Logic Layer](./class_diagram.png)
+iagram for Business Logic Layer](./Detailed%20Class%20Diagram%20for%20Business%20Logic%20Layer.md)
 
 #### Explanation
 
