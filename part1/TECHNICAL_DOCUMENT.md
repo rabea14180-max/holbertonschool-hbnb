@@ -226,7 +226,13 @@ These diagrams help define the interaction between components and ensure that th
 
 The following sequence diagram describes the registration process for a new user:
 
-![User Registration Sequence Diagram](Detailed%20Class%20Diagram%20for%20Business%20Logic%20Layer.md)
+
+
+
+
+<img width="1034" height="788" alt="Screenshot 2026-02-04 200458" src="https://github.com/user-attachments/assets/92bf0702-7dea-441f-930a-7d0440b428d1" />
+
+
 
 #### Explanation
 
@@ -246,7 +252,13 @@ This workflow ensures that duplicate users are not created and that user informa
 
 The following sequence diagram describes the process of creating a new place:
 
-![Place Creation Sequence Diagram](Detailed%20Class%20Diagram%20for%20Business%20Logic%20Layer.md)
+<img width="1097" height="792" alt="Screenshot 2026-02-04 202731" src="https://github.com/user-attachments/assets/69192560-7dce-41b5-a7f7-061d09e72784" />
+
+
+
+
+
+
 
 #### Explanation
 
@@ -266,8 +278,14 @@ This workflow ensures that only valid owners can create places and that place da
 ## 4.4 Review Submission Sequence Diagram
 
 The following sequence diagram describes how a user submits a review for a place:
+<img width="1017" height="757" alt="Screenshot 2026-02-04 201741" src="https://github.com/user-attachments/assets/bcac4f35-347c-47ea-aa9f-71ac9798b30c" />
 
-![Review Submission Sequence Diagram](Detailed%20Class%20Diagram%20for%20Business%20Logic%20Layer.md)
+
+
+
+
+
+
 
 #### Explanation
 
@@ -288,8 +306,12 @@ This workflow ensures reviews are always linked to valid users and valid places.
 ## 4.5 Fetch Places Sequence Diagram
 
 The following sequence diagram describes how the system retrieves a list of available places:
+<img width="665" height="792" alt="Screenshot 2026-02-04 203147" src="https://github.com/user-attachments/assets/41f4b71b-5a37-4d2a-92af-83880667e25b" />
 
-![Fetch Places Sequence Diagram](Detailed%20Class%20Diagram%20for%20Business%20Logic%20Layer.md)
+
+
+
+
 
 #### Explanation
 
