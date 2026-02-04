@@ -1,4 +1,4 @@
-# HBnB Evolution - Part 1
+# HBnB Evolution - Part 1 .
 
 **HBnB Evolution** is a simplified AirBnB-like application.  
 It allows users to register, manage places, associate amenities, and submit reviews.
