@@ -65,6 +65,6 @@ cd HBnB-Evolution
 . Git & GitHub for version control
 ```
 👩‍💻 Author :
-Hamsa Alammar
-Rabea Younis Thabit
+Hamsa Alammar , 
+Rabea Younis Thabit ,
 Solaf Alessa
