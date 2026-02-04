@@ -40,9 +40,7 @@ This design improves maintainability, modularity, and makes the system easier to
 
 ### 2.2 High-Level Package Diagram
 
-The following diagram illustrates the high-level structure of the HBnB Evolution application and how the layers interact.
-
-![High-Level Package Diagram](./packeg.png)
+![High-Level Package Diagram](./images/packeg.png)
 
 #### Explanation
 
@@ -76,9 +74,18 @@ These entities represent the main objects required to implement an AirBnB-like p
 
 ### 3.2 Detailed Class Diagram
 
-The following class diagram describes the entities, their attributes, methods, and relationships.
+![Detailed Class Diagram](./images/class_diagram.png)
 
-[Detailed Class Diagram for Business Logic Layer](./Detailed%20Class%20Diagram%20for%20Business%20Logic%20Layer.md)
+#### Explanation
+
+- Shows all entities (User, Place, Review, Amenity) with their attributes and main methods.
+- Illustrates **relationships**:
+  - User → Place (1-to-many)
+  - User → Review (1-to-many)
+  - Place → Review (1-to-many)
+  - Place → Amenity (many-to-many)
+- Displays primary keys, foreign keys, and association links.
+- Provides a visual map of how the Business Logic layer is structured.
 
 ---
 
@@ -197,9 +204,7 @@ These diagrams help define the interaction between components and ensure that th
 
 ## 4.2 User Registration Sequence Diagram
 
-The following sequence diagram describes the registration process for a new user.
-
-[User Registration Sequence Diagram](./user_registration.md)
+![User Registration Sequence Diagram](./images/user_registration.png)
 
 ### Explanation
 
@@ -217,9 +222,7 @@ This workflow ensures that duplicate users are not created and that user informa
 
 ## 4.3 Place Creation Sequence Diagram
 
-The following sequence diagram describes the process of creating a new place.
-
-[Place Creation Sequence Diagram](./place_creation.md)
+![Place Creation Sequence Diagram](./images/place_creation.png)
 
 ### Explanation
 
@@ -238,9 +241,7 @@ This workflow ensures that only valid owners can create places and that place da
 
 ## 4.4 Review Submission Sequence Diagram
 
-The following sequence diagram describes how a user submits a review for a place.
-
-[Review Submission Sequence Diagram](./review_submission.md)
+![Review Submission Sequence Diagram](./images/review_submission.png)
 
 ### Explanation
 
@@ -260,9 +261,7 @@ This workflow ensures reviews are always linked to valid users and valid places.
 
 ## 4.5 Fetch Places Sequence Diagram
 
-The following sequence diagram describes how the system retrieves a list of available places.
-
-[Fetch Places Sequence Diagram](./fetch_places.md)
+![Fetch Places Sequence Diagram](./images/fetch_places.png)
 
 ### Explanation
 
