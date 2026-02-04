@@ -79,10 +79,9 @@ These entities represent the main objects required to implement an AirBnB-like p
 
 The following class diagram describes the entities, their attributes, methods, and relationships:
 
-![Detailed Class D![ Image 2026-02-04 at 13 25 53](https://github.com/user-attachments/assets/46b3d1e7-637b-4755-b80b-2dc72685aeca)
-iagram for Business Logic Layer](./Detailed%20Class%20Diagram%20for%20Business%20Logic%20Layer.md)
 
-#### Explanation
+#### Explanation<img width="1205" height="897" alt="Screenshot 2026-02-04 132313" src="https://github.com/user-attachments/assets/75e56a7b-19d8-4bb5-ae88-09cbabd216f3" />
+
 
 This diagram provides a complete overview of the Business Logic layer entities and their relationships:
 
