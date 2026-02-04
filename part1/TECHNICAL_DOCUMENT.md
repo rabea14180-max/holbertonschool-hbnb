@@ -313,4 +313,4 @@ This technical document compiles the architectural and design documentation of t
 It defines the system’s layered structure, explains the facade communication pattern, and documents the main business entities and their relationships.
 
 The included diagrams describe the main API workflows and demonstrate how information flows across the different layers.  
-This documentation will serve as the foundation for implementing the project in future parts.
+This documentation will serve as the foundation for implementing the project in future parts 
