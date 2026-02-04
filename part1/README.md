@@ -3,21 +3,21 @@
 **HBnB Evolution** is a simplified AirBnB-like application.  
 It allows users to register, manage places, associate amenities, and submit reviews.
 
-This README provides a detailed explanation of the project structure, entities, relationships, and API workflows.
+This README provides a **detailed overview** of the project architecture, entities, relationships, and API workflows.
 
 ---
 
 ## 1. Project Overview
 
-HBnB Evolution mimics a basic vacation rental platform with the following features:
+HBnB Evolution mimics a basic vacation rental platform with features:
 
-- User registration and management
-- Place creation and management
-- Amenities association (WiFi, Pool, Parking, etc.)
-- Review submission system
-- Clear layered architecture with Facade Pattern
+- User registration and management  
+- Place creation and management  
+- Amenities association (WiFi, Pool, Parking, etc.)  
+- Review submission system  
+- Clear layered architecture using Facade Pattern
 
-The architecture ensures maintainability, modularity, and easy extension.
+**Goal:** Maintainable, modular, and extensible system.
 
 ---
 
@@ -25,19 +25,11 @@ The architecture ensures maintainability, modularity, and easy extension.
 
 ### 2.1 Layers
 
-The system follows a layered architecture:
-
-1. **Presentation Layer (API Layer)**  
-   - Handles user requests and responses  
-   - Validates input data  
-
-2. **Business Logic Layer**  
-   - Core application logic  
-   - Contains main entities: User, Place, Review, Amenity  
-
-3. **Persistence Layer (Database Layer)**  
-   - Stores and retrieves data  
-   - Interacts only with Business Logic Layer  
+| Layer | Responsibility |
+|-------|----------------|
+| **Presentation Layer (API)** | Handles requests, input validation, and responses |
+| **Business Logic Layer** | Core application logic, contains main entities (User, Place, Review, Amenity) |
+| **Persistence Layer** | Stores and retrieves data; accessed only through Business Logic Layer |
 
 **Communication Flow:**  
 User → API → Facade → Business Logic → Persistence → Response
@@ -50,10 +42,8 @@ User → API → Facade → Business Logic → Persistence → Response
 
 **Explanation:**
 
-- API sends requests to the Facade  
-- Facade calls Business Logic  
-- Business Logic interacts with Persistence Layer  
-- Data flows back through the same path  
+- API → Facade → Business Logic → Persistence → Back  
+- Ensures separation of concerns and avoids direct database access from API
 
 ---
 
@@ -61,17 +51,14 @@ User → API → Facade → Business Logic → Persistence → Response
 
 ### 3.1 Core Entities
 
-The system has four main entities:
+| Entity | Description |
+|--------|-------------|
+| **User** | Represents system users |
+| **Place** | Represents properties listed by users |
+| **Review** | Feedback and ratings for Places |
+| **Amenity** | Features linked to Places (WiFi, Pool, Parking, etc.) |
 
-1. **User** – Registered users  
-2. **Place** – Properties listed by users  
-3. **Review** – Feedback and ratings for places  
-4. **Amenity** – Features that can be attached to places  
-
-All entities include:
-
-- `id` (unique identifier)  
-- `created_at` & `updated_at` (audit fields)
+All entities include `id`, `created_at`, and `updated_at`.
 
 ---
 
@@ -79,54 +66,112 @@ All entities include:
 
 ![Detailed Class Diagram](./class_diagram.png)
 
-**Explanation:**
-
-- One **User** can own multiple **Places** (One-to-Many)  
-- One **User** can write multiple **Reviews** (One-to-Many)  
-- One **Place** can have multiple **Reviews** (One-to-Many)  
-- **Places** and **Amenities** are linked in a Many-to-Many relationship
-
 ---
 
 ### 3.3 Entities Description
 
-#### User
+#### 3.3.1 User
 
-**Attributes:** `id`, `first_name`, `last_name`, `email`, `password`, `is_admin`, `created_at`, `updated_at`  
-**Responsibilities:** Register, update profile, own Places, write Reviews  
+| Field | Type | Description |
+|-------|------|------------|
+| id | string | Unique identifier |
+| first_name | string | User's first name |
+| last_name | string | User's last name |
+| email | string | User email for login |
+| password | string | Hashed password |
+| is_admin | boolean | Administrator flag |
+| created_at | datetime | Creation timestamp |
+| updated_at | datetime | Last updated timestamp |
 
-#### Place
-
-**Attributes:** `id`, `title`, `description`, `price`, `latitude`, `longitude`, `owner_id`, `created_at`, `updated_at`  
-**Responsibilities:** Create/manage properties, associate amenities, have reviews  
-
-#### Review
-
-**Attributes:** `id`, `rating`, `comment`, `place_id`, `user_id`, `created_at`, `updated_at`  
-**Responsibilities:** Submit feedback, link to user and place  
-
-#### Amenity
-
-**Attributes:** `id`, `name`, `description`, `created_at`, `updated_at`  
-**Responsibilities:** Provide additional features, link to multiple places  
+**Responsibilities:**  
+- Register and update profile  
+- Own multiple Places  
+- Write multiple Reviews  
 
 ---
 
-## 4. API Interaction Flow
+#### 3.3.2 Place
+
+| Field | Type | Description |
+|-------|------|------------|
+| id | string | Unique identifier |
+| title | string | Property title |
+| description | string | Property description |
+| price | float | Rental price |
+| latitude | float | GPS latitude |
+| longitude | float | GPS longitude |
+| owner_id | string | Reference to User |
+| created_at | datetime | Creation timestamp |
+| updated_at | datetime | Last updated timestamp |
+
+**Responsibilities:**  
+- Create and manage properties  
+- Store location and pricing info  
+- Associate Amenities  
+
+---
+
+#### 3.3.3 Review
+
+| Field | Type | Description |
+|-------|------|------------|
+| id | string | Unique identifier |
+| rating | int | Rating value (1-5) |
+| comment | string | Feedback text |
+| place_id | string | Reference to Place |
+| user_id | string | Reference to User |
+| created_at | datetime | Creation timestamp |
+| updated_at | datetime | Last updated timestamp |
+
+**Responsibilities:**  
+- Submit feedback linked to User and Place  
+
+---
+
+#### 3.3.4 Amenity
+
+| Field | Type | Description |
+|-------|------|------------|
+| id | string | Unique identifier |
+| name | string | Feature name |
+| description | string | Feature description |
+| created_at | datetime | Creation timestamp |
+| updated_at | datetime | Last updated timestamp |
+
+**Responsibilities:**  
+- Provide additional features  
+- Link to multiple Places (Many-to-Many)  
+
+---
+
+### 3.4 Relationships
+
+| Relationship | Type |
+|-------------|------|
+| User → Places | One-to-Many |
+| User → Reviews | One-to-Many |
+| Place → Reviews | One-to-Many |
+| Place → Amenities | Many-to-Many |
+
+---
+
+## 4. API Workflows (Sequence Diagrams)
 
 ### 4.1 User Registration
 
 ![User Registration Sequence Diagram](./user_registration.png)
 
-**Flow:**
+**Steps Table:**
 
-1. User sends registration request  
-2. API forwards to Facade  
-3. Business logic validates data  
-4. Email uniqueness check  
-5. New User object is created  
-6. Persistence Layer saves the user  
-7. Success response returned  
+| Step | Action |
+|------|-------|
+| 1 | User sends registration request to API |
+| 2 | API forwards request to Facade |
+| 3 | Business Logic validates user data |
+| 4 | System checks email uniqueness |
+| 5 | New User object created |
+| 6 | Persistence Layer saves user |
+| 7 | Success response returned |
 
 ---
 
@@ -134,15 +179,15 @@ All entities include:
 
 ![Place Creation Sequence Diagram](./place_creation.png)
 
-**Flow:**
-
-1. Owner requests place creation  
-2. API → Facade → Business Logic  
-3. Owner existence validated  
-4. Place data validated  
-5. New Place object created  
-6. Persistence Layer saves Place  
-7. Success response returned  
+| Step | Action |
+|------|-------|
+| 1 | Owner requests new Place creation |
+| 2 | API → Facade → Business Logic |
+| 3 | Owner validated |
+| 4 | Place data validated |
+| 5 | New Place object created |
+| 6 | Persistence Layer saves Place |
+| 7 | Success response returned |
 
 ---
 
@@ -150,15 +195,15 @@ All entities include:
 
 ![Review Submission Sequence Diagram](./review_submission.png)
 
-**Flow:**
-
-1. User submits review  
-2. API → Facade → Business Logic  
-3. User & Place existence validated  
-4. Rating validated  
-5. New Review object created  
-6. Persistence Layer saves review  
-7. Success response returned  
+| Step | Action |
+|------|-------|
+| 1 | User submits review |
+| 2 | API → Facade → Business Logic |
+| 3 | Validate User and Place |
+| 4 | Validate rating value |
+| 5 | Create Review object |
+| 6 | Persistence Layer saves review |
+| 7 | Success response returned |
 
 ---
 
@@ -166,24 +211,24 @@ All entities include:
 
 ![Fetch Places Sequence Diagram](./fetch_places.png)
 
-**Flow:**
-
-1. User requests places list  
-2. API → Facade → Business Logic → Persistence Layer  
-3. All stored places retrieved  
-4. Response returned (list or empty)  
+| Step | Action |
+|------|-------|
+| 1 | User requests Places list |
+| 2 | API → Facade → Business Logic → Persistence |
+| 3 | Retrieve all stored Places |
+| 4 | Return list (or empty) |
+| 5 | API returns response |
 
 ---
 
 ## 5. Conclusion
 
-This part of HBnB Evolution defines:
+This README provides:
 
-- Layered architecture  
-- Core entities and their relationships  
-- Main API workflows with sequence diagrams  
+- Full layered architecture explanation  
+- Core entities with detailed fields & responsibilities  
+- Relationships & API workflows  
+- Diagrams embedded directly as images
 
-All diagrams are included as images and appear directly in this README.
+This file is **ready to be used on GitHub**, showing all images and tables clearly.
 
-👩‍💻 Author : 
-Hamsa Alammar ,  Rabea Younis Thabit ، Solaf Alessa
