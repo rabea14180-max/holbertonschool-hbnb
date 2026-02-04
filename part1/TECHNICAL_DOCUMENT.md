@@ -2,11 +2,11 @@
 
 ## 1. Introduction
 
-This technical document provides a complete overview of the architecture and design of the **HBnB Evolution** project.
-HBnB Evolution is a simplified AirBnB-like application that allows users to register, manage places, associate amenities,
-and submit reviews.
+This technical document provides a complete overview of the architecture and design of the **HBnB Evolution** project.  
+HBnB Evolution is a simplified AirBnB-like application that allows users to register, manage places, associate amenities, and submit reviews.
 
 The purpose of this documentation is to serve as a blueprint for the implementation phases of the project by clearly defining:
+
 - The layered architecture of the system.
 - The core business entities and their relationships.
 - The interactions between layers through different API workflows.
@@ -31,7 +31,7 @@ HBnB Evolution follows a layered architecture composed of three main layers:
 - **Persistence Layer (Database Layer)**  
   Responsible for storing and retrieving data. This layer will be fully implemented in later parts of the project.
 
-To simplify communication between layers, the application uses the **Facade Pattern**.
+To simplify communication between layers, the application uses the **Facade Pattern**.  
 The Presentation Layer communicates only with a Facade, which provides a unified interface to the Business Logic layer.
 
 This design improves maintainability, modularity, and makes the system easier to extend.
@@ -40,7 +40,9 @@ This design improves maintainability, modularity, and makes the system easier to
 
 ### 2.2 High-Level Package Diagram
 
-![High-Level Package Diagram](./images/packeg.png)
+The following diagram illustrates the high-level structure of the HBnB Evolution application and how the layers interact:
+
+![High-Level Package Diagram](./packeg.png)
 
 #### Explanation
 
@@ -65,6 +67,7 @@ The Business Logic Layer contains the core entities of the HBnB system:
 - **Amenity**
 
 Each entity includes:
+
 - A unique identifier (`id`)
 - Audit fields (`created_at`, `updated_at`) for tracking creation and updates
 
@@ -74,18 +77,27 @@ These entities represent the main objects required to implement an AirBnB-like p
 
 ### 3.2 Detailed Class Diagram
 
-![Detailed Class Diagram](./images/class_diagram.png)
+The following class diagram describes the entities, their attributes, methods, and relationships:
+
+![Detailed Class Diagram for Business Logic Layer](./class_diagram.png)
 
 #### Explanation
 
-- Shows all entities (User, Place, Review, Amenity) with their attributes and main methods.
-- Illustrates **relationships**:
-  - User → Place (1-to-many)
-  - User → Review (1-to-many)
-  - Place → Review (1-to-many)
-  - Place → Amenity (many-to-many)
-- Displays primary keys, foreign keys, and association links.
-- Provides a visual map of how the Business Logic layer is structured.
+This diagram provides a complete overview of the Business Logic layer entities and their relationships:
+
+- **User** represents registered users in the system.
+- **Place** represents a property owned by a user.
+- **Review** represents user feedback and ratings for a place.
+- **Amenity** represents features like WiFi, Pool, Parking, etc.
+
+Relationships shown:
+
+- One **User** can own many **Places** (One-to-Many).
+- One **User** can write many **Reviews** (One-to-Many).
+- One **Place** can have many **Reviews** (One-to-Many).
+- **Places** and **Amenities** are linked in a Many-to-Many relationship.
+
+The diagram also includes audit fields (`created_at`, `updated_at`) to ensure proper tracking of entity updates.
 
 ---
 
@@ -96,6 +108,7 @@ These entities represent the main objects required to implement an AirBnB-like p
 The `User` entity represents system users.
 
 **Main Attributes:**
+
 - `id`
 - `first_name`
 - `last_name`
@@ -106,6 +119,7 @@ The `User` entity represents system users.
 - `updated_at`
 
 **Main Responsibilities:**
+
 - Register into the system.
 - Update profile information.
 - Be identified as a regular user or administrator.
@@ -119,6 +133,7 @@ A user can own multiple places and can write reviews.
 The `Place` entity represents a property listed by a user.
 
 **Main Attributes:**
+
 - `id`
 - `title`
 - `description`
@@ -130,6 +145,7 @@ The `Place` entity represents a property listed by a user.
 - `updated_at`
 
 **Main Responsibilities:**
+
 - Allow owners to create and manage properties.
 - Store location and pricing information.
 - Be associated with amenities.
@@ -143,6 +159,7 @@ A place belongs to one owner and can have multiple reviews.
 The `Review` entity represents feedback submitted by a user about a place.
 
 **Main Attributes:**
+
 - `id`
 - `rating`
 - `comment`
@@ -152,6 +169,7 @@ The `Review` entity represents feedback submitted by a user about a place.
 - `updated_at`
 
 **Main Responsibilities:**
+
 - Allow users to rate places.
 - Store written feedback and rating score.
 - Be associated with both the user and the place.
@@ -163,6 +181,7 @@ The `Review` entity represents feedback submitted by a user about a place.
 The `Amenity` entity represents a feature that can be attached to a place.
 
 **Main Attributes:**
+
 - `id`
 - `name`
 - `description`
@@ -170,6 +189,7 @@ The `Amenity` entity represents a feature that can be attached to a place.
 - `updated_at`
 
 **Main Responsibilities:**
+
 - Provide additional features for places (WiFi, Pool, Parking, etc).
 - Be reusable across multiple places.
 
@@ -204,9 +224,11 @@ These diagrams help define the interaction between components and ensure that th
 
 ## 4.2 User Registration Sequence Diagram
 
-![User Registration Sequence Diagram](./images/user_registration.png)
+The following sequence diagram describes the registration process for a new user:
 
-### Explanation
+![User Registration Sequence Diagram](./user_registration.png)
+
+#### Explanation
 
 1. The user sends a registration request to the API.
 2. The API forwards the request to the Facade.
@@ -222,9 +244,11 @@ This workflow ensures that duplicate users are not created and that user informa
 
 ## 4.3 Place Creation Sequence Diagram
 
-![Place Creation Sequence Diagram](./images/place_creation.png)
+The following sequence diagram describes the process of creating a new place:
 
-### Explanation
+![Place Creation Sequence Diagram](./place_creation.png)
+
+#### Explanation
 
 1. The owner sends a request to create a place.
 2. The API forwards the request to the Facade.
@@ -241,9 +265,11 @@ This workflow ensures that only valid owners can create places and that place da
 
 ## 4.4 Review Submission Sequence Diagram
 
-![Review Submission Sequence Diagram](./images/review_submission.png)
+The following sequence diagram describes how a user submits a review for a place:
 
-### Explanation
+![Review Submission Sequence Diagram](./review_submission.png)
+
+#### Explanation
 
 1. The user submits a review request.
 2. The API forwards the request to the Facade.
@@ -261,9 +287,11 @@ This workflow ensures reviews are always linked to valid users and valid places.
 
 ## 4.5 Fetch Places Sequence Diagram
 
-![Fetch Places Sequence Diagram](./images/fetch_places.png)
+The following sequence diagram describes how the system retrieves a list of available places:
 
-### Explanation
+![Fetch Places Sequence Diagram](./fetch_places.png)
+
+#### Explanation
 
 1. The user requests a list of places.
 2. The API forwards the request to the Facade.
@@ -280,8 +308,8 @@ The diagram includes an alternative flow to represent cases where no places are 
 
 ## 5. Conclusion
 
-This technical document compiles the architectural and design documentation of the HBnB Evolution application.
+This technical document compiles the architectural and design documentation of the HBnB Evolution application.  
 It defines the system’s layered structure, explains the facade communication pattern, and documents the main business entities and their relationships.
 
-The included sequence diagrams describe the main API workflows and demonstrate how information flows across the different layers.
+The included diagrams describe the main API workflows and demonstrate how information flows across the different layers.  
 This documentation will serve as the foundation for implementing the project in future parts.
