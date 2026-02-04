@@ -227,7 +227,7 @@ These diagrams help define the interaction between components and ensure that th
 
 The following sequence diagram describes the registration process for a new user:
 
-![User Registration Sequence Diagram](./user_registration.png)
+![User Registration Sequence Diagram](Detailed%20Class%20Diagram%20for%20Business%20Logic%20Layer.md)
 
 #### Explanation
 
@@ -247,7 +247,7 @@ This workflow ensures that duplicate users are not created and that user informa
 
 The following sequence diagram describes the process of creating a new place:
 
-![Place Creation Sequence Diagram](./place_creation.png)
+![Place Creation Sequence Diagram](Detailed%20Class%20Diagram%20for%20Business%20Logic%20Layer.md)
 
 #### Explanation
 
