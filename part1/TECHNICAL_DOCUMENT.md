@@ -42,7 +42,10 @@ This design improves maintainability, modularity, and makes the system easier to
 
 The following diagram illustrates the high-level structure of the HBnB Evolution application and how the layers interact:
 
-![High-Level Package Diagram](./packeg.png)
+
+
+
+<img width="657" height="921" alt="Screenshot 2026-02-05 162031" src="https://github.com/user-attachments/assets/48fcc3c6-6f81-4b7a-8434-d8eb00aee9af" />
 
 #### Explanation
 
