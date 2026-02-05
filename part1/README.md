@@ -38,9 +38,10 @@ User → API → Facade → Business Logic → Persistence → Response
 
 ### 2.2 High-Level Package Diagram
 
-![High-Level Package Diagram](./packeg.png)
+
 
 **Explanation:**
+<img width="657" height="921" alt="Screenshot 2026-02-05 162031" src="https://github.com/user-attachments/assets/8c82f2e1-483a-4b65-b393-0147f9cfafc8" />
 
 - API → Facade → Business Logic → Persistence → Back  
 - Ensures separation of concerns and avoids direct database access from API
@@ -64,9 +65,10 @@ All entities include `id`, `created_at`, and `updated_at`.
 
 ### 3.2 Detailed Class Diagram
 
-![Detailed Class Diagram](./class_diagram.png)
 
----
+
+---<img width="1205" height="897" alt="Screenshot 2026-02-04 132313" src="https://github.com/user-attachments/assets/1b9855bd-35f5-4a06-a4d6-5197a74eacde" />
+
 
 ### 3.3 Entities Description
 
@@ -74,7 +76,7 @@ All entities include `id`, `created_at`, and `updated_at`.
 
 | Field | Type | Description |
 |-------|------|------------|
-| id | string | Unique identifier |
+| id | UUID | Unique identifier |
 | first_name | string | User's first name |
 | last_name | string | User's last name |
 | email | string | User email for login |
@@ -94,7 +96,7 @@ All entities include `id`, `created_at`, and `updated_at`.
 
 | Field | Type | Description |
 |-------|------|------------|
-| id | string | Unique identifier |
+| id | UUID | Unique identifier |
 | title | string | Property title |
 | description | string | Property description |
 | price | float | Rental price |
@@ -115,7 +117,7 @@ All entities include `id`, `created_at`, and `updated_at`.
 
 | Field | Type | Description |
 |-------|------|------------|
-| id | string | Unique identifier |
+| id | UUID | Unique identifier |
 | rating | int | Rating value (1-5) |
 | comment | string | Feedback text |
 | place_id | string | Reference to Place |
@@ -132,7 +134,7 @@ All entities include `id`, `created_at`, and `updated_at`.
 
 | Field | Type | Description |
 |-------|------|------------|
-| id | string | Unique identifier |
+| id | UUID | Unique identifier |
 | name | string | Feature name |
 | description | string | Feature description |
 | created_at | datetime | Creation timestamp |
@@ -159,7 +161,8 @@ All entities include `id`, `created_at`, and `updated_at`.
 
 ### 4.1 User Registration
 
-![User Registration Sequence Diagram](./user_registration.png)
+<img width="1034" height="788" alt="Screenshot 2026-02-04 200458" src="https://github.com/user-attachments/assets/bd415f65-3da2-482a-b226-b8231458a494" />
+
 
 **Steps Table:**
 
@@ -176,8 +179,9 @@ All entities include `id`, `created_at`, and `updated_at`.
 ---
 
 ### 4.2 Place Creation
+<img width="1097" height="792" alt="Screenshot 2026-02-04 202731" src="https://github.com/user-attachments/assets/fd8ccc3c-981b-4881-8c42-4066dfb3f4e9" />
 
-![Place Creation Sequence Diagram](./place_creation.png)
+
 
 | Step | Action |
 |------|-------|
@@ -193,7 +197,7 @@ All entities include `id`, `created_at`, and `updated_at`.
 
 ### 4.3 Review Submission
 
-![Review Submission Sequence Diagram](./review_submission.png)
+<img width="1017" height="757" alt="Screenshot 2026-02-04 201741" src="https://github.com/user-attachments/assets/c92db1ff-3142-43f9-bac8-838e537de81c" />
 
 | Step | Action |
 |------|-------|
@@ -208,8 +212,9 @@ All entities include `id`, `created_at`, and `updated_at`.
 ---
 
 ### 4.4 Fetch Places
+<img width="663" height="783" alt="Screenshot 2026-02-04 203434" src="https://github.com/user-attachments/assets/18af99e4-6ded-4b3b-a9ed-0e11bbbc3553" />
 
-![Fetch Places Sequence Diagram](./fetch_places.png)
+
 
 | Step | Action |
 |------|-------|
