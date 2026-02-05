@@ -44,7 +44,7 @@ User → API → Facade → Business Logic → Persistence → Response
 
 ## 🖼 Screenshots / Diagrams
 
-High-level architecture and sequence diagrams are included in the [Technical Documentation](./TECHNICAL_DOCUMENT.md) file.
+High-level architecture and sequence diagrams are included in the [Technical Documentation](https://github.com/rabea14180-max/holbertonschool-hbnb/blob/main/part1/TECHNICAL_DOCUMENT.md) file.
 
 ---
 
