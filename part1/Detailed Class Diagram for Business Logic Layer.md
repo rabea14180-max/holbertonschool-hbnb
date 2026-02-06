@@ -11,8 +11,8 @@ class User {
   +is_admin: Bool
   +created_at: Date
   +updated_at: Date
-  +register: void
-  +updateProfile: void
+  +register() void
+  +updateProfile() void
   +delete() void
 }
 
@@ -29,7 +29,7 @@ class Place {
   +create () void
   +update () void
   +delete () void
-  +list: List~Place~
+  +list() List~Place~
 }
 
 class Review {
@@ -43,7 +43,7 @@ class Review {
   +create() void
   +update() void
   +delete() void
-  +listByPlace place_id: List~Review~
+  +listByPlace (place_id) List~Review~
 }
 
 class Amenity {
@@ -55,7 +55,7 @@ class Amenity {
   +create () void
   +update() void
   +delete() void
-  +list: List~Amenity~
+  +list() List~Amenity~
 }
 
 %% العلاقات الأساسية
