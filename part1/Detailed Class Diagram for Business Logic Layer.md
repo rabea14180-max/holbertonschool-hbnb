@@ -6,56 +6,56 @@ class User {
   -id: UUID
   +first_name: String
   +last_name: String
-  +email: String
+  -email: String
   -password: String
-  +is_admin: Boolean
-  +created_at: DateTime
-  +updated_at: DateTime
-  +register(): void
-  +updateProfile(): void
-  +delete(): void
+  +is_admin: Bool
+  +created_at: Date
+  +updated_at: Date
+  +register: void
+  +updateProfile: void
+  +delete() void
 }
 
 class Place {
   -id: UUID
-  +owner_id: UUID
+  -owner_id: UUID
   +title: String
   +description: String
   +price: Float
   +latitude: Float
   +longitude: Float
-  +created_at: DateTime
-  +updated_at: DateTime
-  +create(): void
-  +update(): void
-  +delete(): void
-  +list(): List~Place~
+  +created_at: Date
+  +updated_at: Date
+  +create () void
+  +update () void
+  +delete () void
+  +list: List~Place~
 }
 
 class Review {
   -id: UUID
   +place_id: UUID
   +user_id: UUID
-  +rating: Integer
+  +rating: Int
   +comment: String
   +created_at: DateTime
   +updated_at: DateTime
-  +create(): void
-  +update(): void
-  +delete(): void
-  +listByPlace(place_id): List~Review~
+  +create() void
+  +update() void
+  +delete() void
+  +listByPlace place_id: List~Review~
 }
 
 class Amenity {
   -id: UUID
   +name: String
   +description: String
-  +created_at: DateTime
-  +updated_at: DateTime
-  +create(): void
-  +update(): void
-  +delete(): void
-  +list(): List~Amenity~
+  +created_at: Date
+  +updated_at: Date
+  +create () void
+  +update() void
+  +delete() void
+  +list: List~Amenity~
 }
 
 %% العلاقات الأساسية
