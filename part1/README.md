@@ -40,8 +40,9 @@ User → API → Facade → Business Logic → Persistence → Response
 
 
 
-**Explanation:**
-<img width="657" height="921" alt="Screenshot 2026-02-05 162031" src="https://github.com/user-attachments/assets/8c82f2e1-483a-4b65-b393-0147f9cfafc8" />
+**Explan<img width="631" height="765" alt="Screenshot 2026-02-06 155059" src="https://github.com/user-attachments/assets/c146640b-155d-4e8b-ab21-23368d204dcb" />
+ation:**
+
 
 - API → Facade → Business Logic → Persistence → Back  
 - Ensures separation of concerns and avoids direct database access from API
@@ -67,8 +68,7 @@ All entities include `id`, `created_at`, and `updated_at`.
 
 
 
----<img width="1205" height="897" alt="Screenshot 2026-02-04 132313" src="https://github.com/user-attachments/assets/1b9855bd-35f5-4a06-a4d6-5197a74eacde" />
-
+<img width="1232" height="875" alt="Screenshot 2026-02-06 155914" src="https://github.com/user-attachments/assets/78cb3405-a4e5-4ea6-ac28-bb13999cb5fd" />
 
 ### 3.3 Entities Description
 
