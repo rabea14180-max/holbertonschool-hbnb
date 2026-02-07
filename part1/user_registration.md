@@ -11,9 +11,9 @@ sequenceDiagram
         alt Registration success
         DataBase-->>BusinessLogic: user saved
         BusinessLogic-->>API: registration success 
-        API-->>user: account created 201
+        API-->>user: 201 Created (account created)
         else Registration failed 
         DataBase-->>BusinessLogic: Email found
         BusinessLogic-->>API: registration failed
-        API-->>user: creation failed(email already exists)
+        API-->>user: 409 Conflict (email already exists)
         end
