@@ -1,6 +1,6 @@
 # HBnB Evolution - Technical Documentation (Part 1)
 
-## 1. Introduction .
+## 1. Introduction 
 
 This technical document provides a complete overview of the architecture and design of the **HBnB Evolution** project.  
 HBnB Evolution is a simplified AirBnB-like application that allows users to register, manage places, associate amenities, and submit reviews.
