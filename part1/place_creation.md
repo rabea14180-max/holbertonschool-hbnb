@@ -11,9 +11,9 @@ sequenceDiagram
         alt Creation success
         DataBase-->>BusinessLogic: place saved
         BusinessLogic-->>API: successed creation 
-        API-->>user: place created 201
+        API-->>user:  201 Created (place created)
         else Creation failed
         DataBase-->>BusinessLogic: error saving
         BusinessLogic-->>API: failed creation
-        API-->>user: could not create place
+        API-->>user: 500 Internal Server Error (could not create place)
         end
