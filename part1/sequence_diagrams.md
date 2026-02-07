@@ -68,7 +68,7 @@ sequenceDiagram
     participant BusinessLogic
     participant DataBase
 
-    ```mermaid
+```mermaid
     user-->>API: create_Place(title, description, price, lat, long)
     API->>BusinessLogic: process creation request
     BusinessLogic->>DataBase: save place
@@ -81,7 +81,7 @@ sequenceDiagram
         BusinessLogic-->>API: failed creation
         API-->>user: 500 Internal Server Error (could not create place)
     end
-    ```
+```
     
 Explanatory Notes
 
@@ -115,7 +115,7 @@ sequenceDiagram
     participant BusinessLogic
     participant DataBase
     
-    ```mermaid
+```mermaid
     user->>API: submit_Review(Rating, comment)
     API->>BusinessLogic: send review 
     BusinessLogic->>DataBase: save review 
@@ -127,7 +127,7 @@ sequenceDiagram
         BusinessLogic-->>API: validation failed
         API-->>user: 400 Bad Request (invalid data)
     end
-    ```
+ ```
 
 Explanatory Notes
 
@@ -161,7 +161,7 @@ sequenceDiagram
     participant BusinessLogic
     participant DataBase
 
-    ```mermaid
+```mermaid
     user->>API: get_place(criteria)
     API->>BusinessLogic: process request
     BusinessLogic->>DataBase: fetch list of places
@@ -178,7 +178,7 @@ sequenceDiagram
         BusinessLogic-->>API: fetch failed 
         API-->>user: 500 Internal Server Error 
     end
-    ```
+```
     
 Explanatory Notes
 
