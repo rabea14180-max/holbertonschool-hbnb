@@ -238,4 +238,7 @@ This README provides:
 This file is **ready to be used on GitHub**, showing all images and tables clearly.
 
 
-👩‍💻 Author : Hamsa Alammar , Rabea Younis Thabit , Solaf Alessa 
+👩‍💻 Author : 
+- Hamsa Alammar
+- Rabea Younis Thabit
+- Solaf Alessa 
