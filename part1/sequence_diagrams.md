@@ -193,3 +193,7 @@ sequenceDiagram
 - 200 Found is returned if list exists and: places exist or are empty; 500 Internal Server Error if the query fails
 
 - Highlights layered flow and proper handling of different scenarios
+
+---
+## Author
+### Solaf Alessa - My part of the project
