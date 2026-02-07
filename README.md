@@ -48,6 +48,7 @@ High-level architecture and sequence diagrams are included in the [Technical Doc
 
 ---
 
+👩‍💻 Authors 
 This project was created by Holberton School students:
 - Hamsa Alammar
 - Rabea Younis Thabit
