@@ -69,6 +69,12 @@ sequenceDiagram
     participant DataBase
 
 ```mermaid
+sequenceDiagram
+    actor user
+    participant API
+    participant BusinessLogic
+    participant DataBase
+
     user-->>API: create_Place(title, description, price, lat, long)
     API->>BusinessLogic: process creation request
     BusinessLogic->>DataBase: save place
@@ -116,6 +122,12 @@ sequenceDiagram
     participant DataBase
     
 ```mermaid
+sequenceDiagram
+    actor user
+    participant API
+    participant BusinessLogic
+    participant DataBase
+
     user->>API: submit_Review(Rating, comment)
     API->>BusinessLogic: send review 
     BusinessLogic->>DataBase: save review 
@@ -162,6 +174,12 @@ sequenceDiagram
     participant DataBase
 
 ```mermaid
+sequenceDiagram
+    actor user
+    participant API
+    participant BusinessLogic
+    participant DataBase
+
     user->>API: get_place(criteria)
     API->>BusinessLogic: process request
     BusinessLogic->>DataBase: fetch list of places
