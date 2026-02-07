@@ -48,23 +48,13 @@ High-level architecture and sequence diagrams are included in the [Technical Doc
 
 ---
 
-## 💻 Getting Started
+This project was created by Holberton School students:
+. Hamsa Alammar
+.Rabea Younis Thabit
+. Solaf Alessa
 
-1. Clone the repository:
-```bash
-git clone <your-repo-url>
-
-2 - Navigate to the project folder:
-cd HBnB-Evolution
-3 - Explore the TECHNICAL_DOCUMENT.md for architecture and sequence diagrams.
-
-📚 Technologies
-. Python 3.x
-. Object-Oriented Programming (OOP)
-. Markdown documentation for diagrams and architecture
-. Git & GitHub for version control
-```
-👩‍💻 Author :
-Hamsa Alammar , 
-Rabea Younis Thabit ,
-Solaf Alessa
+🎓 Academic Context
+.School: Holberton School Saudi Arabia
+.Program: Advanced Backend Specialization
+.Project: HBnB Evolution — Part 1 (Technical Documentation)
+.Date: February 2026
