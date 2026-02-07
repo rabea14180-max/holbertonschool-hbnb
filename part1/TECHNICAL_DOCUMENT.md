@@ -338,3 +338,8 @@ It defines the system’s layered structure, explains the facade communication p
 
 The included diagrams describe the main API workflows and demonstrate how information flows across the different layers.  
 This documentation will serve as the foundation for implementing the project in future parts 
+
+👩‍💻 Author : 
+- Hamsa Alammar
+- Rabea Younis Thabit
+- Solaf Alessa 
