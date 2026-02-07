@@ -1,6 +1,6 @@
 # TASK 2 — Sequence Diagrams for API Calls
 
-This section presents sequence diagrams illustrating the interaction flow between the **Presentation Layer (API)**, **Business Logic Layer**, and **Persistence Layer (Database)** for the main API use cases of the HBnB Evolution application.
+This section shows sequence diagrams that explain how the API, Business Logic, and Database layers interact to handle the main API requests in the HBnB Evolution application.
 
 ---
 
@@ -50,8 +50,8 @@ sequenceDiagram
 
 - Highlights separation of responsibilities and proper handling of success and failure scenarios
 
-### 2.2 Place Creation :
--
+## 2.2 Place Creation :
+
 ### Description
 This API call allows a registered user to create a new place listing. The system validates the input and stores the place in the database.
 
@@ -66,12 +66,6 @@ This API call allows a registered user to create a new place listing. The system
 - Success or failure HTTP responses are returned
 
 ### Sequence Diagram
-sequenceDiagram
-    actor user
-    participant API
-    participant BusinessLogic
-    participant DataBase
-
 ```mermaid
 sequenceDiagram
     actor user
@@ -103,7 +97,7 @@ sequenceDiagram
 
 - Shows validation and persistence responsibilities across layers
 
-2.3 Review Submission :
+## 2.3 Review Submission :
 
 ### Description :
 This API call handles the submission of a review for a specific place by a registered user.
@@ -119,12 +113,6 @@ This API call handles the submission of a review for a specific place by a regis
 - Appropriate HTTP responses are returned based on success or validation failure
 
 ### Sequence Diagram
-sequenceDiagram
-    actor user
-    participant API
-    participant BusinessLogic
-    participant DataBase
-    
 ```mermaid
 sequenceDiagram
     actor user
@@ -155,7 +143,7 @@ sequenceDiagram
 
 - Shows clear validation and persistence steps
 
-### 2.4 Fetching a List of Places :
+## 2.4 Fetching a List of Places :
 
 ### Description
 This API call retrieves a list of places based on criteria such as location, price, or amenities.
@@ -171,12 +159,6 @@ This API call retrieves a list of places based on criteria such as location, pri
 - Responses reflect the result of the query
 
 ### Sequence Diagram
-sequenceDiagram
-    actor user
-    participant API
-    participant BusinessLogic
-    participant DataBase
-
 ```mermaid
 sequenceDiagram
     actor user
