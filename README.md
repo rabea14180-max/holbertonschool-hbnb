@@ -49,12 +49,12 @@ High-level architecture and sequence diagrams are included in the [Technical Doc
 ---
 
 This project was created by Holberton School students:
-. Hamsa Alammar
-.Rabea Younis Thabit
-. Solaf Alessa
+- Hamsa Alammar
+- Rabea Younis Thabit
+- Solaf Alessa
 
 🎓 Academic Context
-.School: Holberton School Saudi Arabia
-.Program: Advanced Backend Specialization
-.Project: HBnB Evolution — Part 1 (Technical Documentation)
-.Date: February 2026
+ - School: Holberton School Saudi Arabia
+ - Program: Advanced Backend Specialization
+ - Project: HBnB Evolution — Part 1 (Technical Documentation)
+ - Date: February 2026
