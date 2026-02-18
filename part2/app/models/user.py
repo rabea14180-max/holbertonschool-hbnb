@@ -1,50 +1,47 @@
-# part2/app/models/user.py
-
-from app.models.BaseModel import BaseModel
-
+# models/user.py
+from models.base_model import BaseModel
+from datetime import datetime
+from typing import List
+import uuid
 
 class User(BaseModel):
-    def __init__(self, first_name="", last_name="", email="", password="", is_admin=False):
-        super().__init__()
+    """
+    User class that represents a user in the HBnB application.
+    Inherits from BaseModel which provides id, created_at, updated_at.
+    """
 
-        self.first_name = first_name
-        self.last_name = last_name
+    def __init__(self, email: str = "", password: str = "", first_name: str = "",
+                 last_name: str = "", **kwargs):
+        super().__init__(**kwargs)
         self.email = email
         self.password = password
-        self.is_admin = is_admin
+        self.first_name = first_name
+        self.last_name = last_name
+        # Relations
+        self.places: List['Place'] = []   # User can have multiple Places
+        self.reviews: List['Review'] = [] # User can have multiple Reviews
 
-        self.validate()
+    def add_place(self, place: 'Place'):
+        """Associate a Place with this User"""
+        if place not in self.places:
+            self.places.append(place)
+            place.user_id = self.id
 
-    def validate(self):
-        """Validate user attributes."""
-        if not isinstance(self.first_name, str) or self.first_name.strip() == "":
-            raise ValueError("first_name must be a non-empty string")
+    def add_review(self, review: 'Review'):
+        """Associate a Review with this User"""
+        if review not in self.reviews:
+            self.reviews.append(review)
+            review.user_id = self.id
 
-        if not isinstance(self.last_name, str) or self.last_name.strip() == "":
-            raise ValueError("last_name must be a non-empty string")
+    def update_info(self, **kwargs):
+        """
+        Update user attributes with validation.
+        Only allows updating certain fields.
+        """
+        allowed_fields = ['email', 'password', 'first_name', 'last_name']
+        for key, value in kwargs.items():
+            if key in allowed_fields:
+                setattr(self, key, value)
 
-        if not isinstance(self.email, str) or self.email.strip() == "":
-            raise ValueError("email must be a non-empty string")
-
-        if "@" not in self.email or "." not in self.email:
-            raise ValueError("email must be a valid email address")
-
-        if not isinstance(self.password, str) or self.password.strip() == "":
-            raise ValueError("password must be a non-empty string")
-
-        if not isinstance(self.is_admin, bool):
-            raise ValueError("is_admin must be a boolean")
-
-    def register(self):
-        """Simulate user registration."""
-        self.validate()
-        return True
-
-    def updateProfile(self, data):
-        """Update user profile information."""
-        self.update(data)
-        self.validate()
-
-    def delete(self):
-        """Simulate deleting the user."""
-        return True
+    def __str__(self):
+        return f"[User] ({self.id}) {self.first_name} {self.last_name} <{self.email}>"
