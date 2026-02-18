@@ -34,4 +34,6 @@ This repository contains the HBnB project work focusing on:
 ```bash
 pip install -r requirements.txt
 
-Athour : Hamsa Alammar
+```
+
+Author : Hamsa Alammar
