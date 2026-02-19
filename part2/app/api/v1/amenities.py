@@ -1,9 +1,9 @@
 # app/api/v1/amenities.py
 from flask import Blueprint, request, jsonify
-from app.services.facade import Facade
+from app.services.facade import HBnBFacade
 
 amenity_bp = Blueprint("amenities", __name__)
-facade = Facade()
+facade = HBnBFacade()
 
 @amenity_bp.route("/amenities", methods=["GET"])
 def get_amenities():
@@ -20,11 +20,10 @@ def get_amenity(amenity_id):
 @amenity_bp.route("/amenities", methods=["POST"])
 def create_amenity():
     data = request.get_json()
-    name = data.get("name") if data else None
-    if not name:
+    if not data or "name" not in data:
         return jsonify({"error": "Name is required"}), 400
     try:
-        amenity = facade.create_amenity(name)
+        amenity = facade.create_amenity(data)
     except ValueError as e:
         return jsonify({"error": str(e)}), 400
     return jsonify(amenity.to_dict()), 201
