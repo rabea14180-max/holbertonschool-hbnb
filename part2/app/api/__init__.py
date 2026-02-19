@@ -9,7 +9,7 @@ def create_api(app):
     api = Api(app, version='1.0', title='HBnB API',
               description='HBnB Evolution REST API', doc='/api/v1/docs')
     api.add_namespace(users_ns, path='/api/v1/users')
-    app.register_blueprint(amenity_bp, url_prefix='/api/v1/amenities')
+    app.register_blueprint(amenity_bp, url_prefix='/api/v1')
     api.add_namespace(reviews_ns, path='/api/v1/reviews')
     api.add_namespace(places_ns, path='/api/v1/places')
     return api
