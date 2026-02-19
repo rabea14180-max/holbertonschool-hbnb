@@ -1,5 +1,5 @@
 # models/user.py
-from models.base_model import BaseModel
+from app.models.base_model import BaseModel
 from datetime import datetime
 from typing import List
 import uuid
