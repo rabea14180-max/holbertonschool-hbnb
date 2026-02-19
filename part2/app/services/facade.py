@@ -46,3 +46,72 @@ class HBnBFacade:
             return None
         amenity.update(data)
         return amenity
+
+   # ------------------- Places -------------------
+    def create_place(self, data):
+        place = Place(**data)
+        self.place_repo.add(place.id, place)
+        return place
+
+    def get_place(self, place_id):
+        place = self.place_repo.get(place_id)
+        if not place:
+            return None
+        owner = self.user_repo.get(place.owner_id)
+        amenities = [self.amenity_repo.get(aid) for aid in place.amenities]
+        reviews = [self.review_repo.get(rid) for rid in place.reviews]
+        return {
+            "id": place.id,
+            "title": place.title,
+            "description": place.description,
+            "price": place.price,
+            "latitude": place.latitude,
+            "longitude": place.longitude,
+            "owner": owner,
+            "amenities": [{"id": a.id, "name": a.name} for a in amenities if a],
+            "reviews": [{"id": r.id, "text": r.text, "rating": r.rating, "user_id": r.user_id} for r in reviews if r]
+        }
+
+    def get_all_places(self):
+        return [{"id": p.id, "title": p.title, "latitude": p.latitude, "longitude": p.longitude}
+                for p in self.place_repo.list_all()]
+
+    def update_place(self, place_id, data):
+        place = self.place_repo.get(place_id)
+        if not place:
+            return None
+        place.update(data)
+        place.validate()
+        return place
+
+
+    # ------------------- Reviews -------------------
+    def create_review(self, data):
+        review = Review(**data)
+        self.review_repo.add(review.id, review)
+        # attach review to place
+        place = self.place_repo.get(review.place_id)
+        if place:
+            place.add_review(review.id)
+        return review
+
+    def get_review(self, review_id):
+        return self.review_repo.get(review_id)
+
+    def get_all_reviews(self):
+        return self.review_repo.list_all()
+
+    def get_reviews_by_place(self, place_id):
+        place = self.place_repo.get(place_id)
+        if not place:
+            return None
+        return [self.review_repo.get(rid) for rid in place.reviews]
+
+    def update_review(self, review_id, data):
+        review = self.review_repo.get(review_id)
+        if review:
+            review.update(data)
+        return review
+
+    def delete_review(self, review_id):
+        return self.review_repo.delete(review_id)
