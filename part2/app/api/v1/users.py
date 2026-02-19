@@ -5,7 +5,7 @@ from app.services.facade import HBnBFacade
 api = Namespace('users', description='User operations')
 facade = HBnBFacade()
 
-# Input model (includes password)
+
 user_input_model = api.model('UserInput', {
     'first_name': fields.String(required=True),
     'last_name': fields.String(required=True),
@@ -14,7 +14,7 @@ user_input_model = api.model('UserInput', {
     'is_admin': fields.Boolean(required=False)
 })
 
-# Output model (NO password)
+
 user_output_model = api.model('UserOutput', {
     'id': fields.String,
     'first_name': fields.String,
