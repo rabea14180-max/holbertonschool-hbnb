@@ -91,7 +91,7 @@ class HBnBFacade:
                 "email": owner.email
             } if owner else None,
             "amenities": [{"id": a.id, "name": a.name} for a in amenities if a],
-            "reviews": [{"id": r.id, "text": r.text, "rating": r.rating, "user_id": r.user_id} for r in reviews if r]
+            "reviews": [{"id": r.id, "text": r.comment, "rating": r.rating, "user_id": r.user_id} for r in reviews if r]
         }
 
     def get_all_places(self):
