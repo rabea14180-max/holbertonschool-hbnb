@@ -18,12 +18,26 @@ class ReviewList(Resource):
     def post(self):
         try:
             review = facade.create_review(api.payload)
-            return review, 201
+            return {
+                "id": review.id,
+                "text": review.comment,
+                "rating": review.rating,
+                "user_id": review.user_id,
+                "place_id": review.place_id
+            }, 201
         except Exception as e:
             return {"error": str(e)}, 400
 
     def get(self):
-        return facade.get_all_reviews(), 200
+        return [
+            {
+                "id": r.id,
+                "text": r.comment,
+                "rating": r.rating,
+                "user_id": r.user_id,
+                "place_id": r.place_id
+            } for r in facade.get_all_reviews()
+        ], 200
 
 @api.route('/<string:review_id>')
 class ReviewResource(Resource):
@@ -31,7 +45,13 @@ class ReviewResource(Resource):
         review = facade.get_review(review_id)
         if not review:
             return {"error": "Review not found"}, 404
-        return review, 200
+        return {
+            "id": review.id,
+            "text": review.comment,
+            "rating": review.rating,
+            "user_id": review.user_id,
+            "place_id": review.place_id
+        }, 200
 
     @api.expect(review_model)
     def put(self, review_id):
