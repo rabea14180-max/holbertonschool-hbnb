@@ -5,7 +5,6 @@ from app.models.user import User
 from app.models.place import Place
 from app.models.review import Review
 
-
 class HBnBFacade:
     def __init__(self):
         self.user_repo = InMemoryRepository()
@@ -34,7 +33,8 @@ class HBnBFacade:
 
     # =================== AMENITIES ===================
     def create_amenity(self, amenity_data):
-        if not amenity_data or not amenity_data.get("name"):
+        name = amenity_data.get("name") if amenity_data else None
+        if not name:
             raise ValueError("Amenity name is required")
         amenity = Amenity(**amenity_data)
         self.amenity_repo.add(amenity)
@@ -58,18 +58,15 @@ class HBnBFacade:
         owner = self.user_repo.get(place_data.get("owner_id"))
         if not owner:
             raise ValueError("Owner not found")
-
         amenities = []
         for aid in place_data.get("amenities", []):
             amenity = self.amenity_repo.get(aid)
             if not amenity:
                 raise ValueError(f"Amenity ID {aid} not found")
             amenities.append(amenity)
-
         place = Place(**place_data)
         for amenity in amenities:
             place.add_amenity(amenity.id)
-
         self.place_repo.add(place)
         return self.get_place(place.id)
 
@@ -77,11 +74,9 @@ class HBnBFacade:
         place = self.place_repo.get(place_id)
         if not place:
             return None
-
         owner = self.user_repo.get(place.owner_id)
         amenities = [self.amenity_repo.get(aid) for aid in place.amenities]
         reviews = [self.review_repo.get(rid) for rid in place.reviews]
-
         return {
             "id": place.id,
             "title": place.title,
@@ -96,7 +91,7 @@ class HBnBFacade:
                 "email": owner.email
             } if owner else None,
             "amenities": [{"id": a.id, "name": a.name} for a in amenities if a],
-            "reviews": [{"id": r.id, "text": r.comment, "rating": r.rating, "user_id": r.user_id} for r in reviews if r]
+            "reviews": [{"id": r.id, "text": r.text, "rating": r.rating, "user_id": r.user_id} for r in reviews if r]
         }
 
     def get_all_places(self):
@@ -128,34 +123,49 @@ class HBnBFacade:
         if not place:
             raise ValueError("Place not found")
         rating = review_data.get("rating")
-        text = review_data.get("text") or review_data.get("comment")
         if not isinstance(rating, int) or not (1 <= rating <= 5):
             raise ValueError("Rating must be integer 1-5")
-        review_data["comment"] = text
         review = Review(**review_data)
         self.review_repo.add(review)
         place.add_review(review.id)
-        return review
+        return {
+            "id": review.id,
+            "text": review.text,
+            "rating": review.rating,
+            "user_id": review.user_id,
+            "place_id": review.place_id
+        }
 
     def get_review(self, review_id):
-        return self.review_repo.get(review_id)
+        review = self.review_repo.get(review_id)
+        if not review:
+            return None
+        return {
+            "id": review.id,
+            "text": review.text,
+            "rating": review.rating,
+            "user_id": review.user_id,
+            "place_id": review.place_id
+        }
 
     def get_all_reviews(self):
-        return self.review_repo.get_all()
+        return [self.get_review(r.id) for r in self.review_repo.get_all()]
 
     def update_review(self, review_id, data):
         review = self.review_repo.get(review_id)
         if not review:
             return None
-        review.updateReview(data)
-        return review
+        for field in ["text", "rating"]:
+            if field in data:
+                setattr(review, field, data[field])
+        return self.get_review(review_id)
 
     def delete_review(self, review_id):
-        self.review_repo.delete(review_id)
-        return True
+        deleted = self.review_repo.delete(review_id)
+        return deleted
 
     def get_reviews_by_place(self, place_id):
         place = self.place_repo.get(place_id)
         if not place:
-            return []
-        return [self.review_repo.get(rid) for rid in place.reviews if self.review_repo.get(rid)]
+            return None
+        return [self.get_review(rid) for rid in place.reviews]
