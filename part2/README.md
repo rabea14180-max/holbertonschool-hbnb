@@ -115,3 +115,65 @@ python3 run.py
 ```
 ---
 Author: Solaf Alessa
+## HBnB Project — Part 2 (Project Setup & User Endpoints)
+
+This repository contains the HBnB project work focusing on:
+
+- **Task 0** — Project Setup and Package Initialization  
+- **Task 2** — User API Endpoints  
+
+---
+
+## Project Overview
+
+- **Project Setup (Task 0)**
+  - The project is organized using a modular layered architecture.
+  - The application structure includes:
+    - `api/` — Presentation Layer (handles HTTP requests and API endpoints)
+    - `models/` & `services/` — Business Logic Layer
+    - `persistence/` — In-memory repository implementation
+  - Implements the **Facade Pattern** in `services/facade.py`.
+  - Communication flow:
+    - `API → Facade → Repository`
+  - No database is used in this phase.
+  - Designed to be replaced with SQLAlchemy in Part 3.
+
+---
+
+- **User Management — API Endpoints (Task 2)**
+  - `models/user.py` defines the `User` class.
+  - Handles attributes:
+    - `first_name`
+    - `last_name`
+    - `email`
+    - `password`
+    - `is_admin`
+  - Includes validation and profile update logic.
+  - Password is excluded from API responses.
+
+  - `api/v1/users.py` exposes REST API endpoints:
+    - `POST /api/v1/users` — Create a new user
+    - `GET /api/v1/users` — Retrieve all users
+    - `GET /api/v1/users/<id>` — Retrieve single user
+    - `PUT /api/v1/users/<id>` — Update user
+
+> DELETE operation is not implemented for Task 2 as per project requirements.
+
+---
+## Architecture
+
+- `models/` → Business logic classes  
+- `persistence/` → In-memory repository implementation  
+- `services/facade.py` → Application service layer (handles validation and coordination)  
+
+Data storage is handled using:
+
+```bash
+# In-memory repository (no database in this phase)
+```
+
+---
+
+### Author
+
+Rabea Thabit
