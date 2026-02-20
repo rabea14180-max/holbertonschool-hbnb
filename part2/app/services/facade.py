@@ -70,7 +70,7 @@ class HBnBFacade:
             place.add_amenity(amenity.id)
        
         self.place_repo.add(place)
-        return self.get_place(place.id)
+        return place
 
     def get_place(self, place_id):
         place = self.place_repo.get(place_id)
