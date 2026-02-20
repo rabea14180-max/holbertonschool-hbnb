@@ -1,9 +1,8 @@
 #part2/app/api/v1/users.py
 from flask_restx import Namespace, Resource, fields
-from app.services.facade import HBnBFacade
+from app.services import facade
 
 api = Namespace('users', description='User operations')
-facade = HBnBFacade()
 
 user_input_model = api.model('UserInput', {
     'first_name': fields.String(required=True),
