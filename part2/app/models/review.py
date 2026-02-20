@@ -1,6 +1,7 @@
 # part2/app/models/review.py
 
 from app.models.BaseModel import BaseModel
+from app.services import facade
 
 
 class Review(BaseModel):
