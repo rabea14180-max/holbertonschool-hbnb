@@ -1,4 +1,4 @@
-# HBnB Project — Part 2 (Tasks 1 & 3) 
+# HBnB Project — Part 2 (Tasks 1 & 3) .
 
 This repository contains the HBnB project work focusing on:
 
