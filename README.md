@@ -48,6 +48,95 @@ High-level architecture and sequence diagrams are included in the [Technical Doc
 
 ---
 
+# HBnB – Part 2
+## Business Logic & REST API Implementation
+## 📖 Overview
+
+This phase translates the architectural design of HBnB into a working backend system.
+The focus is on implementing a clean, modular, and scalable backend using Flask, structured around clear separation of concerns and layered architecture.
+
+The system is built to be extensible, maintainable, and ready for database integration in the next phase.
+
+## 🏗 Architectural Design
+
+The application follows a layered architecture:
+
+## 1️⃣ Presentation Layer
+
+Responsible for exposing RESTful endpoints using Flask + flask-restx.
+This layer:
+
+- Defines API routes and namespaces
+- Handles request parsing and validation
+- Serializes responses
+- Documents endpoints using Swagger
+
+## 2️⃣ Business Logic Layer
+
+Encapsulates the core domain models and application rules.
+
+Implemented entities:
+
+- User
+- Place
+- Review
+- Amenity
+
+This layer:
+
+- Manages relationships between entities
+- Handles domain-level validation
+- Controls object lifecycle and interactions
+- Remains independent from the web framework
+
+## 3️⃣ Persistence Layer (Abstraction-Ready)
+
+Although database integration is postponed to Part 3, the system is designed with persistence abstraction in mind.
+
+- An in-memory repository is implemented.
+- The architecture allows seamless replacement with a database-backed repository (e.g., SQLAlchemy).
+- Business logic remains decoupled from storage implementation.
+
+## 🎯 Design Principles Applied
+
+- Separation of Concerns
+- Single Responsibility Principle
+- Facade Pattern to simplify communication between Presentation and Business Logic layers
+- Clean modular project structure
+- Scalable API design
+- Extensibility for authentication (JWT) and RBAC in future phases
+
+## 🚀 Implemented Features
+
+- Structured Flask application with modular packaging
+- RESTful CRUD endpoints for:
+   - Users
+   - Places
+   - Reviews
+   - Amenities
+- Entity relationship handling
+- Nested/extended serialization (e.g., Place returns owner details and amenities)
+- Swagger API documentation via flask-restx
+- Edge-case handling and endpoint validation
+
+  ## 🛠 Tech Stack
+
+  - Python 3
+  - Flask
+  - flask-restx
+  - In-Memory Repository Pattern
+  - Facade Design Pattern
+ 
+    ## 🔮 Forward Compatibility
+
+    The system is intentionally architected to support:
+
+    - SQLAlchemy integration (Part 3)
+    - JWT authentication
+    - Role-based access control
+    - Production-ready scalability
+   
+      
 👩‍💻 Authors 
 This project was created by Holberton School students:
 - Hamsa Alammar
@@ -59,44 +148,4 @@ This project was created by Holberton School students:
  - Program: Advanced Backend Specialization
  - Project: HBnB Evolution — Part 1 (Technical Documentation)
  - Date: February 2026
-
-# HBnB Project — Part 2 (Tasks 1 & 3)
-
-This repository contains the HBnB project work focusing on:
-
-- **Task 1** — Core Business Logic for Users  
-- **Task 3** — Amenity API Endpoints
-
----
-
-## Project Overview
-
-- **User Management (Task 1)**
-  - `models/user.py` defines the User class.
-  - Handles attributes: `first_name`, `last_name`, `email`, `password`, `is_admin`.
-  - Includes validation, profile update, and registration logic.
-
-- **Amenity Management (Task 3)**
-  - `models/amenity.py` defines the Amenity class.
-  - `services/facade.py` handles CRUD operations for amenities.
-  - `api/v1/amenities.py` exposes REST API endpoints:
-    - `GET /amenities` — List all amenities
-    - `GET /amenities/<id>` — Get single amenity
-    - `POST /amenities` — Create a new amenity
-    - `PUT /amenities/<id>` — Update an amenity
-
-> DELETE operation is not implemented for Task 3 as per project requirements.
-
----
-
-## How to Run
-
-1. Install dependencies:
-
-```bash
-pip install -r requirements.txt
-
-```
-
-Author : Hamsa Alammar
 
