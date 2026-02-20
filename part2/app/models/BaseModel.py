@@ -24,6 +24,11 @@ class BaseModel:
         """
         self.updated_at = datetime.utcnow()
 
+    def update(self, data):
+        for key, value in data.items():
+            setattr(self, key, value)
+        self.save()
+
     def to_dict(self):
         """
         Returns dictionary representation of the object
@@ -33,4 +38,3 @@ class BaseModel:
             "created_at": self.created_at.isoformat(),
             "updated_at": self.updated_at.isoformat()
         }
-
