@@ -1,4 +1,4 @@
-## HBnB Project — Part 2 (Project Setup & User Endpoints)
+## HBnB Project — Part 2 (Project Setup & User Endpoints) .
 
 This repository contains the HBnB project work focusing on:
 
