@@ -59,17 +59,16 @@ class HBnBFacade:
         if not owner:
             raise ValueError("Owner not found")
 
-        amenities = []
-        for aid in place_data.get("amenities", []):
+        amenity_ids = place_data.pop("amenities", [])
+
+        place = Place(**place_data)
+
+        for aid in amenity_ids:
             amenity = self.amenity_repo.get(aid)
             if not amenity:
                 raise ValueError(f"Amenity ID {aid} not found")
-            amenities.append(amenity)
-
-        place = Place(**place_data)
-        for amenity in amenities:
             place.add_amenity(amenity.id)
-
+       
         self.place_repo.add(place)
         return self.get_place(place.id)
 
