@@ -1,6 +1,6 @@
 # app/api/v1/amenities.py
 from flask import Blueprint, request, jsonify
-from app.services.facade import HBnBFacade
+from app.services import HBnBFacade
 
 amenity_bp = Blueprint("amenities", __name__)
 facade = HBnBFacade()
