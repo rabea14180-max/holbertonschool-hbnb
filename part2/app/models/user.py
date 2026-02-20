@@ -11,12 +11,13 @@ class User(BaseModel):
     """
 
     def __init__(self, email: str = "", password: str = "", first_name: str = "",
-                 last_name: str = "", **kwargs):
+                 last_name: str = "", is_admin=False, **kwargs):
         super().__init__(**kwargs)
         self.email = email
         self.password = password
         self.first_name = first_name
         self.last_name = last_name
+        self.is_admin = is_admin
         # Relations
         self.places: List['Place'] = []   # User can have multiple Places
         self.reviews: List['Review'] = [] # User can have multiple Reviews
