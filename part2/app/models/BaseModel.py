@@ -29,7 +29,7 @@ class BaseModel:
             setattr(self, key, value)
         self.save()
 
-   def to_dict(self):
+    def to_dict(self):
        return {
            "id": self.id,
            "created_at": self.created_at.isoformat(),
