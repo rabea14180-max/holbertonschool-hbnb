@@ -29,12 +29,12 @@ class BaseModel:
             setattr(self, key, value)
         self.save()
 
-    def to_dict(self):
-        """
-        Returns dictionary representation of the object
-        """
-        return {
-            "id": self.id,
-            "created_at": self.created_at.isoformat(),
-            "updated_at": self.updated_at.isoformat()
-        }
+   def to_dict(self):
+       base = super().to_dict()
+       base.update({
+           "first_name": self.first_name,
+           "last_name": self.last_name,
+           "email": self.email,
+           "is_admin": getattr(self, "is_admin", None)
+       })
+       return base
