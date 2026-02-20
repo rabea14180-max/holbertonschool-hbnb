@@ -159,5 +159,5 @@ class HBnBFacade:
     def get_reviews_by_place(self, place_id):
         place = self.place_repo.get(place_id)
         if not place:
-            return []
+            return None
         return [self.review_repo.get(rid) for rid in place.reviews if self.review_repo.get(rid)]
