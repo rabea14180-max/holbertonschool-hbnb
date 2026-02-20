@@ -46,3 +46,13 @@ class User(BaseModel):
 
     def __str__(self):
         return f"[User] ({self.id}) {self.first_name} {self.last_name} <{self.email}>"
+    
+    def to_dict(self):
+        base = super().to_dict()
+        base.update({
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "email": self.email,
+            "is_admin": getattr(self, "is_admin", None)
+        })
+        return base
