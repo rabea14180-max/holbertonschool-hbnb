@@ -29,3 +29,11 @@ class Amenity(BaseModel):
     def deleteAmenity(self):
         """Simulate deleting an amenity."""
         return True
+        
+    def to_dict(self):
+        base = super().to_dict()
+        base.update({
+            "name": self.name,
+            "description": self.description
+        })
+        return base
