@@ -270,6 +270,67 @@ List places with Amenities & Reviews (GET)
 
 ---
 
+## Failed Operations
+
+1. User Errors
+
+Missing required fields
+
+<img width="907" height="551" alt="Screenshot 2026-02-21 211338" src="https://github.com/user-attachments/assets/74b6161e-b599-4f02-96be-177b111b8d9b" />
+
+---
+
+Wrong ID
+
+<img width="920" height="409" alt="Screenshot 2026-02-21 211411" src="https://github.com/user-attachments/assets/4587a2b2-2449-46e3-8c66-1ad7d04dbda8" />
+
+---
+
+2. Amenity Errors
+
+Missing name
+
+<img width="916" height="418" alt="Screenshot 2026-02-21 211432" src="https://github.com/user-attachments/assets/ab879a5b-67ec-429c-ae9f-77288e1e1976" />
+
+---
+
+Wrong ID 
+
+<img width="917" height="360" alt="Screenshot 2026-02-21 211453" src="https://github.com/user-attachments/assets/2fcb6ca6-f2d1-431c-879d-e05652d2089c" />
+
+---
+
+3. Place Errors
+
+Missing required field `owner_id`
+
+<img width="916" height="396" alt="Screenshot 2026-02-21 211513" src="https://github.com/user-attachments/assets/5190f1da-d914-4bb5-b9e4-32ec1ae68e13" />
+
+---
+
+Wrong ID 
+
+<img width="905" height="389" alt="Screenshot 2026-02-21 211527" src="https://github.com/user-attachments/assets/b8bdbd33-26e4-46e7-9596-e618ccd72bd8" />
+
+---
+
+4. Review Errors
+
+Rating out of bounds
+
+<img width="908" height="454" alt="Screenshot 2026-02-21 211550" src="https://github.com/user-attachments/assets/138ef8fe-f4b6-411b-b209-91559286cec5" />
+
+---
+
+Wrong ID
+
+<img width="915" height="366" alt="Screenshot 2026-02-21 211605" src="https://github.com/user-attachments/assets/dba3862d-fc50-4a16-8258-729d0a198b4d" />
+
+---
+
+- `DELETE` concerned an Error in  (`Users` , `Amenities` , `Places`) but not in `Reviews`
+
+---
 ## Notes:
 - `DELETE` is not implemented in (`Users` , `Amenities` , `Places`) as it's not required in the project but only in `Reviews`
 - All `POST` and `PUT` operations have been successfully tested with curl
