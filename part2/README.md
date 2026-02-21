@@ -175,9 +175,11 @@ pip install -r requirements.txt
 ```bash
 python3 run.py
 ```
----
+
 Author: Solaf Alessa
+
 ---
+
 # HBnB API Testeng and validation
 providing a detailed overview of the API endpoints tested in the HBnB project, including Users, Amenities, Places, and Reviews
 
