@@ -1,4 +1,4 @@
-## HBnB Project — Part 2 (Project Setup & User Endpoints) 
+# HBnB Project — Part 2 (Project Setup & User Endpoints) 
 
 This repository contains the HBnB project work focusing on:
 
@@ -57,9 +57,7 @@ Data storage is handled using:
 
 ---
 
-### Author
-
-Rabea Thabit
+Author: Rabea Thabit
 
 
 # HBnB Project — Part 2 (Tasks 1 & 3) 
@@ -102,7 +100,7 @@ pip install -r requirements.txt
 
 Author : Hamsa Alammar
 
-## HBnB Project — Part 2 (Places & Reviews)
+# HBnB Project — Part 2 (Places & Reviews)
 
 This repository contains the HBnB project work focusing on:
 - Task 4: Place Endpoints
@@ -179,3 +177,99 @@ python3 run.py
 ```
 ---
 Author: Solaf Alessa
+---
+# HBnB API Testeng and validation
+providing a detailed overview of the API endpoints tested in the HBnB project, including Users, Amenities, Places, and Reviews
+
+1. Users
+Create a User (POST)
+
+<img width="911" height="665" alt="Screenshot 2026-02-21 200404" src="https://github.com/user-attachments/assets/8005ef4a-70d8-4773-8096-45ee96fd2d34" />
+
+---
+
+<img width="910" height="624" alt="Screenshot 2026-02-21 202707" src="https://github.com/user-attachments/assets/f6bc24c8-449d-4d7c-9cf7-bad322bb2c8a" />
+
+---
+
+Update User (PUT)
+
+<img width="909" height="632" alt="Screenshot 2026-02-21 202848" src="https://github.com/user-attachments/assets/451294f6-7adf-48ba-87d0-ae6e8cb940fd" />
+
+---
+2. Amenities
+Create an Amenity (POST)
+
+<img width="916" height="545" alt="Screenshot 2026-02-21 200438" src="https://github.com/user-attachments/assets/1d5bc125-0045-4027-82ee-49b1a056c51b" />
+
+---
+3. Places
+Create a Place (POST)
+
+<img width="920" height="683" alt="Screenshot 2026-02-21 200511" src="https://github.com/user-attachments/assets/ad5b49c9-58ce-4e35-b3a1-18fd7dad9acb" />
+
+---
+
+Update Place to Add Amenities (PUT)
+
+<img width="914" height="445" alt="Screenshot 2026-02-21 200555" src="https://github.com/user-attachments/assets/67fad870-a498-4b81-b65c-21068f664910" />
+
+---
+
+Delete place (DELETE)
+
+<img width="917" height="370" alt="Screenshot 2026-02-21 201406" src="https://github.com/user-attachments/assets/c5e3688c-5ef7-44c7-a3d7-735d3a062276" />
+
+- it can't be deleted because it's not a requirement for the project 
+
+---
+
+4. Reviews
+Create a Review (POST)
+
+<img width="903" height="596" alt="Screenshot 2026-02-21 200653" src="https://github.com/user-attachments/assets/d19b96ed-a269-4a5a-a37a-acdd2cf4b2f0" />
+
+---
+
+Delete Review (DELETE)
+
+<img width="869" height="351" alt="Screenshot 2026-02-21 201225" src="https://github.com/user-attachments/assets/ad26da4f-6c37-4c27-a647-cfa1f2745289" />
+
+---
+
+List places with Amenities & Reviews (GET)
+
+<img width="905" height="907" alt="Screenshot 2026-02-21 200731" src="https://github.com/user-attachments/assets/2d6a3522-84bf-4982-b634-3fa5fa2746f1" />
+
+---
+
+**How it would be showen**
+- Users "before update"
+
+<img width="691" height="510" alt="Screenshot 2026-02-21 202818" src="https://github.com/user-attachments/assets/24099c76-4911-4c77-b4b9-209f9f5dde12" />
+
+---
+
+- Users "after update"
+
+<img width="676" height="508" alt="Screenshot 2026-02-21 202909" src="https://github.com/user-attachments/assets/b3f16616-f377-4e17-8daa-6158d62868e3" />
+
+---
+
+- Places
+
+<img width="690" height="680" alt="Screenshot 2026-02-21 200907" src="https://github.com/user-attachments/assets/dbda7e1d-9823-4aac-b683-a4771ec0e566" />
+
+---
+
+- Reviews
+
+<img width="671" height="329" alt="Screenshot 2026-02-21 200948" src="https://github.com/user-attachments/assets/833444ea-1a54-4dcf-b3e3-b7ce0b8216f8" />
+
+---
+
+## Notes:
+- `DELETE` is not implemented in (`Users` , `Amenities` , `Places`) as it's not required in the project but only in `Reviews`
+- All `POST` and `PUT` operations have been successfully tested with curl
+- `GET` operations can be tested by fetching entities using their IDs
+- No authentication or authorization implemented yet
