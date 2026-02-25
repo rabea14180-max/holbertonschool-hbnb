@@ -1,7 +1,6 @@
 # part2/app/models/user.py
 from app.models.BaseModel import BaseModel
-from typing import List
-
+from app.services import facade
 
 class User(BaseModel):
     def __init__(self, email: str = "", password: str = "", first_name: str = "",
