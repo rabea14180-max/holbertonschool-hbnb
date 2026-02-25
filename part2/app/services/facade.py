@@ -4,6 +4,8 @@ from app.models.amenity import Amenity
 from app.models.user import User
 from app.models.place import Place
 from app.models.review import Review
+import re
+
 
 class HBnBFacade:
     def __init__(self):
@@ -12,9 +14,41 @@ class HBnBFacade:
         self.review_repo = InMemoryRepository()
         self.amenity_repo = InMemoryRepository()
 
-    # =================== USERS ===================
+    def _validate_email_format(self, email):
+        if not isinstance(email, str) or not email.strip():
+            raise ValueError("email is required")
+        email = email.strip()
+        if not re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", email):
+            raise ValueError("Invalid email format")
+        return email
+
+    def _validate_name(self, value, field_name):
+        if not isinstance(value, str) or not value.strip():
+            raise ValueError(f"{field_name} is required")
+        return value.strip()
+
     def create_user(self, user_data):
-        user = User(**user_data)
+        if not user_data:
+            raise ValueError("Invalid input data")
+
+        first_name = self._validate_name(user_data.get("first_name"), "first_name")
+        last_name = self._validate_name(user_data.get("last_name"), "last_name")
+        email = self._validate_email_format(user_data.get("email"))
+
+        password = user_data.get("password")
+        if not isinstance(password, str) or not password.strip():
+            raise ValueError("password is required")
+
+        existing_user = self.user_repo.get_by_attribute("email", email)
+        if existing_user:
+            raise ValueError("Email already registered")
+
+        clean_data = dict(user_data)
+        clean_data["first_name"] = first_name
+        clean_data["last_name"] = last_name
+        clean_data["email"] = email
+
+        user = User(**clean_data)
         self.user_repo.add(user)
         return user
 
@@ -28,10 +62,28 @@ class HBnBFacade:
         user = self.user_repo.get(user_id)
         if not user:
             return None
-        user.update_info(**data)
+
+        if not data:
+            raise ValueError("Invalid input data")
+
+        clean_data = dict(data)
+
+        if "first_name" in clean_data:
+            clean_data["first_name"] = self._validate_name(clean_data.get("first_name"), "first_name")
+
+        if "last_name" in clean_data:
+            clean_data["last_name"] = self._validate_name(clean_data.get("last_name"), "last_name")
+
+        if "email" in clean_data:
+            new_email = self._validate_email_format(clean_data.get("email"))
+            existing_user = self.user_repo.get_by_attribute("email", new_email)
+            if existing_user and existing_user.id != user.id:
+                raise ValueError("Email already registered")
+            clean_data["email"] = new_email
+
+        user.update_info(**clean_data)
         return user
 
-    # =================== AMENITIES ===================
     def create_amenity(self, amenity_data):
         if not amenity_data or not amenity_data.get("name"):
             raise ValueError("Amenity name is required")
@@ -52,7 +104,6 @@ class HBnBFacade:
         amenity.updateAmenity(data)
         return amenity
 
-    # =================== PLACES ===================
     def create_place(self, place_data):
         owner = self.user_repo.get(place_data.get("owner_id"))
         if not owner:
@@ -67,7 +118,7 @@ class HBnBFacade:
             if not amenity:
                 raise ValueError(f"Amenity ID {aid} not found")
             place.add_amenity(amenity.id)
-       
+
         self.place_repo.add(place)
         return place
 
@@ -117,7 +168,6 @@ class HBnBFacade:
             place.amenities = new_amenities
         return self.get_place(place_id)
 
-    # =================== REVIEWS ===================
     def create_review(self, review_data):
         user = self.user_repo.get(review_data.get("user_id"))
         if not user:
