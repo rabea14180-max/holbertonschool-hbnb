@@ -1,8 +1,12 @@
 # part2/app/models/user.py
+
+import re
 from app.models.BaseModel import BaseModel
 from app.services import facade
 
+
 class User(BaseModel):
+
     def __init__(self, email="", password="", first_name="",
                  last_name="", is_admin=False, **kwargs):
         super().__init__(**kwargs)
@@ -14,7 +18,7 @@ class User(BaseModel):
         self.places = []
         self.reviews = []
         self.validate()
-                     
+
     def validate(self):
         if not isinstance(self.first_name, str) or not self.first_name.strip():
             raise ValueError("first_name is required")
@@ -47,6 +51,7 @@ class User(BaseModel):
         for key, value in kwargs.items():
             if key in allowed_fields:
                 setattr(self, key, value)
+
         self.validate()
         self.save()
 
