@@ -15,7 +15,7 @@ class User(BaseModel):
         self.places = []
         self.reviews = []
         self.validate()
-
+                     
 def validate(self):
         if not isinstance(self.first_name, str) or not self.first_name.strip():
             raise ValueError("first_name is required")
