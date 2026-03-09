@@ -2,7 +2,7 @@
 from app import create_app
 from app.api import create_api
 
-app = create_app()
+app = create_api()
 api = create_api(app)
 
 if __name__ == '__main__':
