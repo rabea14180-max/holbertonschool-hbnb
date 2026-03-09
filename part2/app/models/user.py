@@ -16,7 +16,7 @@ class User(BaseModel):
         self.reviews = []
         self.validate()
 
-    def validate(self):
+def validate(self):
         if not isinstance(self.first_name, str) or not self.first_name.strip():
             raise ValueError("first_name is required")
         if len(self.first_name.strip()) > 50:
