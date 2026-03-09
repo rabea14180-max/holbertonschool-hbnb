@@ -3,8 +3,7 @@ from app.models.BaseModel import BaseModel
 from app.services import facade
 
 class User(BaseModel):
-    
- def __init__(self, email="", password="", first_name="",
+    def __init__(self, email="", password="", first_name="",
                  last_name="", is_admin=False, **kwargs):
         super().__init__(**kwargs)
         self.email = email
