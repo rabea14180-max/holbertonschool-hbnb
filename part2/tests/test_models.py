@@ -1,7 +1,5 @@
 import pytest
-from models.user import User
-from models.place import Place
-from models.review import Review
+from app.models.user import User
 
 
 def test_create_valid_user():
