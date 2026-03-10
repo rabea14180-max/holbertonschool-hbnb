@@ -1,38 +1,54 @@
-# app/api/v1/amenities.py
-from flask import Blueprint, request, jsonify
-from app.services import facade
+from flask_restx import Namespace, Resource, fields
+from app.services.facade import HBnBFacade
 
-amenity_bp = Blueprint("amenities", __name__)
+api = Namespace('amenities', description='Amenity operations')
 
-@amenity_bp.route("/amenities", methods=["GET"])
-def get_amenities():
-    amenities = facade.list_amenities()
-    return jsonify([a.to_dict() for a in amenities]), 200
+facade = HBnBFacade()
 
-@amenity_bp.route("/amenities/<amenity_id>", methods=["GET"])
-def get_amenity(amenity_id):
-    amenity = facade.get_amenity(amenity_id)
-    if not amenity:
-        return jsonify({"error": "Amenity not found"}), 404
-    return jsonify(amenity.to_dict()), 200
+amenity_model = api.model('Amenity', {
+    'name': fields.String(required=True, description='Amenity name')
+})
 
-@amenity_bp.route("/amenities", methods=["POST"])
-def create_amenity():
-    data = request.get_json()
-    if not data or "name" not in data:
-        return jsonify({"error": "Name is required"}), 400
-    try:
+
+@api.route('/')
+class AmenityList(Resource):
+
+    def get(self):
+        """List all amenities"""
+        amenities = facade.get_all_amenities()
+        return [a.to_dict() for a in amenities], 200
+
+    @api.expect(amenity_model)
+    def post(self):
+        """Create a new amenity"""
+        data = api.payload
+
         amenity = facade.create_amenity(data)
-    except ValueError as e:
-        return jsonify({"error": str(e)}), 400
-    return jsonify(amenity.to_dict()), 201
 
-@amenity_bp.route("/amenities/<amenity_id>", methods=["PUT"])
-def update_amenity(amenity_id):
-    data = request.get_json()
-    if not data:
-        return jsonify({"error": "No data provided"}), 400
-    amenity = facade.update_amenity(amenity_id, data)
-    if not amenity:
-        return jsonify({"error": "Amenity not found"}), 404
-    return jsonify(amenity.to_dict()), 200
+        return amenity.to_dict(), 201
+
+
+@api.route('/<amenity_id>')
+class AmenityResource(Resource):
+
+    def get(self, amenity_id):
+        """Get amenity by ID"""
+        amenity = facade.get_amenity(amenity_id)
+
+        if not amenity:
+            return {"error": "Amenity not found"}, 404
+
+        return amenity.to_dict(), 200
+
+    @api.expect(amenity_model)
+    def put(self, amenity_id):
+        """Update an amenity"""
+
+        data = api.payload
+
+        amenity = facade.update_amenity(amenity_id, data)
+
+        if not amenity:
+            return {"error": "Amenity not found"}, 404
+
+        return amenity.to_dict(), 200
