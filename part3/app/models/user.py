@@ -1,45 +1,44 @@
-# part2/app/models/user.py
-from app.models.BaseModel import BaseModel
-from app.services import facade
+# part3/app/models/user.py
 
-class User(BaseModel):
-    def __init__(self, email: str = "", password: str = "", first_name: str = "",
-                 last_name: str = "", is_admin=False, **kwargs):
-        super().__init__(**kwargs)
-        self.email = email
-        self.password = password
+from app.models.BaseModel import BaseModel
+from app import bcrypt, db
+
+class User(BaseModel, db.Model):
+    __tablename__ = 'users'
+
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    password_hash = db.Column(db.String(128), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)
+
+    reviews = db.relationship('Review', backref='user', lazy=True)
+
+    def __init__(self, first_name, last_name, email, password, is_admin=False):
+        super().__init__()
         self.first_name = first_name
         self.last_name = last_name
+        self.email = email
+        self.password = password  # uses the property setter
         self.is_admin = is_admin
-        self.places: List['Place'] = []
-        self.reviews: List['Review'] = []
 
-    def add_place(self, place: 'Place'):
-        if place not in self.places:
-            self.places.append(place)
-            place.user_id = self.id
+    @property
+    def password(self):
+        raise AttributeError("Password is write-only.")
 
-    def add_review(self, review: 'Review'):
-        if review not in self.reviews:
-            self.reviews.append(review)
-            review.user_id = self.id
+    @password.setter
+    def password(self, plain_password):
+        self.password_hash = bcrypt.generate_password_hash(plain_password).decode('utf-8')
 
-    def update_info(self, **kwargs):
-        allowed_fields = ['email', 'password', 'first_name', 'last_name', 'is_admin']
-        for key, value in kwargs.items():
-            if key in allowed_fields:
-                setattr(self, key, value)
-        self.save()
-
-    def __str__(self):
-        return f"[User] ({self.id}) {self.first_name} {self.last_name} <{self.email}>"
+    def check_password(self, plain_password):
+        return bcrypt.check_password_hash(self.password_hash, plain_password)
 
     def to_dict(self):
-        base = super().to_dict()
-        base.update({
+        """Return user info excluding password"""
+        return {
+            "id": self.id,
             "first_name": self.first_name,
             "last_name": self.last_name,
             "email": self.email,
-            "is_admin": getattr(self, "is_admin", None)
-        })
-        return base
+            "is_admin": self.is_admin
+        }
