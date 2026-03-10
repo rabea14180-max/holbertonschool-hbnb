@@ -122,6 +122,17 @@ class HBnBFacade:
         self.place_repo.add(place)
         return place
 
+    def get_place_obj(self, place_id):
+        """Return the raw Place object (not serialized dict)."""
+        return self.place_repo.get(place_id)
+
+    def user_already_reviewed(self, user_id, place_id):
+        """Return True if the user has already reviewed the given place."""
+        return any(
+            r.user_id == user_id and r.place_id == place_id
+            for r in self.review_repo.get_all()
+        )
+
     def get_place(self, place_id):
         place = self.place_repo.get(place_id)
         if not place:

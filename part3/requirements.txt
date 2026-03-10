@@ -1,3 +1,5 @@
-#part2/requirements.txt
 flask
 flask-restx
+flask-jwt-extended
+flask-sqlalchemy
+flask-bcrypt
