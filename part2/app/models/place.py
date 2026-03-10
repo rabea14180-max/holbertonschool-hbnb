@@ -5,22 +5,20 @@ from app.services import facade
 
 
 class Place(BaseModel):
-    def __init__(self, **kwargs):
-        super().__init__()
+   def __init__(self, title="", description="", price=0.0, latitude=0.0, longitude=0.0, owner_id=None): 
+       super().__init__()
 
-        # Use kwargs with defaults
-        self.title = kwargs.get("name", kwargs.get("title", ""))
-        self.description = kwargs.get("description", "")
-        self.price = kwargs.get("price", 0.0)
-        self.latitude = kwargs.get("latitude", 0.0)
-        self.longitude = kwargs.get("longitude", 0.0)
-        self.owner_id = kwargs.get("owner_id", None)
-
-        # Relationships
-        self.reviews = []
-        self.amenities = []
-
-        self.validate()
+       self.title = title 
+       self.description = description 
+       self.price = price 
+       self.latitude = latitude 
+       self.longitude = longitude 
+       
+       self.owner_id = owner_id # linked to User 
+       self.reviews = [] # list of Review objects or IDs 
+       self.amenities = [] # list of Amenity objects or IDs 
+       
+       self.validate()
 
 
     def validate(self):
