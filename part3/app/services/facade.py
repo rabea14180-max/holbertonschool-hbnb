@@ -1,5 +1,6 @@
 #part3/app/services/facade.py
-from app.persistence.repository import InMemoryRepository, SQLAlchemyRepository
+from app.persistence.repository import InMemoryRepository
+from app.services.repositories.user_repository import UserRepository
 from app.models.amenity import Amenity
 from app.models.place import Place
 from app.models.review import Review
@@ -8,10 +9,9 @@ import re
 
 class HBnBFacade:
     def __init__(self):
-        # Users are persisted via SQLAlchemy; other models still use in-memory store
-        # (Place, Review, Amenity will be migrated in subsequent tasks)
-        from app.models.user import User
-        self.user_repo = SQLAlchemyRepository(User)
+        # UserRepository uses SQLAlchemy for persistence
+        # Place, Review, Amenity still use in-memory (migrated in subsequent tasks)
+        self.user_repo = UserRepository()
         self.place_repo = InMemoryRepository()
         self.review_repo = InMemoryRepository()
         self.amenity_repo = InMemoryRepository()
@@ -45,18 +45,22 @@ class HBnBFacade:
         if existing_user:
             raise ValueError("Email already registered")
 
-        clean_data = dict(user_data)
-        clean_data["first_name"] = first_name
-        clean_data["last_name"] = last_name
-        clean_data["email"] = email
-
-        user = self.user_repo.model(**clean_data)
+        from app.models.user import User
+        user = User(
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            password=password
+        )
         self.user_repo.add(user)
         return user
 
 
     def get_user(self, user_id):
         return self.user_repo.get(user_id)
+
+    def get_user_by_email(self, email):
+        return self.user_repo.get_user_by_email(email)
 
     def get_all_users(self):
         return self.user_repo.get_all()

@@ -1,37 +1,36 @@
-#part2/app/models/BaseModel.py
+#part3/app/models/BaseModel.py
+from app import db
 import uuid
 from datetime import datetime
 
 
-class BaseModel:
+class BaseModel(db.Model):
     """
-    BaseModel defines common attributes/methods
-    for all models in the application.
+    Abstract SQLAlchemy base model providing common columns: id, created_at, updated_at.
+    __abstract__ = True tells SQLAlchemy NOT to create a separate table for this class.
     """
+    __abstract__ = True
 
-    def __init__(self, **kwargs):
-        """
-        Initialize a new model instance
-        """
-
-        self.id = kwargs.get("id", str(uuid.uuid4()))
-        self.created_at = kwargs.get("created_at", datetime.utcnow())
-        self.updated_at = kwargs.get("updated_at", datetime.utcnow())
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
     def save(self):
-        """
-        Updates the updated_at timestamp
-        """
+        """Update the updated_at timestamp and flush to session."""
         self.updated_at = datetime.utcnow()
+        db.session.add(self)
+        db.session.commit()
 
     def update(self, data):
+        """Apply a dict of updates and save."""
         for key, value in data.items():
-            setattr(self, key, value)
+            if hasattr(self, key):
+                setattr(self, key, value)
         self.save()
 
     def to_dict(self):
-       return {
-           "id": self.id,
-           "created_at": self.created_at.isoformat(),
-           "updated_at": self.updated_at.isoformat()
-       }
+        return {
+            "id": self.id,
+            "created_at": self.created_at.isoformat() if self.created_at else None,
+            "updated_at": self.updated_at.isoformat() if self.updated_at else None,
+        }
