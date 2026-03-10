@@ -1,20 +1,22 @@
 #part3/app/services/facade.py
-from app.persistence.repository import InMemoryRepository
 from app.services.repositories.user_repository import UserRepository
-from app.models.amenity import Amenity
-from app.models.place import Place
-from app.models.review import Review
+from app.services.repositories.place_repository import PlaceRepository
+from app.services.repositories.review_repository import ReviewRepository
+from app.services.repositories.amenity_repository import AmenityRepository
+from app import db
 import re
 
 
 class HBnBFacade:
     def __init__(self):
-        # UserRepository uses SQLAlchemy for persistence
-        # Place, Review, Amenity still use in-memory (migrated in subsequent tasks)
         self.user_repo = UserRepository()
-        self.place_repo = InMemoryRepository()
-        self.review_repo = InMemoryRepository()
-        self.amenity_repo = InMemoryRepository()
+        self.place_repo = PlaceRepository()
+        self.review_repo = ReviewRepository()
+        self.amenity_repo = AmenityRepository()
+
+    # ------------------------------------------------------------------ #
+    #  Helpers
+    # ------------------------------------------------------------------ #
 
     def _validate_email_format(self, email):
         if not isinstance(email, str) or not email.strip():
@@ -29,32 +31,26 @@ class HBnBFacade:
             raise ValueError(f"{field_name} is required")
         return value.strip()
 
+    # ------------------------------------------------------------------ #
+    #  User
+    # ------------------------------------------------------------------ #
+
     def create_user(self, user_data):
         if not user_data:
             raise ValueError("Invalid input data")
-
         first_name = self._validate_name(user_data.get("first_name"), "first_name")
         last_name = self._validate_name(user_data.get("last_name"), "last_name")
         email = self._validate_email_format(user_data.get("email"))
-
         password = user_data.get("password")
         if not isinstance(password, str) or not password.strip():
             raise ValueError("password is required")
-
-        existing_user = self.user_repo.get_by_attribute("email", email)
-        if existing_user:
+        if self.user_repo.get_user_by_email(email):
             raise ValueError("Email already registered")
-
         from app.models.user import User
-        user = User(
-            first_name=first_name,
-            last_name=last_name,
-            email=email,
-            password=password
-        )
+        user = User(first_name=first_name, last_name=last_name,
+                    email=email, password=password)
         self.user_repo.add(user)
         return user
-
 
     def get_user(self, user_id):
         return self.user_repo.get(user_id)
@@ -69,31 +65,31 @@ class HBnBFacade:
         user = self.user_repo.get(user_id)
         if not user:
             return None
-
         if not data:
             raise ValueError("Invalid input data")
-
         clean_data = dict(data)
-
         if "first_name" in clean_data:
-            clean_data["first_name"] = self._validate_name(clean_data.get("first_name"), "first_name")
-
+            clean_data["first_name"] = self._validate_name(clean_data["first_name"], "first_name")
         if "last_name" in clean_data:
-            clean_data["last_name"] = self._validate_name(clean_data.get("last_name"), "last_name")
-
+            clean_data["last_name"] = self._validate_name(clean_data["last_name"], "last_name")
         if "email" in clean_data:
-            new_email = self._validate_email_format(clean_data.get("email"))
-            existing_user = self.user_repo.get_by_attribute("email", new_email)
-            if existing_user and existing_user.id != user.id:
+            new_email = self._validate_email_format(clean_data["email"])
+            existing = self.user_repo.get_user_by_email(new_email)
+            if existing and existing.id != user.id:
                 raise ValueError("Email already registered")
             clean_data["email"] = new_email
-
         user.update_info(**clean_data)
+        db.session.commit()
         return user
+
+    # ------------------------------------------------------------------ #
+    #  Amenity
+    # ------------------------------------------------------------------ #
 
     def create_amenity(self, amenity_data):
         if not amenity_data or not amenity_data.get("name"):
             raise ValueError("Amenity name is required")
+        from app.models.amenity import Amenity
         amenity = Amenity(**amenity_data)
         self.amenity_repo.add(amenity)
         return amenity
@@ -111,44 +107,31 @@ class HBnBFacade:
         amenity.updateAmenity(data)
         return amenity
 
+    # ------------------------------------------------------------------ #
+    #  Place
+    # ------------------------------------------------------------------ #
+
     def create_place(self, place_data):
         owner = self.user_repo.get(place_data.get("owner_id"))
         if not owner:
             raise ValueError("Owner not found")
-
-        amenity_ids = place_data.pop("amenities", [])
-
+        # Remove amenities list — relationships handled in a later task
+        place_data.pop("amenities", [])
+        from app.models.place import Place
         place = Place(**place_data)
-
-        for aid in amenity_ids:
-            amenity = self.amenity_repo.get(aid)
-            if not amenity:
-                raise ValueError(f"Amenity ID {aid} not found")
-            place.add_amenity(amenity.id)
-
         self.place_repo.add(place)
         return place
 
     def get_place_obj(self, place_id):
-        """Return the raw Place object (not serialized dict)."""
+        """Return the raw Place SQLAlchemy object."""
         return self.place_repo.get(place_id)
-
-    def user_already_reviewed(self, user_id, place_id):
-        """Return True if the user has already reviewed the given place."""
-        return any(
-            r.user_id == user_id and r.place_id == place_id
-            for r in self.review_repo.get_all()
-        )
 
     def get_place(self, place_id):
         place = self.place_repo.get(place_id)
         if not place:
             return None
-
         owner = self.user_repo.get(place.owner_id)
-        amenities = [self.amenity_repo.get(aid) for aid in place.amenities]
-        reviews = [self.review_repo.get(rid) for rid in place.reviews]
-
+        reviews = self.review_repo.get_reviews_by_place(place_id)
         return {
             "id": place.id,
             "title": place.title,
@@ -162,8 +145,11 @@ class HBnBFacade:
                 "last_name": owner.last_name,
                 "email": owner.email
             } if owner else None,
-            "amenities": [{"id": a.id, "name": a.name} for a in amenities if a],
-            "reviews": [{"id": r.id, "text": r.comment, "rating": r.rating, "user_id": r.user_id} for r in reviews if r]
+            "amenities": [],  # relationships added in next task
+            "reviews": [
+                {"id": r.id, "text": r.text, "rating": r.rating, "user_id": r.user_id}
+                for r in reviews
+            ]
         }
 
     def get_all_places(self):
@@ -176,15 +162,16 @@ class HBnBFacade:
         for field in ["title", "description", "price", "latitude", "longitude"]:
             if field in data:
                 setattr(place, field, data[field])
-        if "amenities" in data:
-            new_amenities = []
-            for aid in data["amenities"]:
-                amenity = self.amenity_repo.get(aid)
-                if not amenity:
-                    raise ValueError(f"Amenity ID {aid} not found")
-                new_amenities.append(aid)
-            place.amenities = new_amenities
+        # amenity list updates skipped until relationships are implemented
+        db.session.commit()
         return self.get_place(place_id)
+
+    # ------------------------------------------------------------------ #
+    #  Review
+    # ------------------------------------------------------------------ #
+
+    def user_already_reviewed(self, user_id, place_id):
+        return self.review_repo.user_already_reviewed(user_id, place_id)
 
     def create_review(self, review_data):
         user = self.user_repo.get(review_data.get("user_id"))
@@ -196,11 +183,15 @@ class HBnBFacade:
         rating = review_data.get("rating")
         if not isinstance(rating, int) or not (1 <= rating <= 5):
             raise ValueError("Rating must be integer 1-5")
-        text = review_data.get("text") or review_data.get("comment")
-        review_data["comment"] = text
-        review = Review(**review_data)
+        text = review_data.get("text") or review_data.get("comment") or ""
+        from app.models.review import Review
+        review = Review(
+            rating=rating,
+            text=text,
+            user_id=review_data["user_id"],
+            place_id=review_data["place_id"]
+        )
         self.review_repo.add(review)
-        place.add_review(review.id)
         return review
 
     def get_review(self, review_id):
@@ -227,4 +218,4 @@ class HBnBFacade:
         place = self.place_repo.get(place_id)
         if not place:
             return None
-        return [self.review_repo.get(rid) for rid in place.reviews if self.review_repo.get(rid)]
+        return self.review_repo.get_reviews_by_place(place_id)

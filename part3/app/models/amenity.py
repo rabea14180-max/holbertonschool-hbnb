@@ -1,38 +1,41 @@
-# part2/app/models/amenity.py
-
+#part3/app/models/amenity.py
+from app import db
 from app.models.BaseModel import BaseModel
 
 
 class Amenity(BaseModel):
-    def __init__(self, name="", description=""):
-        super().__init__()
+    """Amenity entity mapped to the 'amenities' table via SQLAlchemy."""
+    __tablename__ = 'amenities'
 
+    name = db.Column(db.String(128), nullable=False)
+    description = db.Column(db.String(512), nullable=False, default="")
+
+    def __init__(self, name="", description="", **kwargs):
+        super().__init__(**kwargs)
         self.name = name
-        self.description = description
-
+        self.description = description or ""
         self.validate()
 
     def validate(self):
         """Validate amenity attributes."""
         if not isinstance(self.name, str) or self.name.strip() == "":
             raise ValueError("name must be a non-empty string")
-
         if not isinstance(self.description, str):
             raise ValueError("description must be a string")
 
     def updateAmenity(self, data):
         """Update amenity attributes."""
-        self.update(data)
+        if 'name' in data:
+            self.name = data['name']
+        if 'description' in data:
+            self.description = data['description']
         self.validate()
+        db.session.commit()
 
-    def deleteAmenity(self):
-        """Simulate deleting an amenity."""
-        return True
-        
     def to_dict(self):
         base = super().to_dict()
         base.update({
             "name": self.name,
-            "description": self.description
+            "description": self.description,
         })
         return base
