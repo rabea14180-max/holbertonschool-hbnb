@@ -38,6 +38,9 @@ class User(BaseModel):
         if not isinstance(self.is_admin, bool):
             raise ValueError("is_admin must be a boolean")
 
+        if not isinstance(self.password, str) or not self.password.strip():
+        raise ValueError("password is required")
+
     def add_place(self, place):
         if place not in self.places:
             self.places.append(place)
