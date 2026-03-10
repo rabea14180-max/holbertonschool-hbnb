@@ -1,9 +1,11 @@
 from app.models.BaseModel import BaseModel
 from app import bcrypt, db
+import uuid
 
 class User(BaseModel, db.Model):
     __tablename__ = 'users'
 
+    id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
@@ -12,8 +14,8 @@ class User(BaseModel, db.Model):
 
     reviews = db.relationship('Review', backref='user', lazy=True)
 
-    def __init__(self, first_name, last_name, email, password, is_admin=False):
-        super().__init__()
+    def __init__(self, first_name, last_name, email, password, is_admin=False, **kwargs):
+        super().__init__(**kwargs)
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
@@ -30,6 +32,13 @@ class User(BaseModel, db.Model):
 
     def check_password(self, plain_password):
         return bcrypt.check_password_hash(self.password_hash, plain_password)
+
+    def update_info(self, **kwargs):
+        for key, value in kwargs.items():
+            if key == 'password':
+                self.password = value
+            elif hasattr(self, key):
+                setattr(self, key, value)
 
     def to_dict(self):
         """Return user info excluding password"""

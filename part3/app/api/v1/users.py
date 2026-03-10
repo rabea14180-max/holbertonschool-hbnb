@@ -1,8 +1,8 @@
 from flask_restx import Namespace, Resource, fields
 from flask import request
 from app.models.user import User
-from app import db
-from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity
+from app import db, bcrypt
+from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, get_jwt
 
 api = Namespace('users', description='User operations')
 
@@ -11,9 +11,24 @@ login_model = api.model('Login', {
     'password': fields.String(required=True)
 })
 
+user_create_model = api.model('UserCreate', {
+    'first_name': fields.String(required=True),
+    'last_name': fields.String(required=True),
+    'email': fields.String(required=True),
+    'password': fields.String(required=True),
+    'is_admin': fields.Boolean(default=False)
+})
+
 user_update_model = api.model('UserUpdate', {
     'first_name': fields.String,
     'last_name': fields.String
+})
+
+admin_user_update_model = api.model('AdminUserUpdate', {
+    'first_name': fields.String,
+    'last_name': fields.String,
+    'email': fields.String,
+    'password': fields.String
 })
 
 
@@ -37,29 +52,74 @@ class Login(Resource):
         return {"access_token": access_token}, 200
 
 
+@api.route('/')
+class UserList(Resource):
+    @jwt_required()
+    @api.expect(user_create_model)
+    def post(self):
+        """Create a new user (admin only)"""
+        claims = get_jwt()
+        if not claims.get('is_admin'):
+            return {"error": "Admin privileges required"}, 403
+
+        data = request.get_json()
+        email = data.get('email')
+
+        existing = User.query.filter_by(email=email).first()
+        if existing:
+            return {"error": "Email already registered"}, 400
+
+        user = User(
+            first_name=data.get('first_name'),
+            last_name=data.get('last_name'),
+            email=email,
+            password=data.get('password'),
+            is_admin=data.get('is_admin', False)
+        )
+        db.session.add(user)
+        db.session.commit()
+        return user.to_dict(), 201
+
+
 @api.route('/<user_id>')
 class UserResource(Resource):
     @jwt_required()
-    @api.expect(user_update_model)
     def put(self, user_id):
-        """Modify user details (self only, no email/password changes)"""
+        """
+        Modify user details.
+        - Admins: can modify any user including email and password.
+        - Regular users: can only modify their own first_name / last_name.
+        """
+        claims = get_jwt()
         current_user_id = get_jwt_identity()
+        is_admin = claims.get('is_admin', False)
 
-        # Only allow users to modify their own data
-        if current_user_id != user_id:
+        # Non-admins can only edit themselves
+        if not is_admin and current_user_id != user_id:
             return {"error": "Unauthorized action"}, 403
 
         data = request.get_json()
         if not data:
             return {"error": "No data provided"}, 400
 
-        # Prevent email or password modification
-        if 'email' in data or 'password' in data:
+        # Regular users cannot change email or password
+        if not is_admin and ('email' in data or 'password' in data):
             return {"error": "You cannot modify email or password"}, 400
 
         user = User.query.filter_by(id=user_id).first()
         if not user:
             return {"error": "User not found"}, 404
+
+        # Admin-only: handle email and password updates
+        if is_admin:
+            if 'email' in data:
+                new_email = data['email']
+                existing = User.query.filter_by(email=new_email).first()
+                if existing and existing.id != user_id:
+                    return {"error": "Email already in use"}, 400
+                user.email = new_email
+            if 'password' in data:
+                user.password = data['password']  # uses the property setter
 
         if 'first_name' in data:
             user.first_name = data['first_name']

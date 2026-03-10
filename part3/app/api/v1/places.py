@@ -1,5 +1,5 @@
 from flask_restx import Namespace, Resource, fields
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import jwt_required, get_jwt_identity, get_jwt
 from app.services import facade
 
 api = Namespace('places', description='Place operations')
@@ -38,7 +38,7 @@ place_update_model = api.model('PlaceUpdate', {
     'amenities': fields.List(fields.String)
 })
 
-# Routes
+
 @api.route('/')
 class PlaceList(Resource):
     @jwt_required()
@@ -80,13 +80,19 @@ class PlaceResource(Resource):
     @jwt_required()
     @api.expect(place_update_model)
     def put(self, place_id):
-        """Update a place (owner only)"""
+        """Update a place (owner or admin)"""
+        claims = get_jwt()
         current_user_id = get_jwt_identity()
+        is_admin = claims.get('is_admin', False)
+
         place = facade.get_place_obj(place_id)
         if not place:
             return {"error": "Place not found"}, 404
-        if place.owner_id != current_user_id:
+
+        # Admins bypass ownership check
+        if not is_admin and place.owner_id != current_user_id:
             return {"error": "Unauthorized action"}, 403
+
         data = api.payload
         try:
             updated = facade.update_place(place_id, data)
