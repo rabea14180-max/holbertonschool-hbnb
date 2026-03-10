@@ -5,7 +5,7 @@ from app.services import facade
 api = Namespace('reviews', description='Review operations')
 
 review_model = api.model('Review', {
-    'text': fields.String(required=True),
+    'comment': fields.String(required=True),
     'rating': fields.Integer(required=True),
     'user_id': fields.String(required=True),
     'place_id': fields.String(required=True)
@@ -19,7 +19,7 @@ class ReviewList(Resource):
             review = facade.create_review(api.payload)
             return {
                 "id": review.id,
-                "text": review.comment,
+                "comment": review.comment,
                 "rating": review.rating,
                 "user_id": review.user_id,
                 "place_id": review.place_id
@@ -31,7 +31,7 @@ class ReviewList(Resource):
         return [
             {
                 "id": r.id,
-                "text": r.comment,
+                "comment": r.comment,
                 "rating": r.rating,
                 "user_id": r.user_id,
                 "place_id": r.place_id
@@ -46,7 +46,7 @@ class ReviewResource(Resource):
             return {"error": "Review not found"}, 404
         return {
             "id": review.id,
-            "text": review.comment,
+            "comment": review.comment,
             "rating": review.rating,
             "user_id": review.user_id,
             "place_id": review.place_id
