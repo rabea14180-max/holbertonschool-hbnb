@@ -1,4 +1,5 @@
 # part2/app/models/place.py
+# app/models/place.py
 from app.models.BaseModel import BaseModel
 from app.services import facade
 
@@ -34,27 +35,22 @@ class Place(BaseModel):
             raise ValueError("owner_id is required")
 
     def add_review(self, review):
-        """Add a review to the place."""
         self.reviews.append(review)
         self.save()
 
     def add_amenity(self, amenity):
-        """Add an amenity to the place."""
         if amenity not in self.amenities:
             self.amenities.append(amenity)
             self.save()
 
     def remove_amenity(self, amenity):
-        """Remove an amenity from the place."""
         if amenity in self.amenities:
             self.amenities.remove(amenity)
             self.save()
 
     def updatePlace(self, data):
-        """Update place attributes."""
         self.update(data)
         self.validate()
 
     def deletePlace(self):
-        """Simulate deleting a place."""
         return True
