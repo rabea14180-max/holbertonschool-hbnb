@@ -1,7 +1,6 @@
 # part2/app/models/place.py
 
 from app.models.BaseModel import BaseModel
-from app.services import facade
 
 
 class Place(BaseModel):
