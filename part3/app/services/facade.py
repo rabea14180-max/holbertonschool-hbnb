@@ -1,7 +1,6 @@
-#part2/app/services/facade.py
-from app.persistence.repository import InMemoryRepository
+#part3/app/services/facade.py
+from app.persistence.repository import InMemoryRepository, SQLAlchemyRepository
 from app.models.amenity import Amenity
-from app.models.user import User
 from app.models.place import Place
 from app.models.review import Review
 import re
@@ -9,7 +8,10 @@ import re
 
 class HBnBFacade:
     def __init__(self):
-        self.user_repo = InMemoryRepository()
+        # Users are persisted via SQLAlchemy; other models still use in-memory store
+        # (Place, Review, Amenity will be migrated in subsequent tasks)
+        from app.models.user import User
+        self.user_repo = SQLAlchemyRepository(User)
         self.place_repo = InMemoryRepository()
         self.review_repo = InMemoryRepository()
         self.amenity_repo = InMemoryRepository()
@@ -48,9 +50,10 @@ class HBnBFacade:
         clean_data["last_name"] = last_name
         clean_data["email"] = email
 
-        user = User(**clean_data)
+        user = self.user_repo.model(**clean_data)
         self.user_repo.add(user)
         return user
+
 
     def get_user(self, user_id):
         return self.user_repo.get(user_id)
