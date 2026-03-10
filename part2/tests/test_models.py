@@ -1,21 +1,48 @@
-# part2/tests/test_models.py
+# part2/tests/test_models_full.py
 import pytest
+from app.models.user import User
 from app.models.place import Place
 from app.models.review import Review
+from app.models.amenity import Amenity
 
-# ----- Place Tests -----
+# ------------------ User Tests ------------------
+def test_create_user():
+    user = User(username="john_doe", email="john@example.com", password="securepass")
+    assert user.username == "john_doe"
+    assert user.email == "john@example.com"
+
+def test_invalid_user_email():
+    with pytest.raises(ValueError):
+        User(username="john", email="", password="1234")
+
+def test_missing_user_password():
+    with pytest.raises(ValueError):
+        User(username="jane", email="jane@example.com", password=None)
+
+# ------------------ Amenity Tests ------------------
+def test_create_amenity():
+    amenity = Amenity(name="Pool", description="Outdoor swimming pool")
+    assert amenity.name == "Pool"
+    assert amenity.description == "Outdoor swimming pool"
+
+def test_invalid_amenity_name():
+    with pytest.raises(ValueError):
+        Amenity(name="", description="Desc")
+
+# ------------------ Place Tests ------------------
 def test_create_place():
+    user = User(username="owner1", email="owner1@example.com", password="pass")
     place = Place(
         title="Hotel",
         description="Nice place",
         price=100.0,
         latitude=21.5,
         longitude=39.2,
-        owner_id="user_1"
+        owner_id=user.id
     )
     assert place.title == "Hotel"
     assert place.price == 100.0
-    assert place.owner_id == "user_1"
+    assert place.owner_id == user.id
 
 def test_invalid_place_title():
     with pytest.raises(ValueError):
@@ -25,25 +52,53 @@ def test_invalid_place_price():
     with pytest.raises(ValueError):
         Place(title="Test", description="Desc", price=-10, owner_id="user_1")
 
-# ----- Review Tests -----
+# Test Place & Amenity relationship
+def test_add_amenity_to_place():
+    place = Place(title="Resort", description="Sea view", price=200, owner_id="user_2")
+    amenity = Amenity(name="Gym", description="Fitness center")
+    place.add_amenity(amenity)
+    assert amenity in place.amenities
+
+def test_remove_amenity_from_place():
+    place = Place(title="Resort", description="Sea view", price=200, owner_id="user_2")
+    amenity = Amenity(name="Spa", description="Relaxing spa")
+    place.add_amenity(amenity)
+    place.remove_amenity(amenity)
+    assert amenity not in place.amenities
+
+# ------------------ Review Tests ------------------
 def test_create_review():
+    user = User(username="reviewer", email="review@example.com", password="pass")
+    place = Place(title="Hotel", description="Nice", price=150, owner_id=user.id)
     review = Review(
         rating=5,
         comment="Great place",
-        user_id="user_1",
-        place_id="place_1"
+        user_id=user.id,
+        place_id=place.id
     )
     assert review.rating == 5
     assert review.comment == "Great place"
 
 def test_invalid_rating():
+    user = User(username="userX", email="x@example.com", password="pass")
+    place = Place(title="Inn", description="Cozy", price=80, owner_id=user.id)
     with pytest.raises(ValueError):
-        Review(rating=10, comment="Bad", user_id="user_1", place_id="place_1")
+        Review(rating=10, comment="Bad", user_id=user.id, place_id=place.id)
 
 def test_missing_user_id():
+    place = Place(title="Inn", description="Cozy", price=80, owner_id="user1")
     with pytest.raises(ValueError):
-        Review(rating=4, comment="Good", user_id=None, place_id="place_1")
+        Review(rating=4, comment="Good", user_id=None, place_id=place.id)
 
 def test_missing_place_id():
+    user = User(username="userY", email="y@example.com", password="pass")
     with pytest.raises(ValueError):
-        Review(rating=4, comment="Good", user_id="user_1", place_id=None)
+        Review(rating=4, comment="Good", user_id=user.id, place_id=None)
+
+# Test adding review to place
+def test_add_review_to_place():
+    user = User(username="owner2", email="owner2@example.com", password="pass")
+    place = Place(title="Villa", description="Luxury", price=500, owner_id=user.id)
+    review = Review(rating=5, comment="Excellent", user_id=user.id, place_id=place.id)
+    place.add_review(review)
+    assert review in place.reviews
