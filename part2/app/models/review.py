@@ -5,16 +5,20 @@ from app.services import facade
 
 
 class Review(BaseModel):
-    def __init__(self, **kwargs):
-        super().__init__()
-
-        self.rating = kwargs.get("rating", 0)
-        self.comment = kwargs.get("text", kwargs.get("comment", ""))
-        self.user_id = kwargs.get("user_id", None)
-        self.place_id = kwargs.get("place_id", None)
-
-        self.validate()
-
+   def __init__(self, title="", description="", price=0.0, latitude=0.0, longitude=0.0, owner_id=None): 
+       super().__init__()
+       
+       self.title = title 
+       self.description = description 
+       self.price = price
+       self.latitude = latitude 
+       self.longitude = longitude
+       
+       self.owner_id = owner_id # linked to User 
+       self.reviews = [] # list of Review objects or IDs 
+       self.amenities = [] # list of Amenity objects or IDs 
+       
+       self.validate()
 
     def validate(self):
         """Validate review attributes."""
