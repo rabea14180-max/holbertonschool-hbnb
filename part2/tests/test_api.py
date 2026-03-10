@@ -8,13 +8,13 @@ def client():
     return app.test_client()
 
 def test_get_users(client):
-    response = client.get("/api/v1/users")
+    response = client.get("/api/v1/users/")
     assert response.status_code == 200
 
 def test_get_places(client):
-    response = client.get("/api/v1/places")
+    response = client.get("/api/v1/places/")
     assert response.status_code == 200
 
 def test_get_reviews(client):
-    response = client.get("/api/v1/reviews")
+    response = client.get("/api/v1/reviews/")
     assert response.status_code == 200
