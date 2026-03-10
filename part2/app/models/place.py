@@ -5,7 +5,8 @@ from app.services import facade
 
 
 class Place(BaseModel):
-   def __init__(self, title="", description="", price=0.0, latitude=0.0, longitude=0.0, owner_id=None): 
+   def __init__(self, title="", description="", price=0.0, latitude=0.0, 
+                longitude=0.0, owner_id=None): 
        super().__init__()
 
        self.title = title 
