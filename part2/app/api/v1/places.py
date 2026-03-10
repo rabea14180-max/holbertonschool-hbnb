@@ -17,7 +17,7 @@ user_model = api.model('PlaceUser', {
 })
 review_model = api.model('PlaceReview', {
     'id': fields.String,
-    'text': fields.String,
+    'comment': fields.String,
     'rating': fields.Integer,
     'user_id': fields.String
 })
