@@ -1,5 +1,3 @@
-# part3/app/models/user.py
-
 from app.models.BaseModel import BaseModel
 from app import bcrypt, db
 
