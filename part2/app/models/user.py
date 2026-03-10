@@ -1,72 +1,52 @@
-# part2/app/models/user.py
-
-import re
 from app.models.BaseModel import BaseModel
-from app.services import facade
 
 
 class User(BaseModel):
 
-    def __init__(self, email="", password="", first_name="",
-                 last_name="", is_admin=False, **kwargs):
-        super().__init__(**kwargs)
-        self.email = email
-        self.password = password
+    def __init__(self, first_name="", last_name="", email="", password="", is_admin=False):
+        super().__init__()
+
         self.first_name = first_name
         self.last_name = last_name
+        self.email = email
+        self.password = password
         self.is_admin = is_admin
-        self.places = []
-        self.reviews = []
+
         self.validate()
 
     def validate(self):
-        if not isinstance(self.first_name, str) or not self.first_name.strip():
-            raise ValueError("first_name is required")
-        if len(self.first_name.strip()) > 50:
+
+        if not isinstance(self.first_name, str) or self.first_name.strip() == "":
+            raise ValueError("first_name must be a non-empty string")
+
+        if len(self.first_name) > 50:
             raise ValueError("first_name must be at most 50 characters")
 
-        if not isinstance(self.last_name, str) or not self.last_name.strip():
-            raise ValueError("last_name is required")
-        if len(self.last_name.strip()) > 50:
+        if not isinstance(self.last_name, str) or self.last_name.strip() == "":
+            raise ValueError("last_name must be a non-empty string")
+
+        if len(self.last_name) > 50:
             raise ValueError("last_name must be at most 50 characters")
 
-        if not isinstance(self.email, str) or not self.email.strip():
-            raise ValueError("email is required")
-        if not re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", self.email.strip()):
-            raise ValueError("Invalid email format")
+        if not isinstance(self.email, str) or self.email.strip() == "":
+            raise ValueError("email must be a non-empty string")
+
+        if "@" not in self.email or "." not in self.email:
+            raise ValueError("email must be a valid email")
+
+        if not isinstance(self.password, str) or self.password.strip() == "":
+            raise ValueError("password must be a non-empty string")
 
         if not isinstance(self.is_admin, bool):
             raise ValueError("is_admin must be a boolean")
-            
-        if not isinstance(self.password, str) or not self.password.strip():
-            raise ValueError("password is required")
 
-    def add_place(self, place):
-        if place not in self.places:
-            self.places.append(place)
-
-    def add_review(self, review):
-        if review not in self.reviews:
-            self.reviews.append(review)
-
-    def update_info(self, **kwargs):
-        allowed_fields = ["email", "password", "first_name", "last_name", "is_admin"]
-        for key, value in kwargs.items():
-            if key in allowed_fields:
-                setattr(self, key, value)
-
+    def register(self):
         self.validate()
-        self.save()
+        return True
 
-    def __str__(self):
-        return f"[User] ({self.id}) {self.first_name} {self.last_name} <{self.email}>"
+    def updateProfile(self, data):
+        self.update(data)
+        self.validate()
 
-    def to_dict(self):
-        base = super().to_dict()
-        base.update({
-            "first_name": self.first_name,
-            "last_name": self.last_name,
-            "email": self.email,
-            "is_admin": self.is_admin
-        })
-        return base
+    def delete(self):
+        return True
