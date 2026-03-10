@@ -115,11 +115,18 @@ class HBnBFacade:
         owner = self.user_repo.get(place_data.get("owner_id"))
         if not owner:
             raise ValueError("Owner not found")
-        # Remove amenities list — relationships handled in a later task
-        place_data.pop("amenities", [])
+        # Extract amenity IDs to link after creation
+        amenity_ids = place_data.pop("amenities", [])
         from app.models.place import Place
         place = Place(**place_data)
         self.place_repo.add(place)
+        # Link amenities via M:M relationship
+        for aid in amenity_ids:
+            amenity = self.amenity_repo.get(aid)
+            if not amenity:
+                raise ValueError(f"Amenity ID {aid} not found")
+            place.amenities.append(amenity)
+        db.session.commit()
         return place
 
     def get_place_obj(self, place_id):
@@ -130,8 +137,7 @@ class HBnBFacade:
         place = self.place_repo.get(place_id)
         if not place:
             return None
-        owner = self.user_repo.get(place.owner_id)
-        reviews = self.review_repo.get_reviews_by_place(place_id)
+        # Use ORM relationships directly (no manual repo lookups needed)
         return {
             "id": place.id,
             "title": place.title,
@@ -140,15 +146,17 @@ class HBnBFacade:
             "latitude": place.latitude,
             "longitude": place.longitude,
             "owner": {
-                "id": owner.id,
-                "first_name": owner.first_name,
-                "last_name": owner.last_name,
-                "email": owner.email
-            } if owner else None,
-            "amenities": [],  # relationships added in next task
+                "id": place.owner.id,
+                "first_name": place.owner.first_name,
+                "last_name": place.owner.last_name,
+                "email": place.owner.email
+            } if place.owner else None,
+            "amenities": [
+                {"id": a.id, "name": a.name} for a in place.amenities
+            ],
             "reviews": [
                 {"id": r.id, "text": r.text, "rating": r.rating, "user_id": r.user_id}
-                for r in reviews
+                for r in place.reviews
             ]
         }
 
@@ -162,7 +170,14 @@ class HBnBFacade:
         for field in ["title", "description", "price", "latitude", "longitude"]:
             if field in data:
                 setattr(place, field, data[field])
-        # amenity list updates skipped until relationships are implemented
+        # Handle amenity list update via M:M relationship
+        if "amenities" in data:
+            place.amenities = []
+            for aid in data["amenities"]:
+                amenity = self.amenity_repo.get(aid)
+                if not amenity:
+                    raise ValueError(f"Amenity ID {aid} not found")
+                place.amenities.append(amenity)
         db.session.commit()
         return self.get_place(place_id)
 
