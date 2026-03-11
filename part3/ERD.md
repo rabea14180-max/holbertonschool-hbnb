@@ -3,56 +3,56 @@
 ```mermaid
 erDiagram
     USER {
-        char(36)      id         PK
-        varchar(255)  first_name
-        varchar(255)  last_name
-        varchar(255)  email       "UNIQUE"
-        varchar(255)  password
-        boolean       is_admin    "DEFAULT FALSE"
-        datetime      created_at
-        datetime      updated_at
+        char(36)    id          PK
+        varchar(255) first_name
+        varchar(255) last_name
+        varchar(255) email       "UNIQUE"
+        varchar(255) password
+        boolean     is_admin    "DEFAULT FALSE"
+        datetime    created_at
+        datetime    updated_at
     }
 
     PLACE {
-        char(36)     id          PK
-        varchar(255) title
-        text         description
-        float        price
-        float        latitude
-        float        longitude
-        char(36)     owner_id    FK
-        datetime     created_at
-        datetime     updated_at
+        char(36)        id          PK
+        varchar(255)    title
+        text            description
+        decimal(10-2)   price
+        float           latitude
+        float           longitude
+        char(36)        owner_id    FK
+        datetime        created_at
+        datetime        updated_at
     }
 
     REVIEW {
-        char(36) id         PK
-        text     text
-        int      rating     "1-5"
-        char(36) user_id    FK
-        char(36) place_id   FK
-        datetime created_at
-        datetime updated_at
+        char(36)    id          PK
+        text        text
+        int         rating      "CHECK 1..5"
+        char(36)    user_id     FK
+        char(36)    place_id    FK
+        datetime    created_at
+        datetime    updated_at
     }
 
     AMENITY {
-        char(36)     id          PK
-        varchar(255) name        "UNIQUE"
-        varchar(512) description
-        datetime     created_at
-        datetime     updated_at
+        char(36)        id          PK
+        varchar(255)    name        "UNIQUE"
+        varchar(512)    description
+        datetime        created_at
+        datetime        updated_at
     }
 
     PLACE_AMENITY {
-        char(36) place_id   FK
-        char(36) amenity_id FK
+        char(36)    place_id    FK
+        char(36)    amenity_id  FK
     }
 
-    USER         ||--o{ PLACE         : "owns"
-    USER         ||--o{ REVIEW        : "writes"
-    PLACE        ||--o{ REVIEW        : "receives"
-    PLACE        ||--o{ PLACE_AMENITY : "has"
-    AMENITY      ||--o{ PLACE_AMENITY : "offered at"
+    USER ||--o{ PLACE : owns
+    PLACE ||--o{ REVIEW : has
+    USER ||--o{ REVIEW : writes
+    PLACE ||--o{ PLACE_AMENITY : has
+    AMENITY ||--o{ PLACE_AMENITY : includes
 ```
 
 ## Relationship Summary
@@ -78,4 +78,3 @@ Copy the `mermaid` code block above directly into any `.md` file in your reposit
 GitHub renders Mermaid diagrams natively in markdown previews.
 
 To render and export as PNG/SVG, paste only the diagram body (starting with `erDiagram`) into
-[Mermaid Live Editor](https://mermaid.live) and use the **Download PNG** / **Download SVG** button.
