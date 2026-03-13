@@ -30,11 +30,9 @@ class ReviewList(Resource):
         if not place:
             return {"error": "Place not found"}, 404
 
-        # Cannot review your own place
-        if place.owner_id == current_user_id:
+        if str(place.owner_id) == str(current_user_id):
             return {"error": "You cannot review your own place"}, 400
 
-        # Cannot review the same place twice
         if facade.user_already_reviewed(current_user_id, place_id):
             return {"error": "You have already reviewed this place"}, 400
 
@@ -93,8 +91,7 @@ class ReviewResource(Resource):
         if not review:
             return {"error": "Review not found"}, 404
 
-        # Admins bypass authorship check
-        if not is_admin and review.user_id != current_user_id:
+        if not is_admin and str(review.user_id) != str(current_user_id):
             return {"error": "Unauthorized action"}, 403
 
         updated = facade.update_review(review_id, api.payload)
@@ -113,8 +110,7 @@ class ReviewResource(Resource):
         if not review:
             return {"error": "Review not found"}, 404
 
-        # Admins bypass authorship check
-        if not is_admin and review.user_id != current_user_id:
+        if not is_admin and str(review.user_id) != str(current_user_id):
             return {"error": "Unauthorized action"}, 403
 
         facade.delete_review(review_id)
