@@ -47,7 +47,6 @@ class PlaceList(Resource):
         """Create a new place (authenticated users only)"""
         current_user_id = get_jwt_identity()
         data = api.payload.copy()
-        # Force owner_id to the authenticated user
         data['owner_id'] = current_user_id
         try:
             place = facade.create_place(data)
@@ -89,8 +88,7 @@ class PlaceResource(Resource):
         if not place:
             return {"error": "Place not found"}, 404
 
-        # Admins bypass ownership check
-        if not is_admin and place.owner_id != current_user_id:
+        if not is_admin and str(place.owner_id) != str(current_user_id):
             return {"error": "Unauthorized action"}, 403
 
         data = api.payload
