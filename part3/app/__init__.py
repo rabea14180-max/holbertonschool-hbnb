@@ -2,21 +2,21 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
+from config import DevelopmentConfig
 
 # Instances
 db = SQLAlchemy()
 jwt = JWTManager()
 bcrypt = Bcrypt()
 
-def create_app(config_class=None):
+def create_app(config_class=DevelopmentConfig):
     """
     Application Factory
     """
     app = Flask(__name__)
 
     # Load configuration
-    if config_class:
-        app.config.from_object(config_class)
+    app.config.from_object(config_class)
 
     # Initialize extensions
     db.init_app(app)
