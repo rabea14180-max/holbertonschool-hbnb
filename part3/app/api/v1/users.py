@@ -1,7 +1,7 @@
 from flask_restx import Namespace, Resource, fields
 from flask import request
 from app.models.user import User
-from app import db, bcrypt
+from app import db
 from flask_jwt_extended import create_access_token, jwt_required, get_jwt_identity, get_jwt
 
 api = Namespace('users', description='User operations')
@@ -46,7 +46,7 @@ class Login(Resource):
             return {"error": "Invalid credentials"}, 401
 
         access_token = create_access_token(
-            identity=user.id,
+            identity=str(user.id),
             additional_claims={"is_admin": user.is_admin}
         )
         return {"access_token": access_token}, 200
@@ -83,6 +83,13 @@ class UserList(Resource):
 
 @api.route('/<user_id>')
 class UserResource(Resource):
+    def get(self, user_id):
+        """Retrieve a specific user"""
+        user = User.query.filter_by(id=user_id).first()
+        if not user:
+            return {"error": "User not found"}, 404
+        return user.to_dict(), 200
+
     @jwt_required()
     def put(self, user_id):
         """
@@ -94,15 +101,13 @@ class UserResource(Resource):
         current_user_id = get_jwt_identity()
         is_admin = claims.get('is_admin', False)
 
-        # Non-admins can only edit themselves
-        if not is_admin and current_user_id != user_id:
+        if not is_admin and str(current_user_id) != str(user_id):
             return {"error": "Unauthorized action"}, 403
 
         data = request.get_json()
         if not data:
             return {"error": "No data provided"}, 400
 
-        # Regular users cannot change email or password
         if not is_admin and ('email' in data or 'password' in data):
             return {"error": "You cannot modify email or password"}, 400
 
@@ -110,16 +115,15 @@ class UserResource(Resource):
         if not user:
             return {"error": "User not found"}, 404
 
-        # Admin-only: handle email and password updates
         if is_admin:
             if 'email' in data:
                 new_email = data['email']
                 existing = User.query.filter_by(email=new_email).first()
-                if existing and existing.id != user_id:
+                if existing and str(existing.id) != str(user_id):
                     return {"error": "Email already in use"}, 400
                 user.email = new_email
             if 'password' in data:
-                user.password = data['password']  # uses the property setter
+                user.password = data['password']
 
         if 'first_name' in data:
             user.first_name = data['first_name']
