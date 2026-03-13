@@ -2,14 +2,13 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
-from config import DevelopmentConfig
 
 # Instances
 db = SQLAlchemy()
 jwt = JWTManager()
 bcrypt = Bcrypt()
 
-def create_app(config_class=DevelopmentConfig):
+def create_app(config_class="config.DevelopmentConfig"):
     """
     Application Factory
     """
