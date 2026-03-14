@@ -22,7 +22,7 @@ def test_place_validation_error():
 # -------------------- REVIEW TESTS -------------------- #
 def test_review_creation():
     review = Review(comment="Great place!", rating=5, user_id="user123", place_id="place123")
-    assert review.text == "Great place!"
+    assert review.comment == "Great place!"
     assert review.rating == 5
 
 def test_review_rating_validation():
