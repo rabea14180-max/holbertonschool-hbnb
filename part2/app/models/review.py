@@ -3,10 +3,10 @@ from app.models.BaseModel import BaseModel
 
 class Review(BaseModel):
 
-    def __init__(self, text="", rating=0, user_id="", place_id=""):
+    def __init__(self, comment="", rating=0, user_id="", place_id=""):
         super().__init__()
 
-        self.text = text
+        self.comment = comment
         self.rating = rating
         self.user_id = user_id
         self.place_id = place_id
@@ -15,8 +15,8 @@ class Review(BaseModel):
 
     def validate(self):
 
-        if not isinstance(self.text, str) or self.text.strip() == "":
-            raise ValueError("Review text cannot be empty")
+        if not isinstance(self.comment, str) or self.comment.strip() == "":
+            raise ValueError("Review comment cannot be empty")
 
         if not isinstance(self.rating, int):
             raise ValueError("Rating must be an integer")
