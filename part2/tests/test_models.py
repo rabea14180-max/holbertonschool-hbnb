@@ -1,45 +1,49 @@
+# tests/test_models.py
+
 import pytest
+from app.models.place import Place
+from app.models.review import Review
 from app.models.user import User
 from app.models.amenity import Amenity
-from app.models.place import Place, Review
 
-# ---------- USER TESTS ----------
-def test_user_creation():
-    user = User(first_name="Alice", last_name="Smith", email="alice@test.com", password="1234")
-    assert user.first_name == "Alice"
-    assert user.email == "alice@test.com"
-    assert user.is_admin is False
-
-def test_user_validation_error():
-    with pytest.raises(ValueError):
-        User(first_name="", last_name="Smith", email="alice@test.com", password="1234")
-
-# ---------- AMENITY TESTS ----------
-def test_amenity_creation():
-    amenity = Amenity(name="WiFi")
-    assert amenity.name == "WiFi"
-
-def test_amenity_validation_error():
-    with pytest.raises(ValueError):
-        Amenity(name="")  # empty name not allowed
-
-# ---------- PLACE TESTS ----------
+# -------------------- PLACE TESTS -------------------- #
 def test_place_creation():
-    place = Place(title="My House", description="Nice place", price=100.0,
-                  latitude=10.0, longitude=20.0, owner_id="user123")
-    assert place.title == "My House"
+    place = Place(title="Cozy Apartment", description="Nice place", price=100.0,
+                  latitude=25.0, longitude=45.0, owner_id="owner123")
+    assert place.title == "Cozy Apartment"
     assert place.price == 100.0
+    assert place.reviews == []
+    assert place.amenities == []
 
 def test_place_validation_error():
     with pytest.raises(ValueError):
-        Place(title="", description="desc", price=-10, latitude=0, longitude=0, owner_id="123")
+        Place(title="", description="desc", price=50.0, latitude=0, longitude=0, owner_id="id1")
 
-# ---------- REVIEW TESTS ----------
+# -------------------- REVIEW TESTS -------------------- #
 def test_review_creation():
-    review = Review(text="Great place", rating=5, user_id="u1", place_id="p1")
-    assert review.text == "Great place"
+    review = Review(text="Great place!", rating=5, user_id="user123", place_id="place123")
+    assert review.text == "Great place!"
     assert review.rating == 5
 
-def test_review_validation_error():
+def test_review_rating_validation():
     with pytest.raises(ValueError):
-        Review(text="", rating=10, user_id="u1", place_id="p1")  # invalid text & rating
+        Review(text="Bad review", rating=10, user_id="user1", place_id="place1")
+
+# -------------------- USER TESTS -------------------- #
+def test_user_creation():
+    user = User(first_name="Alice", last_name="Smith", email="alice@test.com", password="pass123")
+    assert user.first_name == "Alice"
+    assert user.email == "alice@test.com"
+
+def test_user_email_validation():
+    with pytest.raises(ValueError):
+        User(first_name="Bob", last_name="Jones", email="bob-at-test.com", password="pass123")
+
+# -------------------- AMENITY TESTS -------------------- #
+def test_amenity_creation():
+    amenity = Amenity(name="Pool")
+    assert amenity.name == "Pool"
+
+def test_amenity_name_validation():
+    with pytest.raises(ValueError):
+        Amenity(name="")
