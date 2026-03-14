@@ -119,6 +119,7 @@ Although database integration is postponed to Part 3, the system is designed wit
 - Swagger API documentation via flask-restx
 - Edge-case handling and endpoint validation
 
+
   ## 🛠 Tech Stack
 
   - Python 3
@@ -135,8 +136,126 @@ Although database integration is postponed to Part 3, the system is designed wit
     - JWT authentication
     - Role-based access control
     - Production-ready scalability
-   
-      
+
+---
+
+# HBnB Evolution — Part 3
+HBnB Evolution — Part 3 extends the HBnB backend by introducing authentication, role-based authorization, and database persistence, preparing the system for real-world deployment.
+
+
+## 📝 Project Overview
+
+This phase transitions HBnB from an in-memory prototype to a secure, database-backed backend:
+
+- JWT-based user authentication and authorization
+
+- Role-based access control (regular users vs. administrators)
+
+- Database persistence using SQLAlchemy with SQLite (development) and MySQL (production)
+
+- CRUD operations for Users, Places, Reviews, and Amenities
+
+- Database schema designed with relationships and constraints
+
+- Forward-compatible architecture for production-ready deployment
+
+High-level flow:
+
+User → API → Facade → Business Logic → SQLAlchemy ORM → Database → Response
+
+## 🏗 Architecture Overview
+
+The system preserves the layered architecture:
+
+## 1️⃣ Presentation Layer
+
+- Exposes RESTful endpoints via Flask + flask-restx
+
+- Handles:
+   - Request validation
+   - Serialization
+   - JWT verification for protected routes
+   - Role-based access control enforcement
+
+## 2️⃣ Business Logic Layer
+
+- Manages entities and domain rules:
+    - User: `first_name`, `last_name`, `email`, `password` (hashed), `is_admin`
+    - Place: `title`, `description`,` price`,` latitude`, `longitude`, `owner_id`, `amenities`
+    - Review:` text`, `rating`,` user_id`, `place_id`
+    - Amenity: `name`
+
+- Validates relationships and constraints
+
+- Handles object lifecycle independently of the storage layer
+
+## 3️⃣ Persistence Layer
+
+- Replaces in-memory repositories with SQLAlchemy ORM
+
+- Supports:
+   - SQLite (development)
+   - MySQL (production)
+
+- Maps all entities and relationships
+
+- Implements CRUD operations with database persistence
+
+## ⚡ Key Features
+
+- User Management
+    - Registration, login, profile management
+    - JWT-based authentication
+    - Role-based access control (is_admin)
+
+- Place Management
+  - CRUD operations for authenticated users
+  - Associate amenities
+
+- Review Management
+    - Users can create, edit, or delete reviews
+    - Linked to corresponding places
+
+- Amenity Management
+    - Admin can manage amenities
+
+- Security & Validation
+  - Passwords hashed with bcrypt
+  - JWT required for protected endpoints
+  - Data validation and constraint enforcement
+
+## 🛠 Tech Stack
+
+- Python 3
+
+- Flask
+
+- flask-restx
+
+- flask-jwt-extended
+
+- SQLAlchemy ORM
+
+- SQLite (development), MySQL (production)
+
+- bcrypt for password hashing
+
+- Facade Design Pattern for clean service orchestration
+
+## 🔮 Forward Compatibility
+
+- Ready for production deployment
+
+- JWT authentication fully integrated
+
+- Role-based access control implemented
+
+- Extensible for future frontend integration
+
+- Can be adapted to larger RDBMS for scaling
+
+---
+
 👩‍💻 Authors 
 This project was created by Holberton School students:
 - Hamsa Alammar
