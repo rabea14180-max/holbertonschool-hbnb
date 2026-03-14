@@ -1,5 +1,5 @@
 from flask_restx import Api
-from .amenities import api as amenities_ns
+from .amenities import api as amenities_ns, amenity_bp
 
 api = Api(
     title="HBnB API",
