@@ -1,5 +1,41 @@
 # HBnB Project — Part 3  
-## Enhanced Backend with Authentication and Database Integration
+  Enhanced Backend with Authentication and Database Integration
+## 1. Project Overview
+
+HBnB Evolution is a backend system inspired by the concept of Airbnb. The project is developed incrementally across multiple parts.
+Part 3 focuses on implementing the API Layer, which exposes the application functionality through RESTful endpoints.
+
+The API allows external clients (such as frontend applications, mobile apps, or testing tools) to interact with the backend system. It receives HTTP requests, processes them through the business logic layer, and returns structured JSON responses.
+
+This part of the project demonstrates how to design and implement a clean RESTful API architecture using Python and Flask while maintaining modularity and separation of concerns.
+
+## 2. Objectives of Part 3
+
+The primary goals of this stage are:
+
+- Implement a RESTful API using Flask
+- Connect API routes with the business logic layer
+- Enable CRUD operations for the system entities
+- Validate incoming client data
+- Return appropriate HTTP status codes
+- Ensure responses follow a consistent JSON structure
+- Maintain modular and maintainable project architecture
+
+## 3. System Architecture
+
+The HBnB backend follows a three-layer architecture:
+
+Client │ ▼ API Layer │ ▼ Business Logic Layer │ ▼ Persistence Layer
+
+
+
+
+
+
+
+
+
+
 
 This repository contains **Part 3** of the HBnB project, where the backend evolves from a basic in-memory application into a **secure, authenticated, and database-backed API** using **Flask**, **JWT**, **SQLAlchemy**, and **SQLite**.
 
