@@ -21,19 +21,19 @@ def test_place_validation_error():
 
 # -------------------- REVIEW TESTS -------------------- #
 def test_review_creation():
-    review = Review(text="Great place!", rating=5, user_id="user123", place_id="place123")
+    review = Review(comment="Great place!", rating=5, user_id="user123", place_id="place123")
     assert review.text == "Great place!"
     assert review.rating == 5
 
 def test_review_rating_validation():
     with pytest.raises(ValueError):
-        Review(text="Bad review", rating=10, user_id="user1", place_id="place1")
+        Review(comment="Bad review", rating=10, user_id="user1", place_id="place1")
 
 # -------------------- USER TESTS -------------------- #
 def test_user_creation():
-    user = User(first_name="Alice", last_name="Smith", email="alice@test.com", password="pass123")
-    assert user.first_name == "Alice"
-    assert user.email == "alice@test.com"
+    user = User(first_name="Solaf", last_name="Aziz", email="Sol@test.com", password="pass123")
+    assert user.first_name == "Solaf"
+    assert user.email == "Sol@test.com"
 
 def test_user_email_validation():
     with pytest.raises(ValueError):
