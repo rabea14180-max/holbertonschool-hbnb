@@ -52,3 +52,7 @@ class AmenityResource(Resource):
             return {"error": "Amenity not found"}, 404
 
         return amenity.to_dict(), 200
+
+from flask import Blueprint
+
+amenity_bp = Blueprint('amenities', __name__)
