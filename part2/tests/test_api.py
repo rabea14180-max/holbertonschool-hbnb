@@ -12,16 +12,16 @@ def client():
 # ---------- USERS API ----------
 def test_create_user(client):
     payload = {
-        "first_name": "Alice",
-        "last_name": "Smith",
-        "email": "alice@example.com",
+        "first_name": "Solaf",
+        "last_name": "Aziz",
+        "email": "Sol@example.com",
         "password": "1234",
-        "is_admin": False
+        "is_admin": True
     }
     response = client.post("/api/v1/users/", json=payload)
     data = response.get_json()
     assert response.status_code == 201
-    assert data["first_name"] == "Alice"
+    assert data["first_name"] == "Solaf"
 
 def test_get_users(client):
     response = client.get("/api/v1/users/")
@@ -79,7 +79,7 @@ def test_create_review(client):
         "owner_id": user.id
     })
     payload = {
-        "text": "Amazing place",
+        "comment": "Amazing place",
         "rating": 5,
         "user_id": user.id,
         "place_id": place.id
@@ -87,7 +87,7 @@ def test_create_review(client):
     response = client.post("/api/v1/reviews/", json=payload)
     data = response.get_json()
     assert response.status_code == 201
-    assert data["text"] == "Amazing place"
+    assert data["comment"] == "Amazing place"
 
 def test_get_reviews(client):
     response = client.get("/api/v1/reviews/")
