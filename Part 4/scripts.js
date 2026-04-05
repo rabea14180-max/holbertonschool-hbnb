@@ -267,11 +267,12 @@ async function fetchPlaceDetails(placeId) {
     }
 }
 
-async function submitReview(token, placeId, reviewText) {
+async function submitReview(token, placeId, reviewText, rating) {
     const payload = {
         place_id: placeId,
         text: reviewText,
-        comment: reviewText
+        comment: reviewText,
+        rating: Number(rating)
     };
 
     const response = await fetch('http://127.0.0.1:5000/api/v1/reviews/', {
@@ -353,19 +354,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const token = checkRequiredAuthentication();
         const placeId = getPlaceIdFromURL();
         const reviewTextField = document.getElementById('review-text');
+        const ratingField = document.getElementById('rating');
 
         reviewForm.addEventListener('submit', async (event) => {
             event.preventDefault();
 
             const reviewText = reviewTextField.value.trim();
+            const rating = ratingField.value;
 
-            if (!reviewText || !placeId || !token) {
+            if (!reviewText || !placeId || !token || !rating) {
                 alert('Failed to submit review');
                 return;
             }
 
             try {
-                const response = await submitReview(token, placeId, reviewText);
+                const response = await submitReview(token, placeId, reviewText, rating);
 
                 if (response.ok) {
                     alert('Review submitted successfully!');
