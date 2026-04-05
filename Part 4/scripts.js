@@ -123,22 +123,144 @@ async function fetchPlaces() {
     }
 }
 
-function checkAuthentication() {
+function checkIndexAuthentication() {
     const token = getCookie('token');
     const loginLink = document.getElementById('login-link');
 
-    if (loginLink) {
-        if (token) {
-            loginLink.style.display = 'none';
-        } else {
-            loginLink.style.display = 'inline-block';
+    if (!loginLink) {
+        return;
+    }
+
+    if (token) {
+        loginLink.style.display = 'none';
+    } else {
+        loginLink.style.display = 'inline-block';
+    }
+}
+
+function getPlaceIdFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('id');
+}
+
+function getHostName(place) {
+    if (place.owner && place.owner.first_name) {
+        const lastName = place.owner.last_name ? ` ${place.owner.last_name}` : '';
+        return `${place.owner.first_name}${lastName}`;
+    }
+    if (place.user && place.user.first_name) {
+        const lastName = place.user.last_name ? ` ${place.user.last_name}` : '';
+        return `${place.user.first_name}${lastName}`;
+    }
+    if (place.host) {
+        return place.host;
+    }
+    return 'Unknown host';
+}
+
+function getAmenitiesList(place) {
+    if (Array.isArray(place.amenities) && place.amenities.length > 0) {
+        return place.amenities.map((amenity) => {
+            if (typeof amenity === 'string') {
+                return amenity;
+            }
+            return amenity.name || 'Amenity';
+        }).join(', ');
+    }
+    return 'No amenities available';
+}
+
+function getReviewsHTML(place) {
+    if (!Array.isArray(place.reviews) || place.reviews.length === 0) {
+        return '<p>No reviews yet.</p>';
+    }
+
+    return place.reviews.map((review) => {
+        let reviewer = 'Anonymous';
+
+        if (review.user && review.user.first_name) {
+            reviewer = `${review.user.first_name}${review.user.last_name ? ` ${review.user.last_name}` : ''}`;
+        } else if (review.user_name) {
+            reviewer = review.user_name;
+        } else if (review.user_id) {
+            reviewer = review.user_id;
         }
+
+        return `
+            <div class="review-card">
+                <p>${review.comment || 'No comment provided'}</p>
+                <p><strong>User:</strong> ${reviewer}</p>
+                <p><strong>Rating:</strong> ${review.rating !== undefined ? review.rating : 'N/A'}</p>
+            </div>
+        `;
+    }).join('');
+}
+
+function displayPlaceDetails(place) {
+    const placeDetails = document.getElementById('place-details');
+
+    if (!placeDetails) {
+        return;
+    }
+
+    placeDetails.innerHTML = `
+        <h2>${getPlaceTitle(place)}</h2>
+
+        <div class="place-info">
+            <p><strong>Host:</strong> ${getHostName(place)}</p>
+            <p><strong>Price:</strong> $${getPlacePrice(place)}/night</p>
+            <p><strong>Description:</strong> ${getPlaceDescription(place)}</p>
+            <p><strong>Location:</strong> ${getPlaceLocation(place)}</p>
+            <p><strong>Amenities:</strong> ${getAmenitiesList(place)}</p>
+        </div>
+
+        <h3>Reviews</h3>
+        <div class="reviews-list">
+            ${getReviewsHTML(place)}
+        </div>
+    `;
+}
+
+function checkPlaceAuthentication() {
+    const token = getCookie('token');
+    const addReviewSection = document.getElementById('add-review');
+
+    if (!addReviewSection) {
+        return token;
+    }
+
+    if (token) {
+        addReviewSection.style.display = 'block';
+    } else {
+        addReviewSection.style.display = 'none';
+    }
+
+    return token;
+}
+
+async function fetchPlaceDetails(placeId) {
+    try {
+        const response = await fetch(`http://127.0.0.1:5000/api/v1/places/${placeId}`, {
+            method: 'GET',
+            headers: getAuthHeaders()
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to fetch place details');
+        }
+
+        const place = await response.json();
+        displayPlaceDetails(place);
+    } catch (error) {
+        console.error(error);
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
     const priceFilter = document.getElementById('price-filter');
+    const placesList = document.getElementById('places-list');
+    const placeDetails = document.getElementById('place-details');
 
     if (loginForm) {
         loginForm.addEventListener('submit', async (event) => {
@@ -173,12 +295,26 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if (document.getElementById('places-list')) {
-        checkAuthentication();
+    if (placesList) {
+        checkIndexAuthentication();
         fetchPlaces();
 
         if (priceFilter) {
             priceFilter.addEventListener('change', filterPlacesByPrice);
+        }
+    }
+
+    if (placeDetails) {
+        const placeId = getPlaceIdFromURL();
+        checkPlaceAuthentication();
+
+        if (placeId) {
+            fetchPlaceDetails(placeId);
+
+            const addReviewLink = document.getElementById('add-review-link');
+            if (addReviewLink) {
+                addReviewLink.href = `add_review.html?id=${placeId}`;
+            }
         }
     }
 });
