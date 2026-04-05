@@ -57,6 +57,22 @@ function getPlaceLocation(place) {
     return 'Location not available';
 }
 
+function getPlaceIdFromURL() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get('id');
+}
+
+function checkRequiredAuthentication() {
+    const token = getCookie('token');
+
+    if (!token) {
+        window.location.href = 'index.html';
+        return null;
+    }
+
+    return token;
+}
+
 function displayPlaces(places) {
     const placesList = document.getElementById('places-list');
 
@@ -138,11 +154,6 @@ function checkIndexAuthentication() {
     }
 }
 
-function getPlaceIdFromURL() {
-    const params = new URLSearchParams(window.location.search);
-    return params.get('id');
-}
-
 function getHostName(place) {
     if (place.owner && place.owner.first_name) {
         const lastName = place.owner.last_name ? ` ${place.owner.last_name}` : '';
@@ -188,7 +199,7 @@ function getReviewsHTML(place) {
 
         return `
             <div class="review-card">
-                <p>${review.comment || 'No comment provided'}</p>
+                <p>${review.comment || review.text || 'No comment provided'}</p>
                 <p><strong>User:</strong> ${reviewer}</p>
                 <p><strong>Rating:</strong> ${review.rating !== undefined ? review.rating : 'N/A'}</p>
             </div>
@@ -256,11 +267,31 @@ async function fetchPlaceDetails(placeId) {
     }
 }
 
+async function submitReview(token, placeId, reviewText) {
+    const payload = {
+        place_id: placeId,
+        text: reviewText,
+        comment: reviewText
+    };
+
+    const response = await fetch('http://127.0.0.1:5000/api/v1/reviews/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+    });
+
+    return response;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
     const priceFilter = document.getElementById('price-filter');
     const placesList = document.getElementById('places-list');
     const placeDetails = document.getElementById('place-details');
+    const reviewForm = document.getElementById('review-form');
 
     if (loginForm) {
         loginForm.addEventListener('submit', async (event) => {
@@ -316,5 +347,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 addReviewLink.href = `add_review.html?id=${placeId}`;
             }
         }
+    }
+
+    if (reviewForm) {
+        const token = checkRequiredAuthentication();
+        const placeId = getPlaceIdFromURL();
+        const reviewTextField = document.getElementById('review-text');
+
+        reviewForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const reviewText = reviewTextField.value.trim();
+
+            if (!reviewText || !placeId || !token) {
+                alert('Failed to submit review');
+                return;
+            }
+
+            try {
+                const response = await submitReview(token, placeId, reviewText);
+
+                if (response.ok) {
+                    alert('Review submitted successfully!');
+                    reviewForm.reset();
+                    window.location.href = `place.html?id=${placeId}`;
+                } else {
+                    alert('Failed to submit review');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Failed to submit review');
+            }
+        });
     }
 });
