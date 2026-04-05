@@ -44,19 +44,6 @@ function getPlaceDescription(place) {
     return place.description || 'No description available';
 }
 
-function getPlaceLocation(place) {
-    if (place.city && place.country) {
-        return `${place.city}, ${place.country}`;
-    }
-    if (place.location) {
-        return place.location;
-    }
-    if (place.country) {
-        return place.country;
-    }
-    return 'Location not available';
-}
-
 function getPlaceIdFromURL() {
     const params = new URLSearchParams(window.location.search);
     return params.get('id');
@@ -90,7 +77,6 @@ function displayPlaces(places) {
         placeCard.innerHTML = `
             <h3>${getPlaceTitle(place)}</h3>
             <p>${getPlaceDescription(place)}</p>
-            <p><strong>Location:</strong> ${getPlaceLocation(place)}</p>
             <p><strong>Price:</strong> $${getPlacePrice(place)}/night</p>
             <a href="place.html?id=${place.id}" class="details-button">View Details</a>
         `;
@@ -221,7 +207,6 @@ function displayPlaceDetails(place) {
             <p><strong>Host:</strong> ${getHostName(place)}</p>
             <p><strong>Price:</strong> $${getPlacePrice(place)}/night</p>
             <p><strong>Description:</strong> ${getPlaceDescription(place)}</p>
-            <p><strong>Location:</strong> ${getPlaceLocation(place)}</p>
             <p><strong>Amenities:</strong> ${getAmenitiesList(place)}</p>
         </div>
 
