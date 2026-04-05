@@ -8,27 +8,25 @@
 <body>
 
 <header>
-    <img src="images/logo.png" class="logo">
+    <img src="images/logo.png" class="logo" alt="HBnB Logo">
     <nav>
         <a href="index.html">Home</a>
-        <a href="login.html" class="login-button">Login</a>
+        <a href="login.html" class="login-button" id="login-link">Login</a>
     </nav>
 </header>
 
 <main>
     <h2>Places</h2>
 
-    <div class="place-card">
-        <h3>Nice Apartment</h3>
-        <p>Price: $50/night</p>
-        <button class="details-button">View Details</button>
-    </div>
+    <label for="price-filter">Filter by max price:</label>
+    <select id="price-filter">
+        <option value="All">All</option>
+        <option value="10">10</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+    </select>
 
-    <div class="place-card">
-        <h3>Cozy Room</h3>
-        <p>Price: $30/night</p>
-        <button class="details-button">View Details</button>
-    </div>
+    <section id="places-list"></section>
 </main>
 
 <footer>
