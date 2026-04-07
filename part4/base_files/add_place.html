@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HBnB - Add New Place</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .amenities-checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 0.5rem;
+        }
+        .amenity-checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            color: var(--text-color);
+        }
+        .add-place-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .form-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .form-row .form-group {
+            flex: 1;
+            min-width: 250px;
+        }
+    </style>
+</head>
+<body>
+
+<header style="display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; border-bottom: 1px solid var(--border-color); background: var(--surface-color); position: sticky; top: 0; z-index: 100;">
+    <a href="index.html" class="logo-container" style="flex: 1; display: flex; align-items: center; gap: 8px; text-decoration: none;">
+        <img src="images/logo.svg" alt="HBnB Logo" class="logo-image" style="height: 32px;">
+        <div class="brand-name" style="color: var(--primary-color); font-size: 1.3rem; font-weight: 700; letter-spacing: -0.5px;">HBnB</div>
+    </a>
+    
+    <div style="flex: 2; display: flex; justify-content: center;">
+        <div style="font-weight: 600; font-size: 1.1rem; color: var(--text-primary);">Host Dashboard</div>
+    </div>
+    
+    <nav style="flex: 1; display: flex; justify-content: flex-end; align-items: center; gap: 15px; position: relative;">
+        <a href="index.html" style="text-decoration: none; font-weight: 600; color: var(--text-primary); margin-right: 10px;">Switch to traveling</a>
+        <div id="nav-actions-container" style="display: flex; gap: 10px; align-items: center;">
+            <a href="login.html" class="btn login-button" id="login-link" style="padding: 0.5rem 1.2rem; border-radius: 20px; font-size: 0.9rem; border: none; box-shadow: none;">Log in</a>
+        </div>
+        <div class="user-nav-pill" style="display: flex; align-items: center; gap: 12px; border: 1px solid var(--border-color); border-radius: 30px; padding: 5px 5px 5px 12px; cursor: pointer; transition: box-shadow 0.2s; background: var(--surface-color);">
+            <div style="font-size: 1.1rem; color: var(--text-secondary);">☰</div>
+            <div style="background: #e2e8f0; color: #64748b; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; overflow: hidden;">
+                👤
+            </div>
+        </div>
+    </nav>
+</header>
+
+<main class="add-place-container">
+    <div class="form-card" style="max-width: 100%;">
+        <h2 class="form-title">Add a New Place</h2>
+        <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem;">As an admin, you can list new gorgeous destinations.</p>
+        
+        <form id="add-place-form">
+            <div class="form-group">
+                <label for="place-title">Title</label>
+                <input type="text" id="place-title" placeholder="e.g. Stunning Penthouse with Ocean View" required>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="place-price">Price per night ($)</label>
+                    <input type="number" id="place-price" step="0.01" min="1" placeholder="99.99" required>
+                </div>
+                <div class="form-group">
+                    <label for="place-latitude">Latitude</label>
+                    <input type="number" id="place-latitude" step="0.000001" placeholder="e.g. 40.7128" required>
+                </div>
+                <div class="form-group">
+                    <label for="place-longitude">Longitude</label>
+                    <input type="number" id="place-longitude" step="0.000001" placeholder="e.g. -74.0060" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="place-description">Description</label>
+                <textarea id="place-description" rows="5" placeholder="Detail the amazing features of this place..." style="width: 100%; border-radius: var(--radius); border: 1px solid var(--border-color); padding: 0.75rem; background-color: var(--input-bg); color: var(--text-color); font-family: inherit; font-size: 1rem; resize: vertical;" required></textarea>
+            </div>
+
+            <div class="form-group" style="margin-top: 1.5rem;">
+                <label>Select Amenities</label>
+                <div class="amenities-checkbox-grid" id="amenities-container">
+                    <span style="color: var(--text-secondary); font-size: 0.9rem;">Loading amenities from server...</span>
+                </div>
+            </div>
+
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 1rem 0 2rem; padding: 10px; background: rgba(139, 92, 246, 0.1); border-radius: 8px; border-left: 3px solid var(--primary-color);">
+                ℹ️ <strong>Note on Images:</strong> Our frontend AI service will automatically assign beautiful, unique structural imagery (House/Villa/Interior) for this place once published.
+            </p>
+
+            <div class="form-actions">
+                <button type="submit" class="btn" style="width: 100%;">Publish Place</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2026 HBnB. All rights reserved.</p>
+</footer>
+
+<script src="scripts.js"></script>
+</body>
+</html>

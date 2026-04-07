@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Review | HBnB</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+    <a href="index.html" class="logo-container">
+        <img src="images/logo.svg" alt="HBnB Logo" class="logo-image">
+        <div class="brand-name">HBnB</div>
+    </a>
+    <nav>
+        <a href="index.html">Home</a>
+        <div class="theme-switch-wrapper">
+            <label class="theme-switch" for="checkbox">
+                <input type="checkbox" id="checkbox" />
+                <div class="slider round"></div>
+            </label>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <div class="form-card">
+        <h2 class="form-title">Tell Us Your Experience</h2>
+
+        <form class="add-review form" id="review-form">
+            <div class="form-group">
+                <label for="rating">Rating</label>
+                <select id="rating" required>
+                    <option value="" disabled selected>Select rating out of 5</option>
+                    <option value="1">1 - Poor</option>
+                    <option value="2">2 - Fair</option>
+                    <option value="3">3 - Good</option>
+                    <option value="4">4 - Very Good</option>
+                    <option value="5">5 - Excellent</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="review-text">Review</label>
+                <textarea id="review-text" placeholder="I absolutely loved my stay..." rows="5" required></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn">Submit Review</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<footer>
+    <p>&copy; 2026 HBnB. All rights reserved.</p>
+</footer>
+
+<script src="scripts.js"></script>
+</body>
+</html>
