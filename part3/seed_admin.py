@@ -4,6 +4,8 @@ seed_admin.py -- run once to create the initial admin user.
 Usage:
     py -3 seed_admin.py
 """
+import importlib
+
 from config import DevelopmentConfig
 from app import create_app, db
 from app.models.user import User
@@ -11,6 +13,7 @@ from app.models.user import User
 app = create_app(DevelopmentConfig)
 
 with app.app_context():
+    importlib.import_module("app.models")  # register all tables before drop/create
     db.drop_all()   # reset schema (dev only — new FKs / relationships added)
     db.create_all()
 
