@@ -164,7 +164,7 @@ function displayPlaces(places) {
         placeCard.innerHTML = `
             <a href="place.html?id=${place.id}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; height: 100%;">
                 <div class="place-card-image" style="width: 100%; height: 300px; overflow: hidden; border-radius: 12px; margin-bottom: 15px;">
-                    <img src="${getPlaceImage(place.id, 400, 300)}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;" onerror="this.parentElement.parentElement.parentElement.style.display='none'" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" />
+                    <img src="${place.image_url || getPlaceImage(place.id, 400, 300)}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;" onerror="this.parentElement.parentElement.parentElement.style.display='none'" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" />
                 </div>
                 <div class="place-card-content">
                     <div style="display: flex; justify-content: space-between; align-items: start;">
@@ -319,6 +319,7 @@ function checkAuthentication() {
             const payload = parseJwt(token);
             if (payload && payload.is_admin) {
                 dropdown.innerHTML += `<a href="add_place.html" class="dropdown-item" style="padding: 12px 16px; text-decoration: none; color: var(--text-primary); font-weight: 600; border-bottom: 1px solid var(--border-color);">➕ Add Place (Admin)</a>`;
+                dropdown.innerHTML += `<a href="add_amenity.html" class="dropdown-item" style="padding: 12px 16px; text-decoration: none; color: var(--text-primary); font-weight: 600; border-bottom: 1px solid var(--border-color);">➕ Add Amenity (Admin)</a>`;
             }
             dropdown.innerHTML += `<a href="#" onclick="showComingSoon('Messages')" class="dropdown-item" style="padding: 12px 16px; text-decoration: none; color: var(--text-primary); font-weight: 600;">Messages</a>`;
             dropdown.innerHTML += `<a href="#" onclick="showComingSoon('Trips Bookings')" class="dropdown-item" style="padding: 12px 16px; text-decoration: none; color: var(--text-primary); font-weight: 600;">Trips</a>`;
@@ -434,7 +435,11 @@ async function displayPlaceDetails(place) {
     }
 
     const amenitiesListHTML = Array.isArray(place.amenities) && place.amenities.length > 0
-        ? place.amenities.map(a => `<span class="amenity-tag">${typeof a === 'string' ? a : (a.name || 'Amenity')}</span>`).join('')
+        ? place.amenities.map(a => {
+            const name = typeof a === 'string' ? a : (a.name || 'Amenity');
+            const icon = (typeof a !== 'string' && a.icon_url) ? `<img src="${a.icon_url}" style="width:20px;height:20px;margin-right:8px;vertical-align:middle;border-radius:4px" alt="icon">` : '🔹 ';
+            return `<span class="amenity-tag" style="display:inline-flex;align-items:center;">${icon}${name}</span>`;
+        }).join('')
         : '<span class="amenity-tag">No amenities available</span>';
 
     const reviewsHTML = await getReviewsHTML(place);
@@ -489,7 +494,7 @@ async function displayPlaceDetails(place) {
         
         <!-- Airbnb Premium 6-Image Gallery (Self-healing Broken Image Removal) -->
         <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; grid-auto-rows: 200px; gap: 8px; border-radius: 16px; overflow: hidden; margin-bottom: 2rem;">
-            <img src="${getPlaceImage(place.id, 1200, 800, 'exterior')}" style="grid-column: span 2; grid-row: span 2; width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.style.display='none'" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
+            <img src="${place.image_url || getPlaceImage(place.id, 1200, 800, 'exterior')}" style="grid-column: span 2; grid-row: span 2; width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.style.display='none'" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
             <img src="${getPlaceImage(place.id, 800, 600, 'livingroom')}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.style.display='none'" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
             <img src="${getPlaceImage(place.id, 800, 600, 'kitchen')}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.style.display='none'" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
             <img src="${getPlaceImage(place.id, 800, 600, 'bedroom')}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.style.display='none'" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
@@ -706,7 +711,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     method: 'POST',
                     headers: getAuthHeaders(),
                     body: JSON.stringify({
-                        title, price: parseFloat(price), latitude: parseFloat(latitude), longitude: parseFloat(longitude), description, amenities: selectedAmenities
+                        title, price: parseFloat(price), latitude: parseFloat(latitude), longitude: parseFloat(longitude), description, amenities: selectedAmenities, image_url: customImage
                     })
                 });
 
@@ -724,6 +729,47 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (err) {
                 console.error(err);
                 alert('Something went wrong submitting the place.');
+            }
+        });
+    }
+
+    const addAmenityForm = document.getElementById('add-amenity-form');
+    if (addAmenityForm) {
+        const token = getCookie('token');
+        const payload = parseJwt(token);
+        if (!payload || !payload.is_admin) {
+            alert('Access denied. Admin privileges required.');
+            window.location.href = 'index.html';
+            return;
+        }
+
+        addAmenityForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('amenity-name').value;
+            const iconUrl = document.getElementById('amenity-icon') ? document.getElementById('amenity-icon').value : '';
+            const description = document.getElementById('amenity-description').value;
+
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/v1/amenities', {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify({
+                        name: name,
+                        description: description,
+                        icon_url: iconUrl
+                    })
+                });
+
+                if (response.ok) {
+                    alert('Amenity created successfully!');
+                    window.location.href = 'index.html';
+                } else {
+                    const data = await response.json();
+                    alert(`Failed to create amenity: ${data.message || data.error || 'Unknown error'}`);
+                }
+            } catch (err) {
+                console.error(err);
+                alert('Something went wrong submitting the amenity.');
             }
         });
     }
@@ -845,7 +891,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const rating = ratingField.value;
 
             if (!reviewText || !placeId || !token || !rating) {
-                alert('Failed to submit review');
+                alert('Please fill out all fields before submitting.');
                 return;
             }
 
@@ -857,11 +903,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     reviewForm.reset();
                     window.location.href = `place.html?id=${placeId}`;
                 } else {
-                    alert('Failed to submit review');
+                    const data = await response.json();
+                    alert(`Failed to submit review: ${data.error || data.message || 'Unknown error'}`);
                 }
             } catch (error) {
                 console.error(error);
-                alert('Failed to submit review');
+                alert('Failed to submit review. Please try again later.');
             }
         });
     }

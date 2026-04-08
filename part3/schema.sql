@@ -38,6 +38,7 @@ CREATE TABLE places (
     latitude    FLOAT           NOT NULL,
     longitude   FLOAT           NOT NULL,
     owner_id    CHAR(36)        NOT NULL,
+    image_url   VARCHAR(255)    DEFAULT '',
     created_at  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
@@ -51,6 +52,7 @@ CREATE TABLE amenities (
     id          CHAR(36)        NOT NULL,
     name        VARCHAR(255)    NOT NULL UNIQUE,
     description VARCHAR(512)    NOT NULL DEFAULT '',
+    icon_url    VARCHAR(255)    DEFAULT '',
     created_at  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at  DATETIME        NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)

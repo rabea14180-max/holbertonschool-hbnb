@@ -52,10 +52,13 @@ class PlaceList(Resource):
 
 @api.route('/<place_id>')
 class PlaceResource(Resource):
+    @api.response(200, 'Place details retrieved successfully')
+    @api.response(404, 'Place not found')
+    @api.marshal_with(place_model)
     def get(self, place_id):
         place = facade.get_place(place_id)
         if not place:
-            return {"error": "Place not found"}, 404
+            api.abort(404, "Place not found")
         return place, 200
 
     @api.expect(place_model)

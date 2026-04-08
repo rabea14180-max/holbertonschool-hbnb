@@ -23,6 +23,8 @@ class Place(BaseModel):
     # FK → users.id  (proper foreign key, replaces the plain String column)
     owner_id = db.Column(db.String(36), db.ForeignKey('users.id'), nullable=False)
 
+    image_url = db.Column(db.String(255), nullable=True, default='')
+
     # One-to-many: a Place has many Reviews
     reviews = db.relationship('Review', backref='place', lazy=True,
                               cascade='all, delete-orphan')
@@ -33,7 +35,7 @@ class Place(BaseModel):
                                 backref=db.backref('places', lazy=True))
 
     def __init__(self, title="", description="", price=0.0,
-                 latitude=0.0, longitude=0.0, owner_id=None, **kwargs):
+                 latitude=0.0, longitude=0.0, owner_id=None, image_url="", **kwargs):
         super().__init__(**kwargs)
         self.title = title
         self.description = description or ""
@@ -41,6 +43,7 @@ class Place(BaseModel):
         self.latitude = latitude
         self.longitude = longitude
         self.owner_id = owner_id
+        self.image_url = image_url or ""
         self.validate()
 
     def validate(self):
@@ -66,5 +69,6 @@ class Place(BaseModel):
             "latitude": self.latitude,
             "longitude": self.longitude,
             "owner_id": self.owner_id,
+            "image_url": self.image_url,
         })
         return base

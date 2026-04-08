@@ -145,6 +145,7 @@ class HBnBFacade:
             "price": place.price,
             "latitude": place.latitude,
             "longitude": place.longitude,
+            "image_url": place.image_url,
             "owner": {
                 "id": place.owner.id,
                 "first_name": place.owner.first_name,
@@ -152,7 +153,7 @@ class HBnBFacade:
                 "email": place.owner.email
             } if place.owner else None,
             "amenities": [
-                {"id": a.id, "name": a.name} for a in place.amenities
+                {"id": a.id, "name": a.name, "icon_url": a.icon_url} for a in place.amenities
             ],
             "reviews": [
                 {"id": r.id, "text": r.text, "rating": r.rating, "user_id": r.user_id}
@@ -167,7 +168,7 @@ class HBnBFacade:
         place = self.place_repo.get(place_id)
         if not place:
             return None
-        for field in ["title", "description", "price", "latitude", "longitude"]:
+        for field in ["title", "description", "price", "latitude", "longitude", "image_url"]:
             if field in data:
                 setattr(place, field, data[field])
         # Handle amenity list update via M:M relationship

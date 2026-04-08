@@ -35,6 +35,13 @@ class HBnBFacade:
     def get_all_users(self):
         return self.user_repo.get_all()
 
+    def update_user(self, user_id, user_data):
+        user = self.get_user(user_id)
+        if not user:
+            return None
+        user.update(user_data)
+        return user
+
     # AMENITY METHODS
 
     def create_amenity(self, amenity_data):
@@ -71,15 +78,21 @@ class HBnBFacade:
 
         return place
 
-
     def get_place(self, place_id):
-
-        return self.place_repo.get(place_id)
-
+        place = self.place_repo.get(place_id)
+        if place:
+            place.owner = self.get_user(place.owner_id)
+        return place
 
     def get_all_places(self):
-
         return self.place_repo.get_all()
+
+    def update_place(self, place_id, place_data):
+        place = self.get_place(place_id)
+        if not place:
+            return None
+        place.update(place_data)
+        return place
 
     # REVIEW METHODS
 
@@ -93,10 +106,24 @@ class HBnBFacade:
 
 
     def get_review(self, review_id):
-
         return self.review_repo.get(review_id)
 
-
     def get_all_reviews(self):
-
         return self.review_repo.get_all()
+
+    def get_reviews_by_place(self, place_id):
+        return [r for r in self.review_repo.get_all() if r.place_id == place_id]
+
+    def update_review(self, review_id, review_data):
+        review = self.get_review(review_id)
+        if not review:
+            return None
+        review.update(review_data)
+        return review
+
+    def delete_review(self, review_id):
+        review = self.get_review(review_id)
+        if not review:
+            return False
+        self.review_repo.delete(review_id)
+        return True

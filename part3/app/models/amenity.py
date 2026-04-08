@@ -9,11 +9,13 @@ class Amenity(BaseModel):
 
     name = db.Column(db.String(128), nullable=False)
     description = db.Column(db.String(512), nullable=False, default="")
+    icon_url = db.Column(db.String(255), nullable=True, default="")
 
-    def __init__(self, name="", description="", **kwargs):
+    def __init__(self, name="", description="", icon_url="", **kwargs):
         super().__init__(**kwargs)
         self.name = name
         self.description = description or ""
+        self.icon_url = icon_url or ""
         self.validate()
 
     def validate(self):
@@ -29,6 +31,8 @@ class Amenity(BaseModel):
             self.name = data['name']
         if 'description' in data:
             self.description = data['description']
+        if 'icon_url' in data:
+            self.icon_url = data['icon_url']
         self.validate()
         db.session.commit()
 
@@ -37,5 +41,6 @@ class Amenity(BaseModel):
         base.update({
             "name": self.name,
             "description": self.description,
+            "icon_url": self.icon_url,
         })
         return base

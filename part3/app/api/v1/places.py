@@ -27,6 +27,7 @@ place_model = api.model('Place', {
     'price': fields.Float(required=True),
     'latitude': fields.Float(required=True),
     'longitude': fields.Float(required=True),
+    'image_url': fields.String,
     'amenities': fields.List(fields.String)
 })
 place_update_model = api.model('PlaceUpdate', {
@@ -35,6 +36,7 @@ place_update_model = api.model('PlaceUpdate', {
     'price': fields.Float,
     'latitude': fields.Float,
     'longitude': fields.Float,
+    'image_url': fields.String,
     'amenities': fields.List(fields.String)
 })
 
@@ -57,6 +59,7 @@ class PlaceList(Resource):
                 "price": place.price,
                 "latitude": place.latitude,
                 "longitude": place.longitude,
+                "image_url": place.image_url,
                 "owner_id": place.owner_id
             }, 201
         except Exception as e:
