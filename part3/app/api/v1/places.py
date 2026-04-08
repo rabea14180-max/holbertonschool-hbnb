@@ -46,7 +46,10 @@ class PlaceList(Resource):
     @jwt_required()
     @api.expect(place_model)
     def post(self):
-        """Create a new place (authenticated users only)"""
+        """Create a new place (admin only; matches Part 4 host UI)."""
+        claims = get_jwt()
+        if not claims.get('is_admin'):
+            return {"error": "Admin privileges required"}, 403
         current_user_id = get_jwt_identity()
         data = api.payload.copy()
         data['owner_id'] = current_user_id
