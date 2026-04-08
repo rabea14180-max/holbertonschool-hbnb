@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+
+# Secrets — never commit
+.env
+.env.local
+*.pem
+
+# SQLite (keep data local; use backup_database.py to archive)
+*.db
+*.db-wal
+*.db-shm
+
+# App backups & instance (keep folder, not backup files)
+part3/backups/*
+!part3/backups/.gitkeep
+part3/instance/
+
+# Testing / coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE & OS
+.idea/
+.vscode/
+*.swp
+Thumbs.db
+.DS_Store
