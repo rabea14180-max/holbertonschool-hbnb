@@ -17,6 +17,9 @@ function parseJwt(token) {
     }
 }
 
+/** Backend API root. Override before loading scripts: window.HBNB_API_BASE = 'http://localhost:5000'; */
+const API_BASE = (typeof window !== 'undefined' && window.HBNB_API_BASE) || 'http://127.0.0.1:5000';
+
 const HOUSE_SETS = [
     // House 1
     {
@@ -234,7 +237,7 @@ const mockPlacesData = [
 
 async function fetchPlaces() {
     try {
-        const response = await fetch('http://127.0.0.1:5000/api/v1/places/', {
+        const response = await fetch(`${API_BASE}/api/v1/places/`, {
             method: 'GET',
             headers: getAuthHeaders()
         });
@@ -244,14 +247,10 @@ async function fetchPlaces() {
         }
 
         let places = await response.json();
-        
-        // Guarantee the user always sees beautiful places with varying prices, even if their database has some test data.
-        if (Array.isArray(places)) {
-            places = places.concat(mockPlacesData);
-        } else {
-            places = mockPlacesData;
+        if (!Array.isArray(places)) {
+            places = [];
         }
-        
+
         displayPlaces(places);
         filterPlaces();
     } catch (error) {
@@ -392,7 +391,7 @@ async function getReviewsHTML(place) {
             reviewer = review.user_name;
         } else if (review.user_id) {
             try {
-                const res = await fetch(`http://127.0.0.1:5000/api/v1/users/${review.user_id}`);
+                const res = await fetch(`${API_BASE}/api/v1/users/${review.user_id}`);
                 if (res.ok) {
                     const userData = await res.json();
                     if (userData.first_name) {
@@ -614,7 +613,7 @@ async function fetchPlaceDetails(placeId) {
     }
 
     try {
-        const response = await fetch(`http://127.0.0.1:5000/api/v1/places/${placeId}`, {
+        const response = await fetch(`${API_BASE}/api/v1/places/${placeId}`, {
             method: 'GET',
             headers: getAuthHeaders()
         });
@@ -638,7 +637,7 @@ async function submitReview(token, placeId, reviewText, rating) {
         rating: Number(rating)
     };
 
-    const response = await fetch('http://127.0.0.1:5000/api/v1/reviews/', {
+    const response = await fetch(`${API_BASE}/api/v1/reviews/`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -675,7 +674,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Load amenities
         const amenitiesContainer = document.getElementById('amenities-container');
-        fetch('http://127.0.0.1:5000/api/v1/amenities', { headers: getAuthHeaders() })
+        fetch(`${API_BASE}/api/v1/amenities`, { headers: getAuthHeaders() })
             .then(res => res.json())
             .then(amenities => {
                 amenitiesContainer.innerHTML = '';
@@ -707,7 +706,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const selectedAmenities = Array.from(document.querySelectorAll('input[name="amenity"]:checked')).map(cb => cb.value);
 
             try {
-                const response = await fetch('http://127.0.0.1:5000/api/v1/places/', {
+                const response = await fetch(`${API_BASE}/api/v1/places/`, {
                     method: 'POST',
                     headers: getAuthHeaders(),
                     body: JSON.stringify({
@@ -723,8 +722,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     alert('Place added successfully!');
                     window.location.href = 'index.html';
                 } else {
-                    const data = await response.json();
-                    alert(`Failed to add place: ${data.message || data.error || 'Unknown error'}`);
+                    const data = await response.json().catch(() => ({}));
+                    const msg = data.error || data.message || `HTTP ${response.status}`;
+                    alert(`Failed to add place: ${msg}`);
                 }
             } catch (err) {
                 console.error(err);
@@ -750,7 +750,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const description = document.getElementById('amenity-description').value;
 
             try {
-                const response = await fetch('http://127.0.0.1:5000/api/v1/amenities', {
+                const response = await fetch(`${API_BASE}/api/v1/amenities`, {
                     method: 'POST',
                     headers: getAuthHeaders(),
                     body: JSON.stringify({
@@ -782,7 +782,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const password = document.getElementById('password').value;
 
             try {
-                const response = await fetch('http://127.0.0.1:5000/api/v1/users/login', {
+                const response = await fetch(`${API_BASE}/api/v1/users/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -817,7 +817,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = document.getElementById(`${prefix}-password`).value;
 
         try {
-            const response = await fetch('http://127.0.0.1:5000/api/v1/users/register', {
+            const response = await fetch(`${API_BASE}/api/v1/users/register`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -1052,7 +1052,7 @@ function initAccountSettings() {
         const jwtData = parseJwt(token);
 
         try {
-            const res = await fetch(`http://127.0.0.1:5000/api/v1/users/${jwtData.sub}`, {
+            const res = await fetch(`${API_BASE}/api/v1/users/${jwtData.sub}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1090,7 +1090,7 @@ window.openAccountSettings = async function() {
     const jwtData = parseJwt(token);
     
     try {
-        const res = await fetch(`http://127.0.0.1:5000/api/v1/users/${jwtData.sub}`, {
+        const res = await fetch(`${API_BASE}/api/v1/users/${jwtData.sub}`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         if (res.ok) {
