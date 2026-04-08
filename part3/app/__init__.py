@@ -1,10 +1,10 @@
-from flask import Flask
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_jwt_extended import JWTManager
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
-from sqlalchemy import text
 from sqlalchemy import event
+from sqlalchemy import text
 
 # Instances
 db = SQLAlchemy()
@@ -62,4 +62,28 @@ def create_app(config_class="config.DevelopmentConfig"):
             return {"status": "unhealthy", "database": "error"}, 503
         return {"status": "ok", "database": "ok"}, 200
 
+    _register_api_error_handlers(app)
+
     return app
+
+
+def _register_api_error_handlers(app):
+    """Consistent JSON errors for /api routes (cleaner clients + monitoring)."""
+
+    @app.errorhandler(404)
+    def handle_404(e):
+        if request.path.startswith("/api"):
+            return jsonify({"error": "Not found"}), 404
+        return "Not Found", 404
+
+    @app.errorhandler(405)
+    def handle_405(e):
+        if request.path.startswith("/api"):
+            return jsonify({"error": "Method not allowed"}), 405
+        return "Method Not Allowed", 405
+
+    @app.errorhandler(500)
+    def handle_500(e):
+        if request.path.startswith("/api"):
+            return jsonify({"error": "Internal server error"}), 500
+        raise e

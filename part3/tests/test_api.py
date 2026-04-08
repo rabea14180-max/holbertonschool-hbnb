@@ -139,3 +139,60 @@ def test_guest_can_review_admin_place(client):
     detail = client.get(f"/api/v1/places/{place_id}").get_json()
     assert len(detail["reviews"]) == 1
     assert detail["reviews"][0]["text"] == "Lovely stay"
+
+
+def test_login_invalid_credentials(client):
+    assert _register(client, "u1@example.com", is_admin=False).status_code == 201
+    bad = _login(client, "u1@example.com", password="WrongPassword!")
+    assert bad.status_code == 401
+
+
+def test_create_place_without_token(client):
+    response = client.post(
+        "/api/v1/places/",
+        data=json.dumps(
+            {
+                "title": "X",
+                "description": "y",
+                "price": 1.0,
+                "latitude": 0.0,
+                "longitude": 0.0,
+                "amenities": [],
+            }
+        ),
+        content_type="application/json",
+    )
+    assert response.status_code == 401
+
+
+def test_get_unknown_place(client):
+    r = client.get("/api/v1/places/00000000-0000-0000-0000-000000000001")
+    assert r.status_code == 404
+    assert "error" in r.get_json()
+
+
+def test_duplicate_review_rejected(client):
+    assert _register(client, "o2@example.com", is_admin=True).status_code == 201
+    ot = _login(client, "o2@example.com").get_json()["access_token"]
+    pid = client.post(
+        "/api/v1/places/",
+        data=json.dumps(
+            {
+                "title": "Dup",
+                "description": "d",
+                "price": 10.0,
+                "latitude": 1.0,
+                "longitude": 1.0,
+                "amenities": [],
+            }
+        ),
+        content_type="application/json",
+        headers={"Authorization": f"Bearer {ot}"},
+    ).get_json()["id"]
+    assert _register(client, "r2@example.com", is_admin=False).status_code == 201
+    rt = _login(client, "r2@example.com").get_json()["access_token"]
+    body = {"place_id": pid, "text": "First", "rating": 5}
+    h = {"Authorization": f"Bearer {rt}", "Content-Type": "application/json"}
+    assert client.post("/api/v1/reviews/", data=json.dumps(body), headers=h).status_code == 201
+    second = client.post("/api/v1/reviews/", data=json.dumps(body), headers=h)
+    assert second.status_code == 400
