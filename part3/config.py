@@ -1,5 +1,14 @@
-#part3/config.py
+# part3/config.py
 import os
+from pathlib import Path
+
+try:
+    from dotenv import load_dotenv
+
+    load_dotenv(Path(__file__).resolve().parent / ".env")
+except ImportError:
+    pass
+
 
 class Config:
     SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key')
