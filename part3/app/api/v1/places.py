@@ -106,6 +106,17 @@ class PlaceResource(Resource):
             return {"error": "Place not found"}, 404
         return {"message": "Place updated successfully"}, 200
 
+    @jwt_required()
+    def delete(self, place_id):
+        """Delete a place (admin only)"""
+        claims = get_jwt()
+        if not claims.get('is_admin'):
+            return {"error": "Admin privileges required"}, 403
+        
+        if facade.delete_place(place_id):
+            return {"message": "Place deleted successfully"}, 200
+        return {"error": "Place not found"}, 404
+
 
 @api.route('/<place_id>/reviews')
 class PlaceReviewList(Resource):

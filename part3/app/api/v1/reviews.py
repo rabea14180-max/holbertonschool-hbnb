@@ -39,6 +39,12 @@ class ReviewList(Resource):
         data['user_id'] = current_user_id
         data['comment'] = data.get('text', '')
 
+        # Ensure rating is a proper integer (JSON may send string or float)
+        try:
+            data['rating'] = int(data.get('rating', 0))
+        except (TypeError, ValueError):
+            return {"error": "Rating must be an integer between 1 and 5"}, 400
+
         try:
             review = facade.create_review(data)
             return {

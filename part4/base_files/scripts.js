@@ -1,3 +1,8 @@
+// ===================================
+// API BASE URL - Backend Server Address
+// ===================================
+const API_BASE = 'http://127.0.0.1:5000';
+
 function setCookie(name, value) {
     document.cookie = `${name}=${value}; path=/`;
 }
@@ -18,64 +23,95 @@ function parseJwt(token) {
 }
 
 /** Backend API root. Override before loading scripts: window.HBNB_API_BASE = 'http://localhost:5000'; */
-const API_BASE = (typeof window !== 'undefined' && window.HBNB_API_BASE) || 'http://127.0.0.1:5000';
 
 const HOUSE_SETS = [
-    // House 1
+    // House 1: Luxury Beachfront (Miami Style)
     {
-        exterior: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80&ixlib=rb-4.0.3',
-        livingroom: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3',
-        bedroom: 'https://images.unsplash.com/photo-1560067174-c5a3a8f37060?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3',
-        kitchen: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3',
-        bathroom: 'https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3',
-        hallway: 'https://images.unsplash.com/photo-1629079447841-f0eb1a7fbccb?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3'
+        exterior: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80',
+        livingroom: 'https://images.unsplash.com/photo-1623336237380-853f7bd75db1?auto=format&fit=crop&w=800&q=80',
+        bedroom: 'https://images.unsplash.com/photo-1560067174-c5a3a8f37060?auto=format&fit=crop&w=800&q=80',
+        kitchen: 'https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=800&q=80',
+        bathroom: 'https://images.unsplash.com/photo-1620626011761-996317b8d101?auto=format&fit=crop&w=800&q=80',
+        hallway: 'https://images.unsplash.com/photo-1629079447841-f0eb1a7fbccb?auto=format&fit=crop&w=800&q=80'
     },
-    // House 2
+    // House 2: Cozy Mountain Cabin (Swiss Alps)
     {
-        exterior: 'https://images.unsplash.com/photo-1583608205776-bfd35f0d9f83?auto=format&fit=crop&w=1200&q=80&ixlib=rb-4.0.3',
-        livingroom: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3',
-        bedroom: 'https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3',
-        kitchen: 'https://images.unsplash.com/photo-1556909212-d5b604d0c90d?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3',
-        bathroom: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3',
-        hallway: 'https://images.unsplash.com/photo-1565182999561-18d7dc61c393?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3'
+        exterior: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=1200&q=80',
+        livingroom: 'https://images.unsplash.com/photo-1499696010180-025ef6e1a8f9?auto=format&fit=crop&w=800&q=80',
+        bedroom: 'https://images.unsplash.com/photo-1536341271573-f14399cb13b8?auto=format&fit=crop&w=800&q=80',
+        kitchen: 'https://images.unsplash.com/photo-1556909190-eccf4a8bf97a?auto=format&fit=crop&w=800&q=80',
+        bathroom: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=800&q=80',
+        hallway: 'https://images.unsplash.com/photo-1510312295357-680479742bd0?auto=format&fit=crop&w=800&q=80'
     },
-    // House 3
+    // House 3: Classic Parisian Apartment
     {
-        exterior: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80&ixlib=rb-4.0.3',
-        livingroom: 'https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3',
-        bedroom: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3',
-        kitchen: 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3',
-        bathroom: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3',
-        hallway: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3'
+        exterior: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80',
+        livingroom: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80',
+        bedroom: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80',
+        kitchen: 'https://images.unsplash.com/photo-1600566752355-35792bedcfea?auto=format&fit=crop&w=800&q=80',
+        bathroom: 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80',
+        hallway: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80'
     },
-    // House 4
+    // House 4: Ultra-Modern Dubai High-rise
     {
-        exterior: 'https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=1200&q=80&ixlib=rb-4.0.3',
-        livingroom: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3',
-        bedroom: 'https://images.unsplash.com/photo-1540518614846-7eded433c457?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3',
-        kitchen: 'https://images.unsplash.com/photo-1584622781564-1d987f7333c1?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3',
-        bathroom: 'https://images.unsplash.com/photo-1600573472550-8090b5e0745e?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3',
-        hallway: 'https://images.unsplash.com/photo-1600607688969-a5bfcd64bd28?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3'
+        exterior: 'https://images.unsplash.com/photo-1512453979798-5ea4dc72814d?auto=format&fit=crop&w=1200&q=80',
+        livingroom: 'https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=800&q=80',
+        bedroom: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=800&q=80',
+        kitchen: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80',
+        bathroom: 'https://images.unsplash.com/photo-1600573472550-8090b5e0745e?auto=format&fit=crop&w=800&q=80',
+        hallway: 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=800&q=80'
     },
-    // House 5
+    // House 5: Traditional Marrakech Riad
     {
-        exterior: 'https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=1200&q=80&ixlib=rb-4.0.3',
-        livingroom: 'https://images.unsplash.com/photo-1567016432779-094069806bea?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3',
-        bedroom: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3',
-        kitchen: 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3',
-        bathroom: 'https://images.unsplash.com/photo-1628624747186-a941c476b7ef?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3',
-        hallway: 'https://images.unsplash.com/photo-1600566752229-250ce4d11fc7?auto=format&fit=crop&w=800&q=80&ixlib=rb-4.0.3'
+        exterior: 'https://images.unsplash.com/photo-1590059223961-4560938f7a63?auto=format&fit=crop&w=1200&q=80',
+        livingroom: 'https://images.unsplash.com/photo-1584144458899-73d8a5628b03?auto=format&fit=crop&w=800&q=80',
+        bedroom: 'https://images.unsplash.com/photo-1520277739336-7bf67edfa768?auto=format&fit=crop&w=800&q=80',
+        kitchen: 'https://images.unsplash.com/photo-1556909212-d5b604d0c90d?auto=format&fit=crop&w=800&q=80',
+        bathroom: 'https://images.unsplash.com/photo-1628624747186-a941c476b7ef?auto=format&fit=crop&w=800&q=80',
+        hallway: 'https://images.unsplash.com/photo-1510312295357-680479742bd0?auto=format&fit=crop&w=800&q=80'
+    },
+    // House 6: Artistic Barcelona Loft
+    {
+        exterior: 'https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=1200&q=80',
+        livingroom: 'https://images.unsplash.com/photo-1560448204-603b3fc33ddc?auto=format&fit=crop&w=800&q=80',
+        bedroom: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=800&q=80',
+        kitchen: 'https://images.unsplash.com/photo-1556911223-053b5665ac22?auto=format&fit=crop&w=800&q=80',
+        bathroom: 'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=800&q=80',
+        hallway: 'https://images.unsplash.com/photo-1600607688969-a5bfcd64bd28?auto=format&fit=crop&w=800&q=80'
     }
 ];
 
-function getPlaceImage(placeId, width = 400, height = 300, roomType = 'exterior') {
-    let hash = 0;
-    if (placeId) {
-        for (let i = 0; i < placeId.length; i++) {
-            hash = placeId.charCodeAt(i) + ((hash << 5) - hash);
-        }
+function getPlaceImage(placeId, width = 400, height = 300, roomType = 'exterior', title = '') {
+    // 1. Keyword-based Matching (Highest Relevance)
+    const lowerTitle = (title || '').toLowerCase();
+    let setIndex = -1;
+
+    if (lowerTitle.includes('cabin') || lowerTitle.includes('mountain') || lowerTitle.includes('alps') || lowerTitle.includes('wooden') || lowerTitle.includes('winter')) {
+        setIndex = 1; // Alpine Cabin
+    } else if (lowerTitle.includes('riad') || lowerTitle.includes('marrakech') || lowerTitle.includes('traditional') || lowerTitle.includes('exotic') || lowerTitle.includes('moroccan')) {
+        setIndex = 4; // Marrakech Riad
+    } else if (lowerTitle.includes('apartment') || lowerTitle.includes('paris') || lowerTitle.includes('classic') || lowerTitle.includes('european')) {
+        setIndex = 2; // Parisian Apartment
+    } else if (lowerTitle.includes('penthouse') || lowerTitle.includes('dubai') || lowerTitle.includes('luxury') || lowerTitle.includes('high') || lowerTitle.includes('modern')) {
+        setIndex = 3; // Dubai Modern
+    } else if (lowerTitle.includes('loft') || lowerTitle.includes('urban') || lowerTitle.includes('studio') || lowerTitle.includes('artist')) {
+        setIndex = 5; // Barcelona Loft
+    } else if (lowerTitle.includes('villa') || lowerTitle.includes('beach') || lowerTitle.includes('island') || lowerTitle.includes('miami') || lowerTitle.includes('ocean')) {
+        setIndex = 0; // Miami Beachfront
     }
-    const houseIndex = Math.abs(hash) % HOUSE_SETS.length; // Completely binds a place to a cohesive Unique House Set
+
+    // 2. Fallback to hash-based selection if no keywords match (Diversity)
+    if (setIndex === -1) {
+        let hash = 0;
+        if (placeId) {
+            for (let i = 0; i < placeId.length; i++) {
+                hash = placeId.charCodeAt(i) + ((hash << 5) - hash);
+            }
+        }
+        setIndex = Math.abs(hash) % HOUSE_SETS.length;
+    }
+
+    const houseSet = HOUSE_SETS[setIndex];
     
     // Safely map room types
     let category = 'exterior';
@@ -84,8 +120,11 @@ function getPlaceImage(placeId, width = 400, height = 300, roomType = 'exterior'
     else if (roomType.includes('kitchen')) category = 'kitchen';
     else if (roomType.includes('bathroom')) category = 'bathroom';
     else if (roomType.includes('hallway')) category = 'hallway';
-    
-    return HOUSE_SETS[houseIndex][category];
+
+    let imageUrl = houseSet[category] || houseSet['exterior'];
+
+    // Optimization check (if it's already an Unsplash URL, we skip re-formatting to avoid double params)
+    return imageUrl;
 }
 
 function getAuthHeaders() {
@@ -144,12 +183,22 @@ function displayPlaces(places) {
 
     placesList.innerHTML = '';
 
+    // CONSOLIDATION FILTER: Exactly 4 diverse properties as requested
+    const keepTitles = [
+        "Luxury Beachfront Villa - Miami",
+        "Cozy Mountain Cabin - Swiss Alps",
+        "Modern City Apartment - Paris",
+        "Historic Castle Suite - Edinburgh"
+    ];
+
     places.forEach((place) => {
+        const placeTitle = getPlaceTitle(place);
+        if (!keepTitles.includes(placeTitle)) return;
+
         const placeCard = document.createElement('div');
         placeCard.className = 'place-card';
         placeCard.dataset.price = getPlacePrice(place);
 
-        const placeTitle = getPlaceTitle(place);
         const placeDesc = getPlaceDescription(place);
         placeCard.dataset.title = placeTitle.toLowerCase();
         placeCard.dataset.desc = placeDesc.toLowerCase();
@@ -167,7 +216,7 @@ function displayPlaces(places) {
         placeCard.innerHTML = `
             <a href="place.html?id=${place.id}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; height: 100%;">
                 <div class="place-card-image" style="width: 100%; height: 300px; overflow: hidden; border-radius: 12px; margin-bottom: 15px;">
-                    <img src="${place.image_url || getPlaceImage(place.id, 400, 300)}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;" onerror="this.parentElement.parentElement.parentElement.style.display='none'" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" />
+                    <img src="${place.image_url || getPlaceImage(place.id, 400, 300, 'exterior', placeTitle)}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;" onerror="this.src='https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=800&q=80'; this.onerror=null;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" />
                 </div>
                 <div class="place-card-content">
                     <div style="display: flex; justify-content: space-between; align-items: start;">
@@ -415,7 +464,7 @@ async function getReviewsHTML(place) {
 
         return `
             <div class="review-card">
-                <p>${review.comment || review.text || 'No comment provided'}</p>
+                <p>${review.text || review.comment || 'No comment provided'}</p>
                 <p><strong>User:</strong> ${reviewer}</p>
                 <p><strong>Rating:</strong> <span class="review-rating">${stars}</span></p>
             </div>
@@ -493,12 +542,12 @@ async function displayPlaceDetails(place) {
         
         <!-- Airbnb Premium 6-Image Gallery (Self-healing Broken Image Removal) -->
         <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; grid-auto-rows: 200px; gap: 8px; border-radius: 16px; overflow: hidden; margin-bottom: 2rem;">
-            <img src="${place.image_url || getPlaceImage(place.id, 1200, 800, 'exterior')}" style="grid-column: span 2; grid-row: span 2; width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.style.display='none'" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
-            <img src="${getPlaceImage(place.id, 800, 600, 'livingroom')}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.style.display='none'" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
-            <img src="${getPlaceImage(place.id, 800, 600, 'kitchen')}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.style.display='none'" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
-            <img src="${getPlaceImage(place.id, 800, 600, 'bedroom')}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.style.display='none'" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
-            <img src="${getPlaceImage(place.id, 800, 600, 'bathroom')}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.style.display='none'" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
-            <img src="${getPlaceImage(place.id, 800, 600, 'hallway')}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.style.display='none'" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
+            <img src="${place.image_url || getPlaceImage(place.id, 1200, 800, 'exterior', getPlaceTitle(place))}" style="grid-column: span 2; grid-row: span 2; width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.src='https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=1200&q=80'; this.onerror=null;" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
+            <img src="${getPlaceImage(place.id, 800, 600, 'livingroom', getPlaceTitle(place))}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.src='https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=80'; this.onerror=null;" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
+            <img src="${getPlaceImage(place.id, 800, 600, 'kitchen', getPlaceTitle(place))}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.src='https://images.unsplash.com/photo-1556911223-053b5665ac22?auto=format&fit=crop&w=800&q=80'; this.onerror=null;" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
+            <img src="${getPlaceImage(place.id, 800, 600, 'bedroom', getPlaceTitle(place))}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.src='https://images.unsplash.com/photo-1505691938895-1758d7eaa511?auto=format&fit=crop&w=800&q=80'; this.onerror=null;" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
+            <img src="${getPlaceImage(place.id, 800, 600, 'bathroom', getPlaceTitle(place))}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.src='https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80'; this.onerror=null;" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
+            <img src="${getPlaceImage(place.id, 800, 600, 'hallway', getPlaceTitle(place))}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80'; this.onerror=null;" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
         </div>
         
         <div class="place-info" style="display: grid; grid-template-columns: 2fr 1fr; gap: 40px;">
@@ -633,8 +682,7 @@ async function submitReview(token, placeId, reviewText, rating) {
     const payload = {
         place_id: placeId,
         text: reviewText,
-        comment: reviewText,
-        rating: Number(rating)
+        rating: parseInt(rating, 10)
     };
 
     const response = await fetch(`${API_BASE}/api/v1/reviews/`, {
@@ -648,6 +696,7 @@ async function submitReview(token, placeId, reviewText, rating) {
 
     return response;
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('login-form');
@@ -883,32 +932,69 @@ document.addEventListener('DOMContentLoaded', () => {
         const placeId = getPlaceIdFromURL();
         const reviewTextField = document.getElementById('review-text');
         const ratingField = document.getElementById('rating');
+        const msg = document.getElementById('review-msg');
 
         reviewForm.addEventListener('submit', async (event) => {
             event.preventDefault();
+            if (msg) {
+                msg.textContent = 'إرسال التقييم...';
+                msg.style.color = 'var(--text-secondary)';
+            }
 
             const reviewText = reviewTextField.value.trim();
             const rating = ratingField.value;
 
             if (!reviewText || !placeId || !token || !rating) {
-                alert('Please fill out all fields before submitting.');
+                if (msg) {
+                    msg.textContent = 'يرجى ملء جميع الحقول أولاً.';
+                    msg.style.color = '#ef4444';
+                } else {
+                    alert('Please fill out all fields before submitting.');
+                }
                 return;
             }
 
             try {
                 const response = await submitReview(token, placeId, reviewText, rating);
+                const data = await response.json().catch(() => ({}));
 
                 if (response.ok) {
-                    alert('Review submitted successfully!');
+                    if (msg) {
+                        msg.textContent = 'تم إرسال التقييم بنجاح! يتم الآن تحويلك...';
+                        msg.style.color = '#10b981';
+                    }
                     reviewForm.reset();
-                    window.location.href = `place.html?id=${placeId}`;
+                    setTimeout(() => {
+                        window.location.href = `place.html?id=${placeId}`;
+                    }, 1500);
                 } else {
-                    const data = await response.json();
-                    alert(`Failed to submit review: ${data.error || data.message || 'Unknown error'}`);
+                    let rawError = data.error || data.message || '';
+                    let errorMsg = rawError || `فشل إرسال التقييم (HTTP ${response.status})`;
+                    
+                    // Arabic translations for common errors
+                    if (rawError.includes('own place') || rawError.includes('cannot review your own')) errorMsg = 'لا يمكنك تقييم عقارك الخاص (أنت صاحب العقار)';
+                    else if (rawError.includes('already reviewed')) errorMsg = 'لقد قمت بتقييم هذا المكان مسبقاً، لا يمكن إضافة تقييم آخر';
+                    else if (rawError.includes('Unauthorized') || response.status === 401) errorMsg = 'يجب تسجيل الدخول للقيام بهذا الإجراء';
+                    else if (rawError.includes('not found') || response.status === 404) errorMsg = 'المكان غير موجود، يرجى التحقق من الرابط';
+                    else if (rawError.includes('Rating') || rawError.includes('rating')) errorMsg = 'يرجى اختيار تقييم صحيح (من 1 إلى 5)';
+                    else if (rawError.includes('text must be') || rawError.includes('text is required')) errorMsg = 'يرجى كتابة نص التقييم';
+                    else if (response.status === 403) errorMsg = 'ليس لديك صلاحية للقيام بهذا الإجراء';
+
+                    console.error('Review API error:', response.status, rawError);
+
+                    if (msg) {
+                        msg.textContent = errorMsg;
+                        msg.style.color = '#ef4444';
+                    } else {
+                        alert(errorMsg);
+                    }
                 }
             } catch (error) {
                 console.error(error);
-                alert('Failed to submit review. Please try again later.');
+                if (msg) {
+                    msg.textContent = 'حدث خطأ في الشبكة. يرجى المحاولة لاحقاً.';
+                    msg.style.color = '#ef4444';
+                }
             }
         });
     }
