@@ -34,7 +34,7 @@ The main objectives of this phase are:
 
 ## 🧩 Tasks Implementation
 
-### Task 1: Design (UI Structure & Styling)
+### Task 0: Design (UI Structure & Styling)
 
 In this task, we completed and structured all required HTML pages and applied styling using CSS.
 
@@ -61,16 +61,121 @@ In this task, we completed and structured all required HTML pages and applied st
 ### Outcome
 A clean, structured, and user-friendly interface that matches the design requirements and is ready to be connected with JavaScript logic.
 
-### Task 2: Login Functionality
+### Task 1: Login Functionality
 
 We implemented user authentication by connecting the login form with the backend API.
 
 ### Implementation Details
 - Added event listener to the login form
 - Prevented default form submission using:
+```bash
 event.preventDefault();
+```
 - Sent a POST request to the login endpoint:
+```bash
 fetch('/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
+```
+- Handled API response:
+  - On success:
+    - Stored JWT token in cookies
+    - Redirected user to `index.html`
+  - On failure:
+    - Displayed error message
+
+### Outcome
+A fully functional login system that securely authenticates users and manages sessions.
+
+### Task 2: List of Places (Index Page)
+
+We implemented the main page that displays all available places dynamically.
+
+### Implementation Details
+- Checked authentication status using cookies:
+   - Show login link if not authenticated
+   - Hide it if authenticated
+- Fetched places data from API using:
+```bash
+fetch('/places', {
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
+});
+```
+- Dynamically created place cards using JavaScript:
+   - Name
+   - Price per night
+   - "View Details" button
+- Implemented client-side filtering:
+   - Dropdown with price options (10, 50, 100, All)
+   - Used JavaScript to show/hide cards without reload
+
+### Outcome
+A dynamic homepage that displays places and allows users to filter results instantly.
+
+### Task 3: Place Details
+
+We built a page to display detailed information about a selected place.
+
+### Implementation Details
+- Extracted `place_id` from URL using:
+```bash
+window.location.search
+```
+- Fetched place details from API
+- Displayed:
+   - Name
+   - Description
+   - Price
+   - Amenities
+   - Reviews
+- Rendered reviews dynamically using review cards
+- Controlled visibility of "Add Review":
+   - Visible only if user is authenticated
+
+### Outcome
+A fully dynamic details page that presents complete information about a place and adapts based on user authentication.
+
+### Task 4: Add Review
+
+We implemented a form that allows authenticated users to submit reviews.
+
+### Implementation Details
+- Checked authentication on page load:
+   - If not authenticated → redirect to index.html
+- Extracted place_id from URL
+- Added event listener to review form
+- Sent POST request to API:
+```bash
+fetch('/reviews', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: `Bearer ${token}`
+  },
+  body: JSON.stringify({
+    place_id: placeId,
+    text: reviewText
+  })
+});
+```
+- Handled response:
+  - Success → show confirmation + clear form
+  - Failure → show error message
+
+### Outcome
+A secure and functional review system integrated with the backend API.
+
+## Conclusion
+In this phase, we successfully built a complete front-end client that interacts with a backend API.
+
+We implemented:
+- Authentication system
+- Dynamic data rendering
+- Client-side filtering
+- Secure review submission
+
+This project demonstrates a real-world example of integrating front-end and back-end systems into a fully functional web application.
+
 
 
 
