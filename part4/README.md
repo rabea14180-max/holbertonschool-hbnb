@@ -61,6 +61,17 @@ In this task, we completed and structured all required HTML pages and applied st
 ### Outcome
 A clean, structured, and user-friendly interface that matches the design requirements and is ready to be connected with JavaScript logic.
 
+### Task 2: Login Functionality
+
+We implemented user authentication by connecting the login form with the backend API.
+
+### Implementation Details
+- Added event listener to the login form
+- Prevented default form submission using:
+event.preventDefault();
+- Sent a POST request to the login endpoint:
+fetch('/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
+
 
 
 
