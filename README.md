@@ -255,6 +255,60 @@ The system preserves the layered architecture:
 - Can be adapted to larger RDBMS for scaling
 
 ---
+# HBnB Evolution — Part 4
+This phase introduces the client-side application of HBnB, transforming the system into a fully interactive web platform.
+
+## What Was Added
+
+A new layer was introduced:
+
+### Client Layer (Front-End)
+
+Built using:
+- HTML5
+- CSS3
+- JavaScript (ES6)
+
+Responsibilities:
+- Sending requests to the API using Fetch
+- Dynamically rendering data (places, reviews)
+- Managing authentication state (logged in / not logged in)
+- Controlling UI behavior based on user state
+
+## Core Functionality
+
+### Authentication
+- Login via API
+- JWT stored in browser cookies
+- Token included in subsequent requests
+
+### Places Listing
+- Fetch places from the API
+- Display them as cards
+- Implement client-side filtering by price (no reload)
+
+### Place Details
+- Retrieve place data using place ID
+- Display:
+   - Description
+   - Price
+   - Amenities
+   - Reviews
+
+### Reviews
+- Allow only authenticated users to submit reviews
+- Send review data to the API
+- Update UI dynamically after submission
+
+## Result
+At the end of this phase, the project becomes a complete full-stack application where users can:
+- Log in
+- Browse places
+- View detailed information
+- Submit reviews
+All interactions are handled dynamically through the web client.
+
+----
 
 👩‍💻 Authors 
 This project was created by Holberton School students:
