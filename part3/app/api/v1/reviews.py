@@ -24,11 +24,16 @@ class ReviewList(Resource):
         """Create a new review (authenticated users only)"""
         current_user_id = get_jwt_identity()
         data = api.payload.copy()
-
         place_id = data.get('place_id')
+
         place = facade.get_place_obj(place_id)
         if not place:
             return {"error": "Place not found"}, 404
+
+        # Administrators are not allowed to post reviews
+        claims = get_jwt()
+        if claims.get('is_admin'):
+            return {"error": "Administrators are not allowed to post reviews."}, 403
 
         if str(place.owner_id) == str(current_user_id):
             return {"error": "You cannot review your own place"}, 400

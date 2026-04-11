@@ -542,3 +542,8 @@ footer {
         align-items: stretch;
     }
 }
+
+/* Administrator Lockdown Styles */
+body.user-is-admin .admin-restricted {
+    display: none !important;
+}

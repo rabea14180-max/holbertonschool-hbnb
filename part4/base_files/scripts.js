@@ -22,7 +22,30 @@ function parseJwt(token) {
     }
 }
 
-/** Backend API root. Override before loading scripts: window.HBNB_API_BASE = 'http://localhost:5000'; */
+// ===================================
+// Administrator Review Lockdown (Global)
+// ===================================
+function checkAdminLockdown() {
+    const token = getCookie('token');
+    const currentUrl = window.location.href.toLowerCase();
+    
+    if (token) {
+        const payload = parseJwt(token);
+        if (payload && payload.is_admin) {
+            // Globally mark the body as admin for CSS-level hiding
+            document.body.classList.add('user-is-admin');
+            
+            // Redirect Admins away from Review and Add Place pages instantly
+            // We use indexOf for maximum backward compatibility across all browsers
+            if (currentUrl.indexOf('add_review.html') !== -1 || currentUrl.indexOf('add_place.html') !== -1) {
+                alert('Administrators are NOT authorized to access this form.');
+                window.location.href = 'index.html';
+            }
+        }
+    }
+}
+checkAdminLockdown();
+// ===================================
 
 const HOUSE_SETS = [
     // House 1: Luxury Beachfront (Miami Style)
@@ -41,7 +64,7 @@ const HOUSE_SETS = [
         bedroom: 'https://images.unsplash.com/photo-1536341271573-f14399cb13b8?auto=format&fit=crop&w=800&q=80',
         kitchen: 'https://images.unsplash.com/photo-1556909190-eccf4a8bf97a?auto=format&fit=crop&w=800&q=80',
         bathroom: 'https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&fit=crop&w=800&q=80',
-        hallway: 'https://images.unsplash.com/photo-1510312295357-680479742bd0?auto=format&fit=crop&w=800&q=80'
+        hallway: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80'
     },
     // House 3: Classic Parisian Apartment
     {
@@ -54,7 +77,7 @@ const HOUSE_SETS = [
     },
     // House 4: Ultra-Modern Dubai High-rise
     {
-        exterior: 'https://images.unsplash.com/photo-1512453979798-5ea4dc72814d?auto=format&fit=crop&w=1200&q=80',
+        exterior: 'https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=1200&q=80',
         livingroom: 'https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=800&q=80',
         bedroom: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=800&q=80',
         kitchen: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=80',
@@ -63,21 +86,21 @@ const HOUSE_SETS = [
     },
     // House 5: Traditional Marrakech Riad
     {
-        exterior: 'https://images.unsplash.com/photo-1590059223961-4560938f7a63?auto=format&fit=crop&w=1200&q=80',
-        livingroom: 'https://images.unsplash.com/photo-1584144458899-73d8a5628b03?auto=format&fit=crop&w=800&q=80',
+        exterior: 'https://images.unsplash.com/photo-1539020140153-06674686b208?auto=format&fit=crop&w=1200&q=80',
+        livingroom: 'https://images.unsplash.com/photo-1553444836-bc6c8d340ba7?auto=format&fit=crop&w=800&q=80',
         bedroom: 'https://images.unsplash.com/photo-1520277739336-7bf67edfa768?auto=format&fit=crop&w=800&q=80',
         kitchen: 'https://images.unsplash.com/photo-1556909212-d5b604d0c90d?auto=format&fit=crop&w=800&q=80',
         bathroom: 'https://images.unsplash.com/photo-1628624747186-a941c476b7ef?auto=format&fit=crop&w=800&q=80',
-        hallway: 'https://images.unsplash.com/photo-1510312295357-680479742bd0?auto=format&fit=crop&w=800&q=80'
+        hallway: 'https://images.unsplash.com/photo-1512918583167-bbd1b0b237b1?auto=format&fit=crop&w=800&q=80'
     },
     // House 6: Artistic Barcelona Loft
     {
         exterior: 'https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=1200&q=80',
         livingroom: 'https://images.unsplash.com/photo-1560448204-603b3fc33ddc?auto=format&fit=crop&w=800&q=80',
         bedroom: 'https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=800&q=80',
-        kitchen: 'https://images.unsplash.com/photo-1556911223-053b5665ac22?auto=format&fit=crop&w=800&q=80',
+        kitchen: 'https://images.unsplash.com/photo-1520699697851-3dc68aa3a474?auto=format&fit=crop&w=800&q=80',
         bathroom: 'https://images.unsplash.com/photo-1507652313519-d4e9174996dd?auto=format&fit=crop&w=800&q=80',
-        hallway: 'https://images.unsplash.com/photo-1600607688969-a5bfcd64bd28?auto=format&fit=crop&w=800&q=80'
+        hallway: 'https://images.unsplash.com/photo-1521783593447-570221ff97ad?auto=format&fit=crop&w=800&q=80'
     }
 ];
 
@@ -644,7 +667,12 @@ function checkPlaceAuthentication() {
     }
 
     if (token) {
-        addReviewSection.style.display = 'block';
+        const payload = parseJwt(token);
+        if (payload && payload.is_admin) {
+            addReviewSection.style.display = 'none'; // Lock out admins
+        } else {
+            addReviewSection.style.display = 'block'; // Allow guests
+        }
     } else {
         addReviewSection.style.display = 'none';
     }
@@ -679,6 +707,15 @@ async function fetchPlaceDetails(placeId) {
 }
 
 async function submitReview(token, placeId, reviewText, rating) {
+    if (token) {
+        const payload = parseJwt(token);
+        if (payload && payload.is_admin) {
+            alert('Administrators are not authorized to post reviews.');
+            window.location.href = 'index.html';
+            return { ok: false, status: 403, json: async () => ({ error: 'Admin restriction' }) };
+        }
+    }
+
     const payload = {
         place_id: placeId,
         text: reviewText,
