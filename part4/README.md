@@ -209,6 +209,7 @@ This project demonstrates a real-world example of integrating front-end and back
 Note: The admin can't review it's place 
 
 ---
-# Authors
+### Authors
 - Solaf Alessa
-- R
+- Rabea Thabit
+- Hamsa Alammar 
