@@ -176,13 +176,39 @@ We implemented:
 
 This project demonstrates a real-world example of integrating front-end and back-end systems into a fully functional web application.
 
+---
 
+# Our HBnB Website
 
+### The login/sign up page:
 
+![WhatsApp Image 2026-04-11 at 20 11 51 (1)](https://github.com/user-attachments/assets/44bf7dee-7d7f-4efa-85bb-48e906ac5909)
 
+![WhatsApp Image 2026-04-11 at 20 11 52](https://github.com/user-attachments/assets/e894425b-6110-4695-b2d3-b03018e978f6)
 
+![WhatsApp Image 2026-04-11 at 20 11 52 (1)](https://github.com/user-attachments/assets/cd5ea865-5651-4b05-a5a2-905331f361b1)
 
+---
 
+### The main page:
 
+![WhatsApp Image 2026-04-11 at 20 11 51](https://github.com/user-attachments/assets/a2802c7b-b5ff-4615-a1ec-436c7fc6a669)
 
+---
 
+### Submitting new review:
+
+![WhatsApp Image 2026-04-11 at 20 11 53](https://github.com/user-attachments/assets/e0d29196-a605-4b9e-8266-4377712bae64)
+
+---
+
+### Listing the reviews "Admin POV":
+
+![WhatsApp Image 2026-04-11 at 20 17 49 (1)](https://github.com/user-attachments/assets/3a7a4db3-193f-4a1c-b931-621f9778a4a7)
+
+Note: The admin can't review it's place 
+
+---
+# Authors
+- Solaf Alessa
+- R
