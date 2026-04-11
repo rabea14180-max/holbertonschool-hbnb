@@ -37,8 +37,9 @@ function checkAdminLockdown() {
             
             // Redirect Admins away from Review and Add Place pages instantly
             // We use indexOf for maximum backward compatibility across all browsers
-            if (currentUrl.indexOf('add_review.html') !== -1 || currentUrl.indexOf('add_place.html') !== -1) {
-                alert('Administrators are NOT authorized to access this form.');
+            // Using window.location.pathname.includes to be more robust and specific
+            if (window.location.pathname.toLowerCase().includes('add_review.html')) {
+                alert('عذراً، لا يُسمح للمسؤولين بإضافة تقييمات.');
                 window.location.href = 'index.html';
             }
         }
@@ -236,10 +237,14 @@ function displayPlaces(places) {
             }
         }
 
+        // Handle Image Gallery
+        const images = (place.image_url || '').split(';').filter(url => url.trim() !== '');
+        const primaryImage = images.length > 0 ? images[0] : getPlaceImage(place.id, 400, 300, 'exterior', placeTitle);
+
         placeCard.innerHTML = `
             <a href="place.html?id=${place.id}" style="text-decoration: none; color: inherit; display: flex; flex-direction: column; height: 100%;">
                 <div class="place-card-image" style="width: 100%; height: 300px; overflow: hidden; border-radius: 12px; margin-bottom: 15px;">
-                    <img src="${place.image_url || getPlaceImage(place.id, 400, 300, 'exterior', placeTitle)}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;" onerror="this.src='https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=800&q=80'; this.onerror=null;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" />
+                    <img src="${primaryImage}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s;" onerror="this.src='https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=800&q=80'; this.onerror=null;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" />
                 </div>
                 <div class="place-card-content">
                     <div style="display: flex; justify-content: space-between; align-items: start;">
@@ -563,23 +568,27 @@ async function displayPlaceDetails(place) {
             </div>
         </div>
         
-        <!-- Airbnb Premium 6-Image Gallery (Self-healing Broken Image Removal) -->
-        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; grid-auto-rows: 200px; gap: 8px; border-radius: 16px; overflow: hidden; margin-bottom: 2rem;">
-            <img src="${place.image_url || getPlaceImage(place.id, 1200, 800, 'exterior', getPlaceTitle(place))}" style="grid-column: span 2; grid-row: span 2; width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.src='https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=1200&q=80'; this.onerror=null;" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
-            <img src="${getPlaceImage(place.id, 800, 600, 'livingroom', getPlaceTitle(place))}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.src='https://images.unsplash.com/photo-1493663284031-b7e3aefcae8e?auto=format&fit=crop&w=800&q=80'; this.onerror=null;" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
-            <img src="${getPlaceImage(place.id, 800, 600, 'kitchen', getPlaceTitle(place))}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.src='https://images.unsplash.com/photo-1556911223-053b5665ac22?auto=format&fit=crop&w=800&q=80'; this.onerror=null;" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
-            <img src="${getPlaceImage(place.id, 800, 600, 'bedroom', getPlaceTitle(place))}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.src='https://images.unsplash.com/photo-1505691938895-1758d7eaa511?auto=format&fit=crop&w=800&q=80'; this.onerror=null;" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
-            <img src="${getPlaceImage(place.id, 800, 600, 'bathroom', getPlaceTitle(place))}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.src='https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80'; this.onerror=null;" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
-            <img src="${getPlaceImage(place.id, 800, 600, 'hallway', getPlaceTitle(place))}" style="width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; transition: opacity 0.2s;" onerror="this.src='https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80'; this.onerror=null;" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1" onclick="openLightbox(this.src)" />
+        </div>
+        
+        <!-- Enhanced Multi-Image Gallery -->
+        <div id="place-gallery-container" style="display: grid; grid-template-columns: 2fr 1fr 1fr; grid-auto-rows: 200px; gap: 8px; border-radius: 16px; overflow: hidden; margin-bottom: 2rem;">
+            <!-- Gallery images will be injected here -->
         </div>
         
         <div class="place-info" style="display: grid; grid-template-columns: 2fr 1fr; gap: 40px;">
             <div class="info-main">
-                <div style="display: flex; justify-content: space-between; align-items: start;">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 5px;">
                     <div>
                         <h2 style="font-size: 1.4rem; font-weight: 600;">Entire home hosted by ${getHostName(place)}</h2>
                         <div style="color: var(--text-secondary); margin-top: 4px; font-size: 1rem;">10 guests · 4 bedrooms · 5 beds · 3 baths</div>
                     </div>
+                    ${(payload && payload.is_admin) ? `
+                    <div style="flex-shrink: 0;">
+                        <button id="delete-place-btn" class="btn" style="background: #ffffff; color: #ef4444; border: 1px solid #ef4444; box-shadow: none; font-size: 0.9rem; padding: 0.5rem 1rem;">
+                            🗑️ Delete Listing
+                        </button>
+                    </div>
+                    ` : ''}
                 </div>
                 
                 <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 2rem 0;">
@@ -598,6 +607,14 @@ async function displayPlaceDetails(place) {
                 
                 <h3 style="font-size: 1.3rem; margin-bottom: 15px; font-weight: 600;">Where you'll be</h3>
                 ${mapHtml}
+                
+                ${place.location_link ? `
+                <div style="margin-top: 1.5rem;">
+                    <a href="${place.location_link}" target="_blank" class="btn" style="display: inline-flex; align-items: center; gap: 8px; background: #ea4335; box-shadow: 0 4px 14px rgba(234, 67, 53, 0.4);">
+                        📍 View on Google Maps
+                    </a>
+                </div>
+                ` : ''}
             </div>
             
             <div class="info-sidebar">
@@ -646,6 +663,44 @@ async function displayPlaceDetails(place) {
                 if (detailLocTag) detailLocTag.innerHTML = `${city}${country ? ', ' + country : ''}`;
             }).catch(err => console.log(err));
     }
+    // Render Image Gallery
+    const galleryContainer = document.getElementById('place-gallery-container');
+    if (galleryContainer) {
+        galleryContainer.innerHTML = '';
+        const images = (place.image_url || '').split(';').filter(url => url.trim() !== '');
+        
+        // Fill gallery with available images, fallback to structural placeholders if less than 6
+        const displayImages = [...images];
+        const fallbacks = ['livingroom', 'kitchen', 'bedroom', 'bathroom', 'hallway'];
+        
+        while (displayImages.length < 6) {
+            const fbType = fallbacks[displayImages.length - 1] || 'exterior';
+            displayImages.push(getPlaceImage(place.id, 800, 600, fbType, getPlaceTitle(place)));
+        }
+
+        displayImages.slice(0, 6).forEach((src, idx) => {
+            const img = document.createElement('img');
+            img.src = src;
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'cover';
+            img.style.cursor = 'zoom-in';
+            img.style.transition = 'opacity 0.2s';
+            
+            if (idx === 0) {
+                img.style.gridColumn = 'span 2';
+                img.style.gridRow = 'span 2';
+            }
+            
+            img.onerror = () => { img.src = 'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?auto=format&fit=crop&w=800&q=80'; };
+            img.onmouseover = () => { img.style.opacity = '0.9'; };
+            img.onmouseout = () => { img.style.opacity = '1'; };
+            img.onclick = () => openLightbox(src);
+            
+            galleryContainer.appendChild(img);
+        });
+    }
+
     placeDetails.innerHTML += `
         <div class="reviews-section" style="margin-top: 3rem;">
             <div class="reviews-header" style="margin-bottom: 20px;">
@@ -656,6 +711,36 @@ async function displayPlaceDetails(place) {
             </div>
         </div>
     `;
+
+    // Add Delete Listener for Admins
+    const deleteBtn = document.getElementById('delete-place-btn');
+    if (deleteBtn) {
+        deleteBtn.addEventListener('click', () => deletePlace(place.id));
+    }
+}
+
+async function deletePlace(placeId) {
+    if (!confirm('هل أنت متأكد من رغبتك في حذف هذا المكان نهائياً؟ لا يمكن التراجع عن هذا الإجراء.')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API_BASE}/api/v1/places/${placeId}`, {
+            method: 'DELETE',
+            headers: getAuthHeaders()
+        });
+
+        if (response.ok) {
+            alert('تم حذف المكان بنجاح.');
+            window.location.href = 'index.html';
+        } else {
+            const error = await response.json();
+            alert(`فشل الحذف: ${error.error || 'خطأ غير معروف'}`);
+        }
+    } catch (error) {
+        console.error('Error deleting place:', error);
+        alert('حدث خطأ أثناء الاتصال بالسيرفر.');
+    }
 }
 
 function checkPlaceAuthentication() {
@@ -779,6 +864,49 @@ document.addEventListener('DOMContentLoaded', () => {
                 amenitiesContainer.innerHTML = '<p>Failed to load amenities.</p>';
             });
 
+        // Map Initialization
+        const mapContainer = document.getElementById('location-map');
+        if (mapContainer && typeof L !== 'undefined') {
+            const map = L.map('location-map').setView([20, 0], 2);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            let marker;
+            map.on('click', function(e) {
+                const lat = e.latlng.lat;
+                const lng = e.latlng.lng;
+                
+                if (marker) {
+                    marker.setLatLng(e.latlng);
+                } else {
+                    marker = L.marker(e.latlng).addTo(map);
+                }
+                
+                document.getElementById('place-latitude').value = lat.toFixed(6);
+                document.getElementById('place-longitude').value = lng.toFixed(6);
+            });
+        }
+
+        // Multi-Image Logic
+        const addImageBtn = document.getElementById('add-image-btn');
+        const imagesContainer = document.getElementById('image-urls-container');
+        if (addImageBtn && imagesContainer) {
+            addImageBtn.addEventListener('click', () => {
+                const div = document.createElement('div');
+                div.className = 'image-url-group';
+                div.innerHTML = `
+                    <input type="url" class="place-image-input" placeholder="https://example.com/image.jpg" style="flex: 1;">
+                    <button type="button" class="btn btn-secondary remove-image-btn" style="background: #fee2e2; color: #ef4444; border: none;">&times;</button>
+                `;
+                imagesContainer.appendChild(div);
+                
+                div.querySelector('.remove-image-btn').addEventListener('click', () => {
+                    div.remove();
+                });
+            });
+        }
+
         addPlaceForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const title = document.getElementById('place-title').value;
@@ -786,7 +914,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const latitude = document.getElementById('place-latitude').value;
             const longitude = document.getElementById('place-longitude').value;
             const description = document.getElementById('place-description').value;
-            const customImage = document.getElementById('place-image') ? document.getElementById('place-image').value : '';
+            const locationLink = document.getElementById('location_link') ? document.getElementById('location_link').value : '';
+            
+            // Join all image URLs with semicolon
+            const imageInputs = document.querySelectorAll('.place-image-input');
+            const images = Array.from(imageInputs).map(input => input.value.trim()).filter(val => val !== '');
+            const combinedImageUrl = images.join(';');
 
             // Collect selected amenities
             const selectedAmenities = Array.from(document.querySelectorAll('input[name="amenity"]:checked')).map(cb => cb.value);
@@ -796,7 +929,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     method: 'POST',
                     headers: getAuthHeaders(),
                     body: JSON.stringify({
-                        title, price: parseFloat(price), latitude: parseFloat(latitude), longitude: parseFloat(longitude), description, amenities: selectedAmenities, image_url: customImage
+                        title, 
+                        price: parseFloat(price), 
+                        latitude: parseFloat(latitude), 
+                        longitude: parseFloat(longitude), 
+                        description, 
+                        amenities: selectedAmenities, 
+                        image_url: combinedImageUrl,
+                        location_link: locationLink
                     })
                 });
 

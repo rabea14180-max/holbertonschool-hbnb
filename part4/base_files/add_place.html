@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HBnB - Add New Place</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Leaflet Maps CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <style>
         .amenities-checkbox-grid {
             display: grid;
@@ -18,19 +20,27 @@
             gap: 8px;
             font-size: 0.95rem;
             color: var(--text-color);
+            padding: 8px;
+            border-radius: 8px;
+            background: rgba(139, 92, 246, 0.05);
+            transition: background 0.2s;
+            cursor: pointer;
         }
-        .add-place-container {
-            max-width: 800px;
-            margin: 0 auto;
+        .amenity-checkbox-item:hover {
+            background: rgba(139, 92, 246, 0.1);
         }
-        .form-row {
+        #location-map {
+            height: 300px;
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border: 1px solid var(--border-color);
+            z-index: 10;
+        }
+        .image-url-group {
             display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        .form-row .form-group {
-            flex: 1;
-            min-width: 250px;
+            gap: 10px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -71,6 +81,17 @@
                 <input type="text" id="place-title" placeholder="e.g. Stunning Penthouse with Ocean View" required>
             </div>
             
+            <div class="form-group">
+                <label for="location_link">Location Link (Google Maps Link)</label>
+                <input type="url" id="location_link" placeholder="https://www.google.com/maps/place/...">
+            </div>
+
+            <div class="form-group">
+                <label>Select Location on Map</label>
+                <div id="location-map"></div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 1rem;">Click on the map to set the exact coordinates of your place.</p>
+            </div>
+
             <div class="form-row">
                 <div class="form-group">
                     <label for="place-price">Price per night ($)</label>
@@ -99,8 +120,13 @@
             </div>
 
             <div class="form-group" style="margin-top: 1.5rem;">
-                <label for="place-image">Image URL</label>
-                <input type="url" id="place-image" placeholder="https://source.unsplash.com/1600x900/?house" style="width: 100%; border-radius: var(--radius); border: 1px solid var(--border-color); padding: 0.75rem; background-color: var(--input-bg); color: var(--text-color); font-family: inherit; font-size: 1rem;">
+                <label>Image URLs</label>
+                <div id="image-urls-container">
+                    <div class="image-url-group">
+                        <input type="url" class="place-image-input" placeholder="https://example.com/image1.jpg" style="flex: 1;">
+                    </div>
+                </div>
+                <button type="button" id="add-image-btn" class="btn btn-secondary" style="font-size: 0.85rem; padding: 5px 15px; margin-top: 5px;">+ Add another image</button>
             </div>
 
             <p style="font-size: 0.85rem; color: var(--text-secondary); margin: 1rem 0 2rem; padding: 10px; background: rgba(139, 92, 246, 0.1); border-radius: 8px; border-left: 3px solid var(--primary-color);">
@@ -118,6 +144,8 @@
     <p>&copy; 2026 HBnB. All rights reserved.</p>
 </footer>
 
-<script src="scripts.js"></script>
+<!-- Leaflet Maps JS -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="scripts.js?v=2.1"></script>
 </body>
 </html>
