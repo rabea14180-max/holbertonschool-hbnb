@@ -510,6 +510,9 @@ async function displayPlaceDetails(place) {
         return;
     }
 
+    const token = getCookie('token');
+    const payload = token ? parseJwt(token) : null;
+
     const amenitiesListHTML = Array.isArray(place.amenities) && place.amenities.length > 0
         ? place.amenities.map(a => {
             const name = typeof a === 'string' ? a : (a.name || 'Amenity');
@@ -566,8 +569,6 @@ async function displayPlaceDetails(place) {
                     <span class="city-country-detail-tag" style="text-decoration: underline;">Loc: ${place.latitude ?? '0'}, ${place.longitude ?? '0'}</span>
                 </div>
             </div>
-        </div>
-        
         </div>
         
         <!-- Enhanced Multi-Image Gallery -->
