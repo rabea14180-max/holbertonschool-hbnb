@@ -13,10 +13,10 @@ env/
 .env.local
 *.pem
 
-# SQLite (keep data local; use backup_database.py to archive)
-*.db
-*.db-wal
-*.db-shm
+# # SQLite (keep data local; use backup_database.py to archive)
+# *.db
+# *.db-wal
+# *.db-shm
 
 # App backups & instance (keep folder, not backup files)
 part3/backups/*
@@ -32,5 +32,5 @@ htmlcov/
 .idea/
 .vscode/
 *.swp
-Thumbs.db
+# Thumbs.db
 .DS_Store
