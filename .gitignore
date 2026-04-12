@@ -13,15 +13,17 @@ env/
 .env.local
 *.pem
 
-# # SQLite (keep data local; use backup_database.py to archive)
-# *.db
-# *.db-wal
-# *.db-shm
+# SQLite (Uncommented to allow pushing DB files if desired)
+*.db
+*.db-wal
+*.db-shm
 
-# App backups & instance (keep folder, not backup files)
+# App backups & instance (allow .db files, ignore others)
 part3/backups/*
 !part3/backups/.gitkeep
-part3/instance/
+!part3/backups/*.db
+part3/instance/*
+!part3/instance/*.db
 
 # Testing / coverage
 .pytest_cache/
