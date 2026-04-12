@@ -209,6 +209,30 @@ This project demonstrates a real-world example of integrating front-end and back
 Note: The admin can't review it's place 
 
 ---
+
+### Adding new place "by the admin':
+
+![WhatsApp Image 2026-04-11 at 21 12 12](https://github.com/user-attachments/assets/f56b3aa7-288a-4b9b-9ceb-c3ea43b381cc)
+
+![WhatsApp Image 2026-04-11 at 21 12 12 (1)](https://github.com/user-attachments/assets/3bb17f0c-dfbf-4f3f-909c-bcb3dcc819ff)
+
+![WhatsApp Image 2026-04-11 at 21 12 13](https://github.com/user-attachments/assets/1524e482-b4a8-4c0d-a48e-3f4282933646)
+
+---
+
+### Place details:
+
+![WhatsApp Image 2026-04-11 at 22 05 45](https://github.com/user-attachments/assets/69362dce-cfa1-4cc7-a5c9-13aefbb066ee)
+
+![WhatsApp Image 2026-04-11 at 22 09 21](https://github.com/user-attachments/assets/98c6ebd4-ef93-457d-b880-d3ee8af84664)
+
+---
+
+### The price Filter:
+
+![WhatsApp Image 2026-04-11 at 22 05 44](https://github.com/user-attachments/assets/28122aa3-5236-45dd-973f-78189699b336)
+
+---
 ### Authors
 - Solaf Alessa
 - Rabea Thabit
