@@ -39,7 +39,7 @@ function checkAdminLockdown() {
             // We use indexOf for maximum backward compatibility across all browsers
             // Using window.location.pathname.includes to be more robust and specific
             if (window.location.pathname.toLowerCase().includes('add_review.html')) {
-                alert('عذراً، لا يُسمح للمسؤولين بإضافة تقييمات.');
+                alert('Sorry, administrators are not allowed to add reviews.');
                 window.location.href = 'index.html';
             }
         }
@@ -721,7 +721,7 @@ async function displayPlaceDetails(place) {
 }
 
 async function deletePlace(placeId) {
-    if (!confirm('هل أنت متأكد من رغبتك في حذف هذا المكان نهائياً؟ لا يمكن التراجع عن هذا الإجراء.')) {
+    if (!confirm('Are you sure you want to permanently delete this place? This action cannot be undone.')) {
         return;
     }
 
@@ -732,15 +732,15 @@ async function deletePlace(placeId) {
         });
 
         if (response.ok) {
-            alert('تم حذف المكان بنجاح.');
+            alert('Place deleted successfully.');
             window.location.href = 'index.html';
         } else {
             const error = await response.json();
-            alert(`فشل الحذف: ${error.error || 'خطأ غير معروف'}`);
+            alert(`Delete failed: ${error.error || 'Unknown error'}`);
         }
     } catch (error) {
         console.error('Error deleting place:', error);
-        alert('حدث خطأ أثناء الاتصال بالسيرفر.');
+        alert('An error occurred while connecting to the server.');
     }
 }
 
@@ -796,7 +796,7 @@ async function submitReview(token, placeId, reviewText, rating) {
     if (token) {
         const payload = parseJwt(token);
         if (payload && payload.is_admin) {
-            alert('Administrators are not authorized to post reviews.');
+            alert('Sorry, administrators are not allowed to post reviews.');
             window.location.href = 'index.html';
             return { ok: false, status: 403, json: async () => ({ error: 'Admin restriction' }) };
         }
@@ -839,7 +839,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const token = getCookie('token');
         const payload = parseJwt(token);
         if (!payload || !payload.is_admin) {
-            alert('Access denied. Admin privileges required.');
+            alert('Access denied. Administrator privileges are required.');
             window.location.href = 'index.html';
             return;
         }
@@ -955,7 +955,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (err) {
                 console.error(err);
-                alert('Something went wrong submitting the place.');
+                alert('Something went wrong while submitting the place.');
             }
         });
     }
@@ -965,7 +965,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const token = getCookie('token');
         const payload = parseJwt(token);
         if (!payload || !payload.is_admin) {
-            alert('Access denied. Admin privileges required.');
+            alert('Access denied. Administrator privileges are required.');
             window.location.href = 'index.html';
             return;
         }
@@ -996,7 +996,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             } catch (err) {
                 console.error(err);
-                alert('Something went wrong submitting the amenity.');
+                alert('Something went wrong while submitting the amenity.');
             }
         });
     }
@@ -1025,7 +1025,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     setCookie('token', data.access_token);
                     window.location.href = 'index.html';
                 } else {
-                    alert('Login failed: Incorrect email or password');
+                    alert('Login failed: incorrect email or password.');
                 }
             } catch (error) {
                 console.error(error);
@@ -1115,7 +1115,7 @@ document.addEventListener('DOMContentLoaded', () => {
         reviewForm.addEventListener('submit', async (event) => {
             event.preventDefault();
             if (msg) {
-                msg.textContent = 'إرسال التقييم...';
+                msg.textContent = 'Submitting review...';
                 msg.style.color = 'var(--text-secondary)';
             }
 
@@ -1124,7 +1124,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!reviewText || !placeId || !token || !rating) {
                 if (msg) {
-                    msg.textContent = 'يرجى ملء جميع الحقول أولاً.';
+                    msg.textContent = 'Please fill out all fields first.';
                     msg.style.color = '#ef4444';
                 } else {
                     alert('Please fill out all fields before submitting.');
@@ -1138,7 +1138,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (response.ok) {
                     if (msg) {
-                        msg.textContent = 'تم إرسال التقييم بنجاح! يتم الآن تحويلك...';
+                        msg.textContent = 'Review submitted successfully! Redirecting now...';
                         msg.style.color = '#10b981';
                     }
                     reviewForm.reset();
@@ -1147,16 +1147,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     }, 1500);
                 } else {
                     let rawError = data.error || data.message || '';
-                    let errorMsg = rawError || `فشل إرسال التقييم (HTTP ${response.status})`;
+                    let errorMsg = rawError || `Failed to submit review (HTTP ${response.status})`;
                     
-                    // Arabic translations for common errors
-                    if (rawError.includes('own place') || rawError.includes('cannot review your own')) errorMsg = 'لا يمكنك تقييم عقارك الخاص (أنت صاحب العقار)';
-                    else if (rawError.includes('already reviewed')) errorMsg = 'لقد قمت بتقييم هذا المكان مسبقاً، لا يمكن إضافة تقييم آخر';
-                    else if (rawError.includes('Unauthorized') || response.status === 401) errorMsg = 'يجب تسجيل الدخول للقيام بهذا الإجراء';
-                    else if (rawError.includes('not found') || response.status === 404) errorMsg = 'المكان غير موجود، يرجى التحقق من الرابط';
-                    else if (rawError.includes('Rating') || rawError.includes('rating')) errorMsg = 'يرجى اختيار تقييم صحيح (من 1 إلى 5)';
-                    else if (rawError.includes('text must be') || rawError.includes('text is required')) errorMsg = 'يرجى كتابة نص التقييم';
-                    else if (response.status === 403) errorMsg = 'ليس لديك صلاحية للقيام بهذا الإجراء';
+                    if (rawError.includes('own place') || rawError.includes('cannot review your own')) errorMsg = 'You cannot review your own property (you are the owner).';
+                    else if (rawError.includes('already reviewed')) errorMsg = 'You have already reviewed this place; you cannot submit another review.';
+                    else if (rawError.includes('Unauthorized') || response.status === 401) errorMsg = 'You must be logged in to perform this action.';
+                    else if (rawError.includes('not found') || response.status === 404) errorMsg = 'Place not found. Please check the link.';
+                    else if (rawError.includes('Rating') || rawError.includes('rating')) errorMsg = 'Please select a valid rating (from 1 to 5).';
+                    else if (rawError.includes('text must be') || rawError.includes('text is required')) errorMsg = 'Please enter review text.';
+                    else if (response.status === 403) errorMsg = 'You do not have permission to perform this action.';
 
                     console.error('Review API error:', response.status, rawError);
 
@@ -1170,7 +1169,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } catch (error) {
                 console.error(error);
                 if (msg) {
-                    msg.textContent = 'حدث خطأ في الشبكة. يرجى المحاولة لاحقاً.';
+                    msg.textContent = 'A network error occurred. Please try again later.';
                     msg.style.color = '#ef4444';
                 }
             }
@@ -1332,11 +1331,11 @@ function initAccountSettings() {
                 setTimeout(() => { document.getElementById('account-settings-modal').style.display = 'none'; }, 1500);
             } else {
                 const data = await res.json();
-                msg.textContent = data.error || 'Failed to update';
+                msg.textContent = data.error || 'Failed to update settings.';
                 msg.style.color = '#ef4444';
             }
         } catch (err) {
-            msg.textContent = 'Network Error. Check backend.';
+            msg.textContent = 'Network error. Please check the backend connection.';
             msg.style.color = '#ef4444';
         }
     });
@@ -1368,5 +1367,5 @@ window.openAccountSettings = async function() {
 };
 
 window.showComingSoon = function(featureName) {
-    alert(featureName + ' is an upcoming feature currently in development! Stay tuned!');
+    alert(featureName + ' is an upcoming feature and is currently in development. Stay tuned!');
 };

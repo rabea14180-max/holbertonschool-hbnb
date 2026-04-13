@@ -58,7 +58,7 @@ class Amenity {
   +list() List~Amenity~
 }
 
-%% العلاقات الأساسية
+%% Core relationships
 User "1" --> "0..*" Place : owns
 User "1" --> "0..*" Review : writes
 Place "1" --> "0..*" Review : has

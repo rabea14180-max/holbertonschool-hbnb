@@ -75,3 +75,15 @@ class Place(BaseModel):
             "location_link": self.location_link,
         })
         return base
+
+    def add_amenity(self, amenity):
+        if amenity not in self.amenities:
+            self.amenities.append(amenity)
+
+    def remove_amenity(self, amenity):
+        if amenity in self.amenities:
+            self.amenities.remove(amenity)
+
+    def add_review(self, review):
+        if review not in self.reviews:
+            self.reviews.append(review)

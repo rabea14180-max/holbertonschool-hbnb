@@ -1,6 +1,6 @@
 #part2/app/models/BaseModel.py
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class BaseModel:
@@ -15,14 +15,14 @@ class BaseModel:
         """
 
         self.id = kwargs.get("id", str(uuid.uuid4()))
-        self.created_at = kwargs.get("created_at", datetime.utcnow())
-        self.updated_at = kwargs.get("updated_at", datetime.utcnow())
+        self.created_at = kwargs.get("created_at", datetime.now(timezone.utc))
+        self.updated_at = kwargs.get("updated_at", datetime.now(timezone.utc))
 
     def save(self):
         """
         Updates the updated_at timestamp
         """
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(timezone.utc)
 
     def update(self, data):
         for key, value in data.items():

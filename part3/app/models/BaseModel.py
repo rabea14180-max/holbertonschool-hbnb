@@ -1,7 +1,7 @@
 #part3/app/models/BaseModel.py
 from app import db
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 class BaseModel(db.Model):
@@ -12,12 +12,21 @@ class BaseModel(db.Model):
     __abstract__ = True
 
     id = db.Column(db.String(36), primary_key=True, default=lambda: str(uuid.uuid4()))
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        if not getattr(self, "id", None):
+            self.id = str(uuid.uuid4())
+        if not getattr(self, "created_at", None):
+            self.created_at = datetime.now(timezone.utc)
+        if not getattr(self, "updated_at", None):
+            self.updated_at = datetime.now(timezone.utc)
 
     def save(self):
         """Update the updated_at timestamp and flush to session."""
-        self.updated_at = datetime.utcnow()
+        self.updated_at = datetime.now(timezone.utc)
         db.session.add(self)
         db.session.commit()
 

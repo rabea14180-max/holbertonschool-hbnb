@@ -1,6 +1,5 @@
 # part2/app/models/place.py
 from app.models.BaseModel import BaseModel
-from app.services import facade
 
 class Place(BaseModel):
     def __init__(self, title="", description="", price=0.0,
@@ -53,3 +52,17 @@ class Place(BaseModel):
 
     def deletePlace(self):
         return True
+
+    def to_dict(self):
+        base = super().to_dict()
+        base.update({
+            "title": self.title,
+            "description": self.description,
+            "price": self.price,
+            "latitude": self.latitude,
+            "longitude": self.longitude,
+            "owner_id": self.owner_id,
+            "amenities": [a.to_dict() if hasattr(a, "to_dict") else a for a in self.amenities],
+            "reviews": [r.to_dict() if hasattr(r, "to_dict") else r for r in self.reviews],
+        })
+        return base

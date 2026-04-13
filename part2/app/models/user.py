@@ -50,3 +50,13 @@ class User(BaseModel):
 
     def delete(self):
         return True
+
+    def to_dict(self):
+        base = super().to_dict()
+        base.update({
+            "first_name": self.first_name,
+            "last_name": self.last_name,
+            "email": self.email,
+            "is_admin": self.is_admin,
+        })
+        return base

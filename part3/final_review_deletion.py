@@ -4,7 +4,7 @@ from app.services import facade
 def final_review_cleanup():
     app = create_app()
     with app.app_context():
-        # Specific accounts to clear
+        # Specific accounts to clean up
         target_uids = [
             'fc431346-d145-49b8-be75-de6ee728b342', # ahmd Alli
             '60e13da9-945f-44a0-9a8e-e4da8aff96cd'  # Admin HBnB
@@ -17,11 +17,11 @@ def final_review_cleanup():
             # 1. Check by User ID
             is_target_user = str(r.user_id) in target_uids
             
-            # 2. Check by Content (using the Arabic word 'nice/beautiful')
+            # 2. Check by content (using the Arabic word for "beautiful")
             # Handle encoding by checking for the substring
             comment = str(r.comment or r.text or "")
-            # 'جميل' is sometimes mangled in different contexts, so we'll look for any review with these 2 target IDs
-            # AND any review that suspiciously has only Arabic or specific text from the screenshot
+            # Keep the Arabic token below unchanged, because some legacy reviews contain it.
+            # Delete reviews from the target users and reviews that match this content token.
             
             if is_target_user:
                 print(f"Deleting review {r.id} from target user {r.user_id}")

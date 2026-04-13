@@ -1,5 +1,5 @@
 """
-seed_data.py -- ملء قاعدة البيانات ببيانات حقيقية
+seed_data.py -- populate the database with realistic data
 Usage:
     python seed_data.py
 """
@@ -17,15 +17,15 @@ with app.app_context():
     # Import all models to register tables
     importlib.import_module("app.models")
 
-    # إنشاء الجداول إن لم تكن موجودة (بدون حذف البيانات الحالية)
+    # Create tables if they do not exist (without deleting current data)
     db.create_all()
 
     print("=" * 50)
-    print("  HBnB - إضافة بيانات حقيقية")
+    print("  HBnB - Populating realistic data")
     print("=" * 50)
 
     # ------------------------------------------------------------------
-    # 1. المشرف (Admin)
+    # 1. Admin user
     # ------------------------------------------------------------------
     admin = User.query.filter_by(email="admin@hbnb.io").first()
     if not admin:
@@ -43,7 +43,7 @@ with app.app_context():
         print(f"ℹ️  Admin already exists: admin@hbnb.io")
 
     # ------------------------------------------------------------------
-    # 2. المستخدمون العاديون
+    # 2. Regular users
     # ------------------------------------------------------------------
     users_data = [
         {"first_name": "Sarah", "last_name": "Johnson", "email": "sarah.johnson@email.com", "password": "Pass1234!"},
@@ -67,7 +67,7 @@ with app.app_context():
             print(f"ℹ️  User exists: {ud['email']}")
 
     # ------------------------------------------------------------------
-    # 3. وسائل الراحة (Amenities)
+    # 3. Amenities
     # ------------------------------------------------------------------
     amenities_data = [
         {"name": "WiFi",              "description": "High-speed wireless internet up to 500 Mbps"},
@@ -98,7 +98,7 @@ with app.app_context():
             print(f"ℹ️  Amenity exists: {ad['name']}")
 
     # ------------------------------------------------------------------
-    # 4. الأماكن (Places) - بيانات واقعية جميلة
+    # 4. Places - realistic sample data
     # ------------------------------------------------------------------
     places_data = [
         {
@@ -157,7 +157,7 @@ with app.app_context():
         },
     ]
 
-    print("\n📍 إضافة الأماكن والتقييمات...")
+    print("\n📍 Adding places and reviews...")
     for pd in places_data:
         # Check if place already exists
         existing_place = Place.query.filter_by(title=pd["title"]).first()
@@ -203,14 +203,14 @@ with app.app_context():
         print(f"   ➕ {len(pd.get('reviews', []))} reviews added")
 
     print("\n" + "=" * 50)
-    print("✅ تم إضافة جميع البيانات بنجاح!")
+    print("✅ All data has been added successfully!")
     print("=" * 50)
-    print(f"\n📊 ملخص قاعدة البيانات:")
+    print(f"\n📊 Database summary:")
     print(f"   👤 Users:     {User.query.count()}")
     print(f"   🏠 Places:    {Place.query.count()}")
     print(f"   ⭐ Amenities: {Amenity.query.count()}")
     from app.models.review import Review
     print(f"   💬 Reviews:   {Review.query.count()}")
-    print("\n🔑 بيانات تسجيل الدخول:")
+    print("\n🔑 Login credentials:")
     print("   Admin:  admin@hbnb.io  / Admin1234!")
     print("   User:   sarah.johnson@email.com / Pass1234!")

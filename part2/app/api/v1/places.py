@@ -48,7 +48,7 @@ class PlaceList(Resource):
             return {"error": str(e)}, 400
 
     def get(self):
-        return facade.get_all_places(), 200
+        return [p.to_dict() for p in facade.get_all_places()], 200
 
 @api.route('/<place_id>')
 class PlaceResource(Resource):

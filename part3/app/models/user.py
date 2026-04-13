@@ -26,8 +26,21 @@ class User(BaseModel):
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
+        if not isinstance(password, str) or password.strip() == "":
+            raise ValueError("password must be a non-empty string")
+        self.validate()
         self.hash_password(password)
         self.is_admin = is_admin
+
+    def validate(self):
+        if not isinstance(self.first_name, str) or self.first_name.strip() == "":
+            raise ValueError("first_name must be a non-empty string")
+        if not isinstance(self.last_name, str) or self.last_name.strip() == "":
+            raise ValueError("last_name must be a non-empty string")
+        if not isinstance(self.email, str) or self.email.strip() == "":
+            raise ValueError("email must be a non-empty string")
+        if "@" not in self.email or "." not in self.email:
+            raise ValueError("email must be valid")
 
     def hash_password(self, plain_password):
         """Hash the password before storing it."""

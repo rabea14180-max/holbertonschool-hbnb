@@ -1,6 +1,6 @@
 """
-populate_via_api.py -- يضيف بيانات حقيقية عبر الـ API مباشرةً
-استخدام:
+populate_via_api.py -- populate realistic data directly via the API
+Usage:
     python populate_via_api.py
 """
 import requests
@@ -12,13 +12,13 @@ def step(msg):
     print(f"\n{'='*50}\n{msg}\n{'='*50}")
 
 # ------------------------------------------------------------------
-# 1. تسجيل الدخول كـ Admin
+# 1. Log in as Admin
 # ------------------------------------------------------------------
-step("1. تسجيل الدخول كـ Admin")
+step("1. Log in as Admin")
 r = requests.post(f"{BASE}/users/login", json={"email": "admin@hbnb.io", "password": "Admin1234!"})
 if r.status_code != 200:
-    print(f"❌ فشل تسجيل الدخول: {r.status_code} {r.text}")
-    print("محاولة إنشاء Admin أولاً...")
+    print(f"❌ Login failed: {r.status_code} {r.text}")
+    print("Trying to create Admin first...")
     r2 = requests.post(f"{BASE}/users/register", json={
         "first_name": "Admin", "last_name": "HBnB",
         "email": "admin@hbnb.io", "password": "Admin1234!", "is_admin": True
@@ -26,7 +26,7 @@ if r.status_code != 200:
     print(f"Register: {r2.status_code} {r2.text}")
     r = requests.post(f"{BASE}/users/login", json={"email": "admin@hbnb.io", "password": "Admin1234!"})
     if r.status_code != 200:
-        print(f"❌ فشل تسجيل الدخول مجدداً: {r.text}")
+        print(f"❌ Login failed again: {r.text}")
         exit(1)
 
 admin_token = r.json()["access_token"]
@@ -34,9 +34,9 @@ admin_headers = {"Authorization": f"Bearer {admin_token}", "Content-Type": "appl
 print(f"✅ Admin token received")
 
 # ------------------------------------------------------------------
-# 2. إضافة المستخدمين العاديين
+# 2. Add regular users
 # ------------------------------------------------------------------
-step("2. إضافة المستخدمين")
+step("2. Add users")
 users_data = [
     {"first_name": "Sarah",    "last_name": "Johnson",   "email": "sarah.j@email.com",   "password": "Pass1234!"},
     {"first_name": "Mohammed", "last_name": "Al-Rashid", "email": "m.rashid@email.com",  "password": "Pass1234!"},
@@ -72,9 +72,9 @@ for ud in users_data:
         user_tokens[ud["email"]] = lr.json()["access_token"]
 
 # ------------------------------------------------------------------
-# 3. إضافة وسائل الراحة (Amenities) - Admin only
+# 3. Add amenities (Admin only)
 # ------------------------------------------------------------------
-step("3. إضافة وسائل الراحة")
+step("3. Add amenities")
 amenities_data = [
     {"name": "WiFi",             "description": "High-speed wireless internet up to 500 Mbps"},
     {"name": "Swimming Pool",    "description": "Heated outdoor/indoor pool"},
@@ -108,9 +108,9 @@ for ad in amenities_data:
         print(f"⚠️  {ad['name']}: {r.status_code} {r.text}")
 
 # ------------------------------------------------------------------
-# 4. إضافة الأماكن والتقييمات
+# 4. Add places and reviews
 # ------------------------------------------------------------------
-step("4. إضافة الأماكن والتقييمات")
+step("4. Add places and reviews")
 
 def get_amenity_ids(names):
     return [amenity_ids[n] for n in names if n in amenity_ids]
@@ -177,16 +177,16 @@ for pc in places_config:
         print(f"⚠️  Place failed: {pc['place']['title'][:45]}: {r.status_code} {r.text[:100]}")
 
 # ------------------------------------------------------------------
-# 5. ملخص نهائي
+# 5. Final summary
 # ------------------------------------------------------------------
-step("✅ ملخص نهائي")
+step("✅ Final summary")
 places_r = requests.get(f"{BASE}/places/")
 amenities_r = requests.get(f"{BASE}/amenities")
 places_count = len(places_r.json()) if places_r.ok else "?"
 amenities_count = len(amenities_r.json()) if amenities_r.ok else "?"
 
-print(f"🏠 الأماكن:          {places_count}")
-print(f"🛎️  وسائل الراحة:     {amenities_count}")
-print(f"\n🔑 بيانات الدخول:")
+print(f"🏠 Places:           {places_count}")
+print(f"🛎️  Amenities:        {amenities_count}")
+print(f"\n🔑 Login credentials:")
 print(f"   Admin:  admin@hbnb.io / Admin1234!")
 print(f"   User:   sarah.j@email.com / Pass1234!")

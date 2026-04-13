@@ -11,8 +11,8 @@ except ImportError:
 
 
 class Config:
-    SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key')
-    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'default_jwt_secret_key')
+    SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key_for_hbnb_app_2026')
+    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'default_jwt_secret_key_for_hbnb_app_2026_please_override')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     DEBUG = False
 
